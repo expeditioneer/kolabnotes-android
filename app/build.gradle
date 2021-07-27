@@ -24,6 +24,8 @@ android {
     }
 
     lintOptions {
+        // WTF ?
+        abortOnError false
         checkReleaseBuilds false
     }
 }
