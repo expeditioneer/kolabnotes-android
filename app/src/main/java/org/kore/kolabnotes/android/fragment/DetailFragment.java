@@ -17,6 +17,8 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
 import android.print.PrintManager;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -42,6 +44,10 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.dhaval2404.colorpicker.ColorPickerDialog;
+import com.github.dhaval2404.colorpicker.listener.ColorListener;
+import com.github.dhaval2404.colorpicker.model.ColorShape;
 
 import org.kore.kolab.notes.AuditInformation;
 import org.kore.kolab.notes.Colors;
@@ -77,8 +83,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Fragment for displaying and editing the details of a note
@@ -561,49 +565,38 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         });
 
         activity.findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, Color.BLACK, false, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                    @Override
-                    public void onOk(AmbilWarnaDialog dialog, int color) {
-                        editor.setTextColor(color);
-                    }
-
-                    @Override
-                    public void onRemove(AmbilWarnaDialog dialog) {
-                        // do nothing
-                    }
-
-                    @Override
-                    public void onCancel(AmbilWarnaDialog dialog) {
-                        // do nothing
-                    }
-                });
-                dialog.show();
+                new ColorPickerDialog
+                    .Builder(activity)
+                    .setTitle("Pick Theme")
+                    .setColorShape(ColorShape.SQAURE)
+                    .setDefaultColor(R.color.black)
+                    .setColorListener(new ColorListener() {
+                        @Override
+                        public void onColorSelected(int color, @NonNull String colorHex) {
+                            editor.setTextColor(color);
+                        }
+                    })
+                    .show();
             }
         });
 
         activity.findViewById(R.id.action_bg_color).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, Color.WHITE, false, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                    @Override
-                    public void onOk(AmbilWarnaDialog dialog, int color) {
-                        editor.setTextBackgroundColor(color == Color.WHITE ? Color.TRANSPARENT : color);
-                    }
-
-                    @Override
-                    public void onRemove(AmbilWarnaDialog dialog) {
-                        // do nothing
-                    }
-
-                    @Override
-                    public void onCancel(AmbilWarnaDialog dialog) {
-                        // do nothing
-                    }
-                });
-                dialog.show();
+                new ColorPickerDialog
+                        .Builder(activity)
+                        .setTitle("Pick Theme")
+                        .setColorShape(ColorShape.SQAURE)
+                        .setDefaultColor(R.color.white)
+                        .setColorListener(new ColorListener() {
+                            @Override
+                            public void onColorSelected(int color, @NonNull String colorHex) {
+                                editor.setTextBackgroundColor(color == Color.WHITE ? Color.TRANSPARENT : color);
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -941,25 +934,19 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         final int initialColor = selectedColor == null ? Color.WHITE : Color.parseColor(selectedColor.getHexcode());
 
-        AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, initialColor, true, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                selectedColor = Colors.getColor(String.format("#%06X", (0xFFFFFF & color)));
-                setToolbarColor();
-            }
-
-            @Override
-            public void onRemove(AmbilWarnaDialog dialog) {
-                selectedColor = null;
-                setToolbarColor();
-            }
-
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                // do nothing
-            }
-        });
-        dialog.show();
+        new ColorPickerDialog
+                .Builder(activity)
+                .setTitle("Pick Theme")
+                .setColorShape(ColorShape.SQAURE)
+                .setDefaultColor(R.color.white)
+                .setColorListener(new ColorListener() {
+                    @Override
+                    public void onColorSelected(int color, @NonNull String colorHex) {
+                        selectedColor = Colors.getColor(String.format("#%06X", (0xFFFFFF & color)));
+                        setToolbarColor();
+                    }
+                })
+                .show();
     }
 
     void showMetainformation(){

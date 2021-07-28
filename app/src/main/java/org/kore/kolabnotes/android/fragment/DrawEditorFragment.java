@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.dhaval2404.colorpicker.ColorPickerDialog;
+import com.github.dhaval2404.colorpicker.listener.ColorListener;
+import com.github.dhaval2404.colorpicker.model.ColorShape;
+
 import org.kore.kolabnotes.android.ColorCircleDrawable;
 import org.kore.kolabnotes.android.DrawEditorActivity;
 import org.kore.kolabnotes.android.R;
@@ -36,8 +41,6 @@ import org.kore.kolabnotes.android.draweditor.ToolButton;
 import org.kore.kolabnotes.android.draweditor.ToolButtonGroup;
 
 import java.io.ByteArrayOutputStream;
-
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Created by yaroslav on 25.03.16.
@@ -265,29 +268,21 @@ public class DrawEditorFragment extends Fragment {
     void chooseColor() {
         final int initialColor = mCanvas.getBrushColor();
 
-        AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, initialColor, true, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                mColor = color;
-                mCanvas.setBrushColor(color);
-                mBrushColor.setImageDrawable(new ColorCircleDrawable(color,
-                        R.color.theme_selected_notes));
-            }
-
-            @Override
-            public void onRemove(AmbilWarnaDialog dialog) {
-                mColor = DrawingView.DEFAULT_BRUSH_COLOR;
-                mCanvas.setBrushColor(DrawingView.DEFAULT_BRUSH_COLOR);
-                mBrushColor.setImageDrawable(new ColorCircleDrawable(DrawingView.DEFAULT_BRUSH_COLOR,
-                        R.color.theme_selected_notes));
-            }
-
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                    /* Nothing */
-            }
-        });
-        dialog.show();
+        new ColorPickerDialog
+                .Builder(activity)
+                .setTitle("Pick Theme")
+                .setColorShape(ColorShape.SQAURE)
+                .setDefaultColor(initialColor)
+                .setColorListener(new ColorListener() {
+                    @Override
+                    public void onColorSelected(int color, @NonNull String colorHex) {
+                        mColor = color;
+                        mCanvas.setBrushColor(color);
+                        mBrushColor.setImageDrawable(new ColorCircleDrawable(color,
+                                R.color.theme_selected_notes));
+                    }
+                })
+                .show();
     }
 
     @Override

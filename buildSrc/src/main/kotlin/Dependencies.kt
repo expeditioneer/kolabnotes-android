@@ -1,13 +1,12 @@
+const val kotlinVersion = "1.5.21"
 
 object BuildPlugins {
     object Versions {
         const val buildToolsVersion = "4.1.3"
-        const val kotlinVersion = "1.5.21"
-
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
-    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinVersion}"
+    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
 }
 
 object Libraries {
@@ -23,8 +22,13 @@ object Libraries {
         const val material = "com.google.android.material:material:${Versions.jetpack}"
     }
 
+    const val colorpicker = "com.github.dhaval2404:colorpicker:2.0"
     const val kolabnotesJava = "com.github.konradrenner:kolabnotes-java:3.4.1"
     const val richtexteditorAndroid = "jp.wasabeef:richeditor-android:1.2.2"
+
+    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    //const val kotlinxSerializationRuntime = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:${kotlinxSerializationVersion}"
 }
 
 object TestLibraries {

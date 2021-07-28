@@ -23,6 +23,10 @@ import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.github.dhaval2404.colorpicker.ColorPickerDialog;
+import com.github.dhaval2404.colorpicker.listener.ColorListener;
+import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -93,8 +97,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Fragment which displays the notes overview and implements the logic for the overview
@@ -648,23 +650,18 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         if (items != null) {
             final int initialColor = Color.WHITE;
 
-            AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, initialColor, true, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                @Override
-                public void onOk(AmbilWarnaDialog dialog, int color) {
-                    setColor(items, Colors.getColor(String.format("#%06X", (0xFFFFFF & color))));
-                }
-
-                @Override
-                public void onRemove(AmbilWarnaDialog dialog) {
-                    setColor(items, null);
-                }
-
-                @Override
-                public void onCancel(AmbilWarnaDialog dialog) {
-                    // do nothing
-                }
-            });
-            dialog.show();
+            new ColorPickerDialog
+                    .Builder(activity)
+                    .setTitle("Pick Theme")
+                    .setColorShape(ColorShape.SQAURE)
+                    .setDefaultColor(R.color.white)
+                    .setColorListener(new ColorListener() {
+                        @Override
+                        public void onColorSelected(int color, @NonNull String colorHex) {
+                            setColor(items, Colors.getColor(String.format("#%06X", (0xFFFFFF & color))));
+                        }
+                    })
+                    .show();
         }
     }
 

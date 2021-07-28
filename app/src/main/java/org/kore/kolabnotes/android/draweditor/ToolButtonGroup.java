@@ -62,7 +62,7 @@ public class ToolButtonGroup extends LinearLayout {
         TypedArray attributes = context.obtainStyledAttributes(
                 attrs, R.styleable.ToolButtonGroup, android.R.attr.radioButtonStyle, 0);
 
-        int value = attributes.getResourceId(R.styleable.ToolButtonGroup_checkedButton, View.NO_ID);
+        int value = attributes.getResourceId(R.styleable.ToolButtonGroup_myCheckedButton, View.NO_ID);
         if (value != View.NO_ID) {
             mCheckedId = value;
         }

@@ -36,8 +36,12 @@ dependencies {
     implementation(Libraries.JetPack.cardview)
     implementation(Libraries.JetPack.material)
 
+    implementation(Libraries.colorpicker)
     implementation(Libraries.kolabnotesJava)
     implementation(Libraries.richtexteditorAndroid)
+
+    implementation(Libraries.kotlinStdLib)
+    implementation(Libraries.kotlinReflect)
 
     testImplementation(TestLibraries.AndroidXTest.espresso)
     testImplementation(TestLibraries.AndroidXTest.junit)

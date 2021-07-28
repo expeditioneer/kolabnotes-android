@@ -8,8 +8,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.github.dhaval2404.colorpicker.ColorPickerDialog;
+import com.github.dhaval2404.colorpicker.listener.ColorListener;
+import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,8 +43,6 @@ import org.kore.kolabnotes.android.content.TagRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 /**
  * Created by yaroslav on 09.01.16.
@@ -254,25 +258,18 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
 
     void chooseColor(final List<Integer> items) {
         if (items != null) {
-            final int initialColor = Color.WHITE;
-
-            AmbilWarnaDialog dialog = new AmbilWarnaDialog(activity, initialColor, true, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                @Override
-                public void onOk(AmbilWarnaDialog dialog, int color) {
-                    setColor(items, Colors.getColor(String.format("#%06X", (0xFFFFFF & color))));
-                }
-
-                @Override
-                public void onRemove(AmbilWarnaDialog dialog) {
-                    setColor(items, null);
-                }
-
-                @Override
-                public void onCancel(AmbilWarnaDialog dialog) {
-                    // do nothing
-                }
-            });
-            dialog.show();
+            new ColorPickerDialog
+                    .Builder(activity)
+                    .setTitle("Pick Theme")
+                    .setColorShape(ColorShape.SQAURE)
+                    .setDefaultColor(R.color.white)
+                    .setColorListener(new ColorListener() {
+                        @Override
+                        public void onColorSelected(int color, @NonNull String colorHex) {
+                            setColor(items, Colors.getColor(String.format("#%06X", (0xFFFFFF & color))));
+                        }
+                    })
+                    .show();
         }
     }
 
