@@ -17,8 +17,8 @@ object Libraries {
     object JetPack {
         const val appcompat = "androidx.appcompat:appcompat:1.3.1"
         const val cardview = "androidx.cardview:cardview:${Versions.jetpack}"
-        const val legacySupportv4 = "androidx.legacy:legacy-support-v4:${Versions.jetpack}"
         const val recycleview = "androidx.recyclerview:recyclerview:${Versions.jetpack}"
+        const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
         const val material = "com.google.android.material:material:${Versions.jetpack}"
     }
 

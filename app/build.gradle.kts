@@ -30,11 +30,11 @@ android {
 }
 
 dependencies {
-    implementation(Libraries.JetPack.legacySupportv4)
     implementation(Libraries.JetPack.appcompat)
-    implementation(Libraries.JetPack.recycleview)
     implementation(Libraries.JetPack.cardview)
     implementation(Libraries.JetPack.material)
+    implementation(Libraries.JetPack.recycleview)
+    implementation(Libraries.JetPack.swiperefreshlayout)
 
     implementation(Libraries.colorpicker)
     implementation(Libraries.kolabnotesJava)
