@@ -4,7 +4,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <set>
-            <objectAnimator android:propertyName="translationZ"
+            <objectAnimator
+                android:propertyName="translationZ"
                 android:duration="100"
                 android:valueTo="2"
                 android:valueType="floatType"/>
@@ -12,11 +13,13 @@
                  here for "x" and "y", or other properties -->
         </set>
     </item>
-    <item android:state_enabled="true"
+    <item
+        android:state_enabled="true"
         android:state_pressed="false"
         android:state_focused="true">
         <set>
-            <objectAnimator android:propertyName="translationZ"
+            <objectAnimator
+                android:propertyName="translationZ"
                 android:duration="100"
                 android:valueTo="10"
                 android:valueType="floatType"/>
