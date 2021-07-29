@@ -18,7 +18,6 @@ import org.kore.kolab.notes.Note;
 import org.kore.kolabnotes.android.R;
 import org.kore.kolabnotes.android.Utils;
 import org.kore.kolabnotes.android.adapter.NoteListAdapater;
-import org.kore.kolabnotes.android.content.DatabaseHelper;
 import org.kore.kolabnotes.android.content.NoteRepository;
 import org.kore.kolabnotes.android.content.NoteSorting;
 import org.kore.kolabnotes.android.security.AuthenticatorActivity;

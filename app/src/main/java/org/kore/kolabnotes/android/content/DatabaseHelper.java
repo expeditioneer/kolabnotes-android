@@ -1,13 +1,9 @@
 package org.kore.kolabnotes.android.content;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import org.kore.kolabnotes.android.security.AuthenticatorActivity;
 
 /**
  * Created by koni on 12.03.15.

@@ -1,7 +1,8 @@
 package org.kore.kolabnotes.android.adapter;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseBooleanArray;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 

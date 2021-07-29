@@ -12,6 +12,8 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.sun.mail.iap.CommandFailedException;
 
 import org.kore.kolab.notes.AccountInformation;
@@ -26,8 +28,6 @@ import org.kore.kolabnotes.android.security.AuthenticatorActivity;
 
 import java.sql.Timestamp;
 import java.util.Date;
-
-import androidx.core.app.NotificationCompat;
 
 /**
  * Created by koni on 18.04.15.

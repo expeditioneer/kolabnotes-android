@@ -10,10 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.kore.kolabnotes.android.Utils;
 import org.kore.kolabnotes.android.security.AuthenticatorActivity;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

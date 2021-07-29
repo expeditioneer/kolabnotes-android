@@ -10,9 +10,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.kore.kolabnotes.android.R;
 

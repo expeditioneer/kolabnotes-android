@@ -2,10 +2,8 @@ package org.kore.kolabnotes.android.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import jp.wasabeef.richeditor.RichEditor;
 

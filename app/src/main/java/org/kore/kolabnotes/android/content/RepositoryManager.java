@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import org.kore.kolab.notes.Attachment;
 import org.kore.kolab.notes.Identification;
 import org.kore.kolab.notes.Note;
@@ -26,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import androidx.core.app.NotificationCompat;
 
 /**
  * This class syncs the database with data from a given repository

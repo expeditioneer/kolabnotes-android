@@ -4,13 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.kore.kolab.notes.Tag;
 import org.kore.kolabnotes.android.R;
@@ -19,6 +20,8 @@ import org.kore.kolabnotes.android.Utils;
 import java.text.DateFormat;
 import java.util.Collections;
 import java.util.List;
+
+;
 
 /**
  * Created by yaroslav on 10.01.16.

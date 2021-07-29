@@ -3,7 +3,7 @@ package org.kore.kolabnotes.android;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 

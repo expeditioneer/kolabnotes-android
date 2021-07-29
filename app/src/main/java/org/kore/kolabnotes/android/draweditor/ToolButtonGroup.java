@@ -19,11 +19,12 @@ package org.kore.kolabnotes.android.draweditor;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.annotation.IdRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.IdRes;
 
 import org.kore.kolabnotes.android.R;
 

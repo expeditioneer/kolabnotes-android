@@ -8,11 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.kore.kolab.notes.Attachment;
 import org.kore.kolabnotes.android.R;

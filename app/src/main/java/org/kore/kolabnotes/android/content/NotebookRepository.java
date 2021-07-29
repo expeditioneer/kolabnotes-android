@@ -3,7 +3,6 @@ package org.kore.kolabnotes.android.content;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import org.kore.kolab.notes.AuditInformation;
 import org.kore.kolab.notes.Identification;

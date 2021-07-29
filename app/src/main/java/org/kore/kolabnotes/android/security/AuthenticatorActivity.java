@@ -22,7 +22,6 @@ import android.widget.Toast;
 import org.kore.kolab.notes.AccountInformation;
 import org.kore.kolabnotes.android.MainActivity;
 import org.kore.kolabnotes.android.R;
-import org.kore.kolabnotes.android.Utils;
 import org.kore.kolabnotes.android.content.ActiveAccount;
 import org.kore.kolabnotes.android.content.ActiveAccountRepository;
 
