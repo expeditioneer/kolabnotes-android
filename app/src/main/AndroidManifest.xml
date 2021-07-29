@@ -99,7 +99,7 @@
             android:name=".content.KolabNotesContentProvider"
             android:authorities="kore.kolabnotes"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
 
         <service
             android:name=".async.KolabSyncService"
@@ -182,7 +182,7 @@
         <activity
             android:name=".setting.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/SettingsTheme"></activity>
+            android:theme="@style/SettingsTheme" />
 
     </application>
 
