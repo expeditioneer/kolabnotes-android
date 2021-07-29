@@ -53,7 +53,7 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    public  static final String DETAIL_FRAGMENT_TAG = "detail_fragment";
+    public static final String DETAIL_FRAGMENT_TAG = "detail_fragment";
 
     private static final int CYAN = 210;
     private static final int RED = 0;
@@ -62,99 +62,99 @@ public class Utils {
     private static final int SATURATION = 1;
     private static final int BRIGHTNESS = 2;
 
-    public enum SortingColumns{
+    public enum SortingColumns {
         summary {
             @Override
             public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
                 int sorting = 0;
-                if(direction == NoteSorting.Direction.ASC){
+                if (direction == NoteSorting.Direction.ASC) {
                     sorting = note1.getSummary().toLowerCase().compareTo(note2.getSummary().toLowerCase());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
                     }
-                }else{
+                } else {
                     sorting = note2.getSummary().toLowerCase().compareTo(note1.getSummary().toLowerCase());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
                     }
                 }
                 return sorting;
             }
-        },lastModificationDate {
+        }, lastModificationDate {
             @Override
             public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
                 int sorting = 0;
-                if(direction == NoteSorting.Direction.ASC){
+                if (direction == NoteSorting.Direction.ASC) {
                     sorting = note1.getAuditInformation().getLastModificationDate().compareTo(note2.getAuditInformation().getLastModificationDate());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
                     }
-                }else{
+                } else {
                     sorting = note2.getAuditInformation().getLastModificationDate().compareTo(note1.getAuditInformation().getLastModificationDate());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
                     }
                 }
                 return sorting;
             }
-        },creationDate {
+        }, creationDate {
             @Override
             public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
                 int sorting = 0;
-                if(direction == NoteSorting.Direction.ASC){
+                if (direction == NoteSorting.Direction.ASC) {
                     sorting = note1.getAuditInformation().getCreationDate().compareTo(note2.getAuditInformation().getCreationDate());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
                     }
-                }else{
+                } else {
                     sorting = note2.getAuditInformation().getCreationDate().compareTo(note1.getAuditInformation().getCreationDate());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
                     }
                 }
                 return sorting;
             }
-        },classification {
+        }, classification {
             @Override
             public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
                 int sorting = 0;
-                if(direction == NoteSorting.Direction.ASC){
+                if (direction == NoteSorting.Direction.ASC) {
                     sorting = note1.getClassification().compareTo(note2.getClassification());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
                     }
-                }else{
+                } else {
                     sorting = note2.getClassification().compareTo(note1.getClassification());
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
                     }
                 }
                 return sorting;
             }
-        },color {
+        }, color {
             @Override
             public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
                 int sorting = 0;
                 String note1Color = note1.getColor() == null ? "" : note1.getColor().getHexcode();
                 String note2Color = note2.getColor() == null ? "" : note2.getColor().getHexcode();
-                if(direction == NoteSorting.Direction.ASC){
+                if (direction == NoteSorting.Direction.ASC) {
                     sorting = note1Color.compareTo(note2Color);
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
                     }
-                }else{
+                } else {
                     sorting = note2Color.compareTo(note1Color);
 
-                    if(sorting == 0){
+                    if (sorting == 0) {
                         sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
                     }
                 }
@@ -164,13 +164,13 @@ public class Utils {
 
         public abstract int compare(Note note1, Note note2, NoteSorting.Direction direction);
 
-        public static String[] valuesToStringArray(){
+        public static String[] valuesToStringArray() {
             final SortingColumns[] values = values();
             String[] arr = new String[values.length];
 
-            for(int i=0;i<values.length;i++){
+            for (int i = 0; i < values.length; i++) {
 
-                if("classification".equalsIgnoreCase(values[i].toString())){
+                if ("classification".equalsIgnoreCase(values[i].toString())) {
                     continue;
                 }
 
@@ -179,9 +179,9 @@ public class Utils {
             return arr;
         }
 
-        public static SortingColumns findValue(String value){
-            for(SortingColumns column : SortingColumns.values()){
-                if(column.toString().equalsIgnoreCase(value)){
+        public static SortingColumns findValue(String value) {
+            for (SortingColumns column : SortingColumns.values()) {
+                if (column.toString().equalsIgnoreCase(value)) {
                     return column;
                 }
             }
@@ -207,46 +207,46 @@ public class Utils {
     }
     */
 
-    public static File getAttachmentDirForAccount(Context context, String account, String rootFolder){
+    public static File getAttachmentDirForAccount(Context context, String account, String rootFolder) {
         File filesDir = context.getFilesDir();
-        File attachmentPart = new File(filesDir,"attachments");
-        if(!attachmentPart.exists()){
+        File attachmentPart = new File(filesDir, "attachments");
+        if (!attachmentPart.exists()) {
             attachmentPart.mkdir();
         }
         File accountPart = new File(attachmentPart, account);
-        if(!accountPart.exists()){
+        if (!accountPart.exists()) {
             accountPart.mkdir();
         }
-        File rootFolderPart = new File(accountPart,rootFolder);
-        if(!rootFolderPart.exists()){
+        File rootFolderPart = new File(accountPart, rootFolder);
+        if (!rootFolderPart.exists()) {
             rootFolderPart.mkdir();
         }
         return rootFolderPart;
     }
 
-    public static File getAttachmentDirForNote(Context context, String account, String rootFolder, String noteUID){
+    public static File getAttachmentDirForNote(Context context, String account, String rootFolder, String noteUID) {
         File accountDir = getAttachmentDirForAccount(context, account, rootFolder);
-        File noteDir = new File(accountDir,noteUID);
-        if(!noteDir.exists()){
+        File noteDir = new File(accountDir, noteUID);
+        if (!noteDir.exists()) {
             noteDir.mkdir();
         }
         return noteDir;
     }
 
-    public static void saveLastSyncTime(Context context,String accountName) {
+    public static void saveLastSyncTime(Context context, String accountName) {
         SharedPreferences.Editor prefs = context.getSharedPreferences("org.kore.kolabnotes.android.async.KolabSyncAdapter", 0).edit();
-        prefs.putLong("lastSyncTst_"+accountName, System.currentTimeMillis());
+        prefs.putLong("lastSyncTst_" + accountName, System.currentTimeMillis());
         prefs.commit();
     }
 
-    public static Timestamp getLastSyncTime(Context context,String accountName) {
+    public static Timestamp getLastSyncTime(Context context, String accountName) {
         SharedPreferences prefs = context.getSharedPreferences("org.kore.kolabnotes.android.async.KolabSyncAdapter", 0);
-        if(prefs == null){
-            Log.d("getLastSyncTime","KolabSyncAdapter prefs are null");
+        if (prefs == null) {
+            Log.d("getLastSyncTime", "KolabSyncAdapter prefs are null");
             return null;
         }
-        long millis = prefs.getLong("lastSyncTst_"+accountName, -1);
-        if(millis < 0){
+        long millis = prefs.getLong("lastSyncTst_" + accountName, -1);
+        if (millis < 0) {
             return null;
         }
 
@@ -255,8 +255,8 @@ public class Utils {
 
     public static boolean getShowMetainformation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getShowMetainformation","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("getShowMetainformation", "PreferenceManager prefs are null");
             return true;
         }
         return prefs.getBoolean("pref_metainformation", true);
@@ -265,8 +265,8 @@ public class Utils {
 
     public static boolean getUseRicheditor(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getUseRicheditor","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("getUseRicheditor", "PreferenceManager prefs are null");
             return true;
         }
         return prefs.getBoolean("pref_richeditor", true);
@@ -275,8 +275,8 @@ public class Utils {
 
     public static boolean getShowSyncNotifications(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getShowSyncNotification","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("getShowSyncNotification", "PreferenceManager prefs are null");
             return true;
         }
         return prefs.getBoolean("pref_show_sync_notifications", true);
@@ -285,8 +285,8 @@ public class Utils {
 
     public static boolean getShowCharacteristics(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getNoteSorting","MainActivity prefs are null");
+        if (prefs == null) {
+            Log.d("getNoteSorting", "MainActivity prefs are null");
             return true;
         }
         return prefs.getBoolean("pref_characteristics", true);
@@ -295,22 +295,22 @@ public class Utils {
 
     public static boolean getShowPreview(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getNoteSorting","MainActivity prefs are null");
+        if (prefs == null) {
+            Log.d("getNoteSorting", "MainActivity prefs are null");
             return true;
         }
         return prefs.getBoolean("pref_preview", false);
 
     }
 
-    public static String getHtmlBodyText(String html){
-        if(TextUtils.isEmpty(html)){
+    public static String getHtmlBodyText(String html) {
+        if (TextUtils.isEmpty(html)) {
             return null;
         }
 
         int start = html.indexOf("<body>");
 
-        if(start < 0){
+        if (start < 0) {
             return html;
         }
 
@@ -320,13 +320,13 @@ public class Utils {
 
         start = start + 6;
 
-        return html.substring(start,end);
+        return html.substring(start, end);
     }
 
     public static boolean clearConflictWithLatest(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("latest","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("latest", "PreferenceManager prefs are null");
             return true;
         }
         return "LATEST".equalsIgnoreCase(prefs.getString("sync_conflict", "LATEST"));
@@ -334,8 +334,8 @@ public class Utils {
 
     public static boolean clearConflictWithServer(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("latest","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("latest", "PreferenceManager prefs are null");
             return true;
         }
         return "SERVER".equalsIgnoreCase(prefs.getString("sync_conflict", "LATEST"));
@@ -343,70 +343,70 @@ public class Utils {
 
     public static boolean clearConflictWithLocal(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("latest","PreferenceManager prefs are null");
+        if (prefs == null) {
+            Log.d("latest", "PreferenceManager prefs are null");
             return true;
         }
-        return "LOCAL".equalsIgnoreCase(prefs.getString("sync_conflict","LATEST"));
+        return "LOCAL".equalsIgnoreCase(prefs.getString("sync_conflict", "LATEST"));
     }
 
     public static NoteSorting getNoteSorting(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if(prefs == null){
-            Log.d("getNoteSorting","MainActivity prefs are null");
+        if (prefs == null) {
+            Log.d("getNoteSorting", "MainActivity prefs are null");
             return new NoteSorting();
         }
         String direction = prefs.getString("pref_direction", null);
         String column = prefs.getString("pref_column", null);
 
-        if(TextUtils.isEmpty(direction) || TextUtils.isEmpty(column)){
-            Log.d("getNoteSorting","column:"+column+"; or direction:"+direction+"; is empty, so default ordering will be returned");
+        if (TextUtils.isEmpty(direction) || TextUtils.isEmpty(column)) {
+            Log.d("getNoteSorting", "column:" + column + "; or direction:" + direction + "; is empty, so default ordering will be returned");
             return new NoteSorting();
         }
 
         return new NoteSorting(SortingColumns.findValue(column.toLowerCase()), NoteSorting.Direction.valueOf(direction));
     }
 
-    public static boolean getReloadDataAfterDetail(Context context){
+    public static boolean getReloadDataAfterDetail(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(Utils.RELOAD_DATA_AFTER_DETAIL,false);
+        return sharedPref.getBoolean(Utils.RELOAD_DATA_AFTER_DETAIL, false);
     }
 
-    public static void setReloadDataAfterDetail(Context context, boolean value){
+    public static void setReloadDataAfterDetail(Context context, boolean value) {
         SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
-        if(value){
-            sharedPref.edit().putBoolean(Utils.RELOAD_DATA_AFTER_DETAIL,value).commit();
-        }else{
+        if (value) {
+            sharedPref.edit().putBoolean(Utils.RELOAD_DATA_AFTER_DETAIL, value).commit();
+        } else {
             sharedPref.edit().remove(Utils.RELOAD_DATA_AFTER_DETAIL).commit();
         }
     }
 
 
-    public static String getSelectedTagName(Context context){
-        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref",Context.MODE_PRIVATE);
-        return sharedPref.getString(Utils.SELECTED_TAG_NAME,null);
+    public static String getSelectedTagName(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
+        return sharedPref.getString(Utils.SELECTED_TAG_NAME, null);
     }
 
-    public static void setSelectedTagName(Context context, String name){
-        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref",Context.MODE_PRIVATE);
-        if(name == null){
+    public static void setSelectedTagName(Context context, String name) {
+        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
+        if (name == null) {
             sharedPref.edit().remove(Utils.SELECTED_TAG_NAME).commit();
-        }else{
-            sharedPref.edit().putString(Utils.SELECTED_TAG_NAME,name).commit();
+        } else {
+            sharedPref.edit().putString(Utils.SELECTED_TAG_NAME, name).commit();
         }
     }
 
-    public static String getSelectedNotebookName(Context context){
-        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref",Context.MODE_PRIVATE);
-        return sharedPref.getString(Utils.SELECTED_NOTEBOOK_NAME,null);
+    public static String getSelectedNotebookName(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
+        return sharedPref.getString(Utils.SELECTED_NOTEBOOK_NAME, null);
     }
 
-    public static void setSelectedNotebookName(Context context, String name){
+    public static void setSelectedNotebookName(Context context, String name) {
         SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
-        if(name == null){
+        if (name == null) {
             sharedPref.edit().remove(Utils.SELECTED_NOTEBOOK_NAME).commit();
-        }else{
-            sharedPref.edit().putString(Utils.SELECTED_NOTEBOOK_NAME,name).commit();
+        } else {
+            sharedPref.edit().putString(Utils.SELECTED_NOTEBOOK_NAME, name).commit();
         }
     }
 
@@ -426,32 +426,32 @@ public class Utils {
         }
     }
 
-    public static void setElevation(View view, float elevation){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+    public static void setElevation(View view, float elevation) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             view.setElevation(elevation);
         }
     }
 
-    public static boolean checkNotebookPermissions(final Context context, final ActiveAccount activeAccount, final Note noteToChange, final Notebook newNotebook){
-        String oldNBUid = new NoteRepository(context).getUIDofNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(),noteToChange.getIdentification().getUid());
+    public static boolean checkNotebookPermissions(final Context context, final ActiveAccount activeAccount, final Note noteToChange, final Notebook newNotebook) {
+        String oldNBUid = new NoteRepository(context).getUIDofNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(), noteToChange.getIdentification().getUid());
 
-        if(newNotebook.isShared() || (oldNBUid != null && !oldNBUid.equals(newNotebook.getIdentification().getUid()))){
-            if(!oldNBUid.equals(newNotebook.getIdentification().getUid())){
+        if (newNotebook.isShared() || (oldNBUid != null && !oldNBUid.equals(newNotebook.getIdentification().getUid()))) {
+            if (!oldNBUid.equals(newNotebook.getIdentification().getUid())) {
                 //notenewNotebook got changed, so one needs the modification rights in the old an creation right in the new book
                 Notebook oldOne = new NotebookRepository(context).getByUID(activeAccount.getAccount(), activeAccount.getRootFolder(), oldNBUid);
-                if(oldOne.isShared()){
-                    if(!((SharedNotebook)oldOne).isNoteModificationAllowed()){
+                if (oldOne.isShared()) {
+                    if (!((SharedNotebook) oldOne).isNoteModificationAllowed()) {
                         Toast.makeText(context, R.string.no_change_permissions, Toast.LENGTH_LONG).show();
                         return true;
                     }
                 }
 
-                if(newNotebook.isShared() && !((SharedNotebook)newNotebook).isNoteCreationAllowed()){
+                if (newNotebook.isShared() && !((SharedNotebook) newNotebook).isNoteCreationAllowed()) {
                     Toast.makeText(context, R.string.no_create_permissions, Toast.LENGTH_LONG).show();
                     return true;
                 }
-            }else {
-                if(!((SharedNotebook)newNotebook).isNoteModificationAllowed()){
+            } else {
+                if (!((SharedNotebook) newNotebook).isNoteModificationAllowed()) {
                     Toast.makeText(context, R.string.no_change_permissions, Toast.LENGTH_LONG).show();
                     return true;
                 }
@@ -459,17 +459,17 @@ public class Utils {
         }
         return false;
     }
-    
-    public static final String getNameOfActiveAccount(Context context, String pemail, String prootFolder){
+
+    public static final String getNameOfActiveAccount(Context context, String pemail, String prootFolder) {
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = accountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-        for(int i=0;i<accounts.length;i++) {
-            String email = accountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_EMAIL);
-            String name = accountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ACCOUNT_NAME);
-            String rootFolder = accountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ROOT_FOLDER);
+        for (int i = 0; i < accounts.length; i++) {
+            String email = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_EMAIL);
+            String name = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_NAME);
+            String rootFolder = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ROOT_FOLDER);
 
-            if(pemail.equals(email) && prootFolder.equals(rootFolder)){
+            if (pemail.equals(email) && prootFolder.equals(rootFolder)) {
                 return name;
             }
         }
@@ -477,26 +477,26 @@ public class Utils {
         return context.getResources().getString(R.string.drawer_account_local);
     }
 
-    public static final AccountIdentifier getAccountIdentifierWithName(Context context, String account){
+    public static final AccountIdentifier getAccountIdentifierWithName(Context context, String account) {
         String rootFolder = "Notes";
         String email = "local";
-        if(account != null && !account.equals("local")) {
+        if (account != null && !account.equals("local")) {
             AccountManager accountManager = AccountManager.get(context);
             Account[] accounts = AccountManager.get(context).getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
             for (Account acc : accounts) {
-                if(account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))){
+                if (account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
                     email = accountManager.getUserData(acc, AuthenticatorActivity.KEY_EMAIL);
                     rootFolder = accountManager.getUserData(acc, AuthenticatorActivity.KEY_ROOT_FOLDER);
                 }
             }
         }
 
-        return new AccountIdentifier(email,rootFolder);
+        return new AccountIdentifier(email, rootFolder);
     }
 
     public static String getAccountType(Context context, AccountIdentifier accountId) {
-        if(Utils.isLocalAccount(accountId)){
+        if (Utils.isLocalAccount(accountId)) {
             return "local";
         }
 
@@ -507,30 +507,30 @@ public class Utils {
             String email = accountManager.getUserData(acc, AuthenticatorActivity.KEY_EMAIL);
             String rootFolder = accountManager.getUserData(acc, AuthenticatorActivity.KEY_ROOT_FOLDER);
 
-            if(accountId.getAccount().equals(email) && accountId.getRootFolder().equals(rootFolder)){
+            if (accountId.getAccount().equals(email) && accountId.getRootFolder().equals(rootFolder)) {
                 return accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_TYPE);
             }
         }
         return null;
     }
 
-    public static void setToolbarTextAndIconColor(final Activity activity, final Toolbar toolbar, final boolean lightText){
+    public static void setToolbarTextAndIconColor(final Activity activity, final Toolbar toolbar, final boolean lightText) {
 
-        setOverflowButtonColor(activity,lightText);
-        if(lightText){
+        setOverflowButtonColor(activity, lightText);
+        if (lightText) {
             toolbar.setTitleTextColor(android.graphics.Color.WHITE);
 
             toolbar.getNavigationIcon().clearColorFilter();
 
-            for(int i=0; i< toolbar.getMenu().size(); i++){
+            for (int i = 0; i < toolbar.getMenu().size(); i++) {
                 final MenuItem item = toolbar.getMenu().getItem(i);
-                if(item.getIcon() != null) {
+                if (item.getIcon() != null) {
                     final Drawable drawable = item.getIcon().mutate();
                     drawable.clearColorFilter();
                     item.setIcon(drawable);
                 }
             }
-        }else{
+        } else {
             //To generate negative image
             float[] colorMatrix_Negative = {
                     -1.0f, 0, 0, 0, 255, //red
@@ -547,9 +547,9 @@ public class Utils {
             navIcon.setColorFilter(colorFilter_Negative);
             toolbar.setNavigationIcon(navIcon);
 
-            for(int i=0; i< toolbar.getMenu().size(); i++){
+            for (int i = 0; i < toolbar.getMenu().size(); i++) {
                 final MenuItem item = toolbar.getMenu().getItem(i);
-                if(item.getIcon() != null) {
+                if (item.getIcon() != null) {
                     final Drawable drawable = item.getIcon().mutate();
                     drawable.clearColorFilter();
                     drawable.setColorFilter(colorFilter_Negative);
@@ -559,7 +559,7 @@ public class Utils {
         }
     }
 
-    public static void setOverflowButtonColor(final Activity activity, final boolean lightColor){
+    public static void setOverflowButtonColor(final Activity activity, final boolean lightColor) {
         final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
         final ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
         final ViewTreeObserver viewTreeObserver = decorView.getViewTreeObserver();
@@ -581,8 +581,8 @@ public class Utils {
         });
     }
 
-    public static boolean useLightTextColor(Context context, Color colorOfNote){
-        if(colorOfNote == null){
+    public static boolean useLightTextColor(Context context, Color colorOfNote) {
+        if (colorOfNote == null) {
             return false;
         }
 
@@ -601,8 +601,8 @@ public class Utils {
      * @param source
      * @return Note
      */
-    public static final Note copy(Note source){
-        Note note = new Note(source.getIdentification(),source.getAuditInformation(),source.getClassification(),source.getSummary());
+    public static final Note copy(Note source) {
+        Note note = new Note(source.getIdentification(), source.getAuditInformation(), source.getClassification(), source.getSummary());
         note.setDescription(source.getDescription());
         note.setColor(source.getColor());
         note.addCategories(source.getCategories().toArray(new Tag[source.getCategories().size()]));
@@ -610,17 +610,17 @@ public class Utils {
         return note;
     }
 
-    public static void updateWidgetsForChange(Context context){
+    public static void updateWidgetsForChange(Context context) {
         Class<StickyNoteWidget> stickyNoteWidgetClass = StickyNoteWidget.class;
         Class<ListWidget> listWidgetClass = ListWidget.class;
-        Intent stickyIntent = new Intent(context,stickyNoteWidgetClass);
+        Intent stickyIntent = new Intent(context, stickyNoteWidgetClass);
         Intent listIntent = new Intent(context, listWidgetClass);
 
         int[] stickyIds = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, stickyNoteWidgetClass));
         int[] listIds = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, listWidgetClass));
 
         stickyIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        stickyIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,stickyIds);
+        stickyIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, stickyIds);
 
         listIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         listIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, listIds);
@@ -629,42 +629,42 @@ public class Utils {
         context.sendBroadcast(listIntent);
     }
 
-    public static final boolean differentMutableData(Note one, Note two){
-        if(!equals(one.getClassification(), two.getClassification())){
+    public static final boolean differentMutableData(Note one, Note two) {
+        if (!equals(one.getClassification(), two.getClassification())) {
             return true;
         }
-        if(!equals(one.getColor(), two.getColor())){
+        if (!equals(one.getColor(), two.getColor())) {
             return true;
         }
-        if(!equals(one.getSummary(), two.getSummary())){
+        if (!equals(one.getSummary(), two.getSummary())) {
             return true;
         }
-        if(one.getCategories().size() != two.getCategories().size() || !one.getCategories().containsAll(two.getCategories())){
+        if (one.getCategories().size() != two.getCategories().size() || !one.getCategories().containsAll(two.getCategories())) {
             return true;
         }
 
         return false;
     }
 
-    public static boolean equals(Object o1, Object o2){
-        if(o1 == null){
+    public static boolean equals(Object o1, Object o2) {
+        if (o1 == null) {
             return o2 == null;
         }
 
         return o1.equals(o2);
     }
 
-    public static void initColumnSpinner(Context context, Spinner spinner, int spinnerLayout, AdapterView.OnItemSelectedListener listener){
-        initColumnSpinner(context,spinner, spinnerLayout,listener,null);
+    public static void initColumnSpinner(Context context, Spinner spinner, int spinnerLayout, AdapterView.OnItemSelectedListener listener) {
+        initColumnSpinner(context, spinner, spinnerLayout, listener, null);
     }
 
 
-    public static void initColumnSpinner(Context context, Spinner spinner, int spinnerLayout, AdapterView.OnItemSelectedListener listener, String selection){
+    public static void initColumnSpinner(Context context, Spinner spinner, int spinnerLayout, AdapterView.OnItemSelectedListener listener, String selection) {
         int select = 1;
-        if(selection != null){
+        if (selection != null) {
             final String[] strings = SortingColumns.valuesToStringArray();
-            for(int i=0;i<strings.length;i++){
-                if(strings[i].trim().equalsIgnoreCase(selection.trim())){
+            for (int i = 0; i < strings.length; i++) {
+                if (strings[i].trim().equalsIgnoreCase(selection.trim())) {
                     select = i;
                     break;
                 }
@@ -672,29 +672,29 @@ public class Utils {
         }
 
         final String[] columnNames = context.getResources().getStringArray(R.array.sorting_columns);
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(context,spinnerLayout,columnNames);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(context, spinnerLayout, columnNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(listener);
         spinner.setSelection(select);
     }
 
-    public static boolean isLocalAccount(String account, String rootFolder){
+    public static boolean isLocalAccount(String account, String rootFolder) {
         return "local".equals(account) && "Notes".equals(rootFolder);
     }
 
-    public static boolean isLocalAccount(AccountIdentifier identifier){
+    public static boolean isLocalAccount(AccountIdentifier identifier) {
         return isLocalAccount(identifier.getAccount(), identifier.getRootFolder());
     }
 
-    public static String getColumnNameOfSelection(int selection){
+    public static String getColumnNameOfSelection(int selection) {
         final SortingColumns[] values = SortingColumns.values();
         return values[selection].toString();
     }
 
-    public static boolean isTablet(Resources res){
-            return (res.getConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK)
-                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    public static boolean isTablet(Resources res) {
+        return (res.getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }

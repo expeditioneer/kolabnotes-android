@@ -113,7 +113,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     private Set<String> selectedTags = new LinkedHashSet<>();
 
-    private Map<String,Tag> allTags = new HashMap<>();
+    private Map<String, Tag> allTags = new HashMap<>();
 
     //Given notebook is set, if a notebook uid was in the start intent,
     //intialNotebook ist the notebook-UID which is selected after setSpinnerSelection was called
@@ -128,7 +128,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     private KolabNotesRichEditor editor;
 
     private EditText editText;
-    
+
     private AppCompatActivity activity;
 
     private boolean isDescriptionDirty = false;
@@ -140,9 +140,9 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     private boolean saveNotRequiredAnymore = false;
 
     //This map contains inline images in its base form, sadly the android webview destroys the correct form
-    private Map<String,String> base64Images = new HashMap<>();
+    private Map<String, String> base64Images = new HashMap<>();
 
-    public static DetailFragment newInstance(String noteUid, String notebook){
+    public static DetailFragment newInstance(String noteUid, String notebook) {
         DetailFragment f = new DetailFragment();
         f.setStartUid(noteUid);
         f.setStartNotebook(notebook);
@@ -164,7 +164,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = (AppCompatActivity)activity;
+        this.activity = (AppCompatActivity) activity;
 
         notebookRepository = new NotebookRepository(activity);
         noteRepository = new NoteRepository(activity);
@@ -172,7 +172,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         tagRepository = new TagRepository(activity);
         activeAccountRepository = new ActiveAccountRepository(activity);
 
-        ((OnFragmentCallback)activity).fragementAttached(this);
+        ((OnFragmentCallback) activity).fragementAttached(this);
     }
 
     @Override
@@ -181,17 +181,17 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
-        if(activity.getSupportActionBar() != null){
+        if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            if(activity.isInMultiWindowMode() && activity.findViewById(R.id.spinner_notebook) == null){
+            if (activity.isInMultiWindowMode() && activity.findViewById(R.id.spinner_notebook) == null) {
                 //if the activity resizes in multiwindow mode to phone ui, all views in this fragment will be null becuase they are not displayed, so don't do anything
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("selectedNotebookName",givenNotebook);
+                returnIntent.putExtra("selectedNotebookName", givenNotebook);
 
-                ((OnFragmentCallback)activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.NOT_VISIBLE);
+                ((OnFragmentCallback) activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.NOT_VISIBLE);
                 return;
             }
         }
@@ -219,38 +219,38 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         if (Intent.ACTION_SEND.equals(action)) {
             final String type = startIntent.getType();
 
-            if(type != null && type.startsWith("image")){
+            if (type != null && type.startsWith("image")) {
                 loadImageFromIntent(startIntent);
-            }else{
+            } else {
                 takeTextFromIntent(startIntent);
             }
         }
 
         Log.d("onCreate", "accountEmail:" + accountEmail);
-        Log.d("onCreate","rootFolder:"+rootFolder);
-        Log.d("onCreate","notebook-uid:"+notebook);
+        Log.d("onCreate", "rootFolder:" + rootFolder);
+        Log.d("onCreate", "notebook-uid:" + notebook);
 
         ActiveAccount activeAccount;
-        if(accountEmail != null && rootFolder != null){
-            activeAccount = activeAccountRepository.switchAccount(accountEmail,rootFolder);
-        }else{
+        if (accountEmail != null && rootFolder != null) {
+            activeAccount = activeAccountRepository.switchAccount(accountEmail, rootFolder);
+        } else {
             activeAccount = activeAccountRepository.getActiveAccount();
         }
 
         toolbar.setTitle(Utils.getNameOfActiveAccount(activity, activeAccount.getAccount(), activeAccount.getRootFolder()));
 
-        if(uid != null) {
+        if (uid != null) {
 
             //if a note was selected from the "all notes" overview
             final AccountIdentifier accountFromNote = noteRepository.getAccountFromNote(uid);
-            if(!activeAccount.getAccount().equals(accountFromNote.getAccount()) || !activeAccount.getRootFolder().equals(accountFromNote.getRootFolder())){
-                activeAccount = activeAccountRepository.switchAccount(accountFromNote.getAccount(),accountFromNote.getRootFolder());
+            if (!activeAccount.getAccount().equals(accountFromNote.getAccount()) || !activeAccount.getRootFolder().equals(accountFromNote.getRootFolder())) {
+                activeAccount = activeAccountRepository.switchAccount(accountFromNote.getAccount(), accountFromNote.getRootFolder());
             }
 
             initSpinner();
 
             notebook = initNote(uid, notebook, activeAccount);
-        }else{
+        } else {
             initSpinner();
             isNewNote = true;
         }
@@ -272,7 +272,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     private void initTextEditor() {
         boolean useRicheditor = Utils.getUseRicheditor(activity);
 
-        if(useRicheditor) {
+        if (useRicheditor) {
             editor = (KolabNotesRichEditor) activity.findViewById(R.id.detail_description);
             editor.setVisibility(View.VISIBLE);
             editor.setBackgroundColor(Color.TRANSPARENT);
@@ -291,21 +291,21 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                 }
             });
             initEditor();
-        }else{
+        } else {
             editText = (EditText) activity.findViewById(R.id.detail_description_plain);
             editText.setVisibility(View.VISIBLE);
             editText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    void updateFragmentDataWithNewNoteSelection(String noteUid, String notebookUID, ActiveAccount account){
+    void updateFragmentDataWithNewNoteSelection(String noteUid, String notebookUID, ActiveAccount account) {
         initTextEditor();
         initSpinner();
         String bookID = notebookUID;
         //if the notebookuid is null it will be loaded from this method
-        if(noteUid == null){
+        if (noteUid == null) {
             isNewNote = true;
-        }else {
+        } else {
             isNewNote = false;
             bookID = initNote(noteUid, notebookUID, account);
         }
@@ -335,7 +335,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             summary.setText(note.getSummary());
 
             String desc = note.getDescription();
-            if(!TextUtils.isEmpty(desc)) {
+            if (!TextUtils.isEmpty(desc)) {
                 String updatedDesc = initImageMap(note.getDescription());
                 setHtml(updatedDesc);
                 note.setDescription(updatedDesc);
@@ -348,7 +348,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
             selectedColor = note.getColor();
 
-            if(notebook == null){
+            if (notebook == null) {
                 notebook = noteRepository.getUIDofNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(), uid);
             }
         }
@@ -360,52 +360,52 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         CharSequence hdescription = startIntent.getCharSequenceExtra(Intent.EXTRA_HTML_TEXT);
         String summary = startIntent.getStringExtra(Intent.EXTRA_SUBJECT);
 
-        if(!TextUtils.isEmpty(hdescription)) {
+        if (!TextUtils.isEmpty(hdescription)) {
             String updatedDesc = initImageMap(hdescription.toString());
             setHtml(updatedDesc);
-        }else if(!TextUtils.isEmpty(description)) {
+        } else if (!TextUtils.isEmpty(description)) {
 
             String updatedDesc = initImageMap(description.toString());
             setHtml(updatedDesc);
         }
 
-        if(!TextUtils.isEmpty(summary)) {
+        if (!TextUtils.isEmpty(summary)) {
             EditText esummary = (EditText) activity.findViewById(R.id.detail_summary);
             esummary.setText(summary);
 
         }
     }
 
-    private String getUUIDForCreation(){
-        if(uuidForCreation == null){
+    private String getUUIDForCreation() {
+        if (uuidForCreation == null) {
             uuidForCreation = UUID.randomUUID().toString();
         }
-        return  uuidForCreation;
+        return uuidForCreation;
     }
 
-    void setToolbarColor(){
+    void setToolbarColor() {
         boolean lightText = true;
         if (selectedColor != null) {
             toolbar.setBackgroundColor(Color.parseColor(selectedColor.getHexcode()));
             lightText = Utils.useLightTextColor(activity, selectedColor);
-        }else{
+        } else {
             toolbar.setBackgroundColor(getResources().getColor(R.color.theme_default_primary));
         }
 
         Utils.setToolbarTextAndIconColor(activity, toolbar, lightText);
     }
 
-    void setHtml(String text){
+    void setHtml(String text) {
         final String stripped = stripBody(text);
-        if(editor != null){
+        if (editor != null) {
             editor.setHtml(stripped);
-        }else{
+        } else {
             Spanned fromHtml = Html.fromHtml(stripped);
             editText.setText(fromHtml, TextView.BufferType.SPANNABLE);
         }
     }
 
-    String stripBody(String html){
+    String stripBody(String html) {
         return Utils.getHtmlBodyText(html);
     }
 
@@ -417,46 +417,46 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         this.startNotebook = startNotebook;
     }
 
-    public Note getNote(){
+    public Note getNote() {
         return note;
     }
 
-    void setNotebook(ActiveAccount activeAccount,String uid, boolean setGivenNotebook){
-        if(uid != null) {
+    void setNotebook(ActiveAccount activeAccount, String uid, boolean setGivenNotebook) {
+        if (uid != null) {
             //GitHub Issue 37
             Notebook notebook = notebookRepository.getByUID(activeAccount.getAccount(), activeAccount.getRootFolder(), uid);
-            if(notebook != null) {
+            if (notebook != null) {
 
                 String summary = notebook.getSummary();
 
-                if(notebook.isShared()){
-                    SharedNotebook shared = (SharedNotebook)notebook;
+                if (notebook.isShared()) {
+                    SharedNotebook shared = (SharedNotebook) notebook;
                     summary = shared.getShortName();
 
-                    if(!shared.isNoteCreationAllowed() && !shared.isNoteModificationAllowed()){
+                    if (!shared.isNoteCreationAllowed() && !shared.isNoteModificationAllowed()) {
                         Toast.makeText(activity, R.string.no_write_permissions, Toast.LENGTH_LONG).show();
-                    }else if(shared.isNoteCreationAllowed() && !shared.isNoteModificationAllowed()){
-                        if(note != null) {
+                    } else if (shared.isNoteCreationAllowed() && !shared.isNoteModificationAllowed()) {
+                        if (note != null) {
                             Toast.makeText(activity, R.string.no_change_permissions, Toast.LENGTH_LONG).show();
                         }
-                    }else if(!shared.isNoteCreationAllowed() && shared.isNoteModificationAllowed()){
+                    } else if (!shared.isNoteCreationAllowed() && shared.isNoteModificationAllowed()) {
                         Toast.makeText(activity, R.string.no_create_permissions, Toast.LENGTH_LONG).show();
                     }
                 }
 
                 String notebookSummary = summary;
                 setSpinnerSelection(notebookSummary);
-                if(setGivenNotebook){
+                if (setGivenNotebook) {
                     givenNotebook = notebookSummary;
                 }
-            }else{
+            } else {
                 Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
                 spinner.setSelection(0);
             }
         }
     }
 
-    void initEditor(){
+    void initEditor() {
         editor.setOnTextChangeListener(new KolabNotesRichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String s) {
@@ -567,17 +567,17 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             @Override
             public void onClick(View v) {
                 new ColorPickerDialog
-                    .Builder(activity)
-                    .setTitle("Pick Theme")
-                    .setColorShape(ColorShape.SQAURE)
-                    .setDefaultColor(R.color.black)
-                    .setColorListener(new ColorListener() {
-                        @Override
-                        public void onColorSelected(int color, @NonNull String colorHex) {
-                            editor.setTextColor(color);
-                        }
-                    })
-                    .show();
+                        .Builder(activity)
+                        .setTitle("Pick Theme")
+                        .setColorShape(ColorShape.SQAURE)
+                        .setDefaultColor(R.color.black)
+                        .setColorListener(new ColorListener() {
+                            @Override
+                            public void onColorSelected(int color, @NonNull String colorHex) {
+                                editor.setTextColor(color);
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -741,13 +741,13 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                     editor.insertImage(imageEncoded, alt);
                     editor.getScaleX();
                     putImage(alt, imageEncoded);
-                    
+
                     if (activity instanceof OnFragmentCallback) {
                         ((OnFragmentCallback) activity).fileSelected();
                     }
                 }
             }
-        }else if(requestCode == ATTACHMENT_ACTIVITY_RESULT_CODE){
+        } else if (requestCode == ATTACHMENT_ACTIVITY_RESULT_CODE) {
             if (activity instanceof OnFragmentCallback) {
                 ((OnFragmentCallback) activity).fileSelected();
             }
@@ -756,12 +756,12 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     private void loadImageFromIntent(Intent resultData) {
         Uri uri = resultData.getData();
-        if(uri != null){
+        if (uri != null) {
             loadImageFromUri(uri);
-        }else{
+        } else {
             //in case of getting image via share intent from other app
             final ClipData clipData = resultData.getClipData();
-            for(int i=0;i<clipData.getItemCount();i++){
+            for (int i = 0; i < clipData.getItemCount(); i++) {
                 loadImageFromUri(clipData.getItemAt(i).getUri());
             }
         }
@@ -787,19 +787,19 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             }
 
             byte[] b = baos.toByteArray();
-            if(b.length < 900000) {
+            if (b.length < 900000) {
                 String imageEncoded = prefix + Base64.encodeToString(b, Base64.NO_WRAP);
 
                 String alt = path;
 
                 //issue 125
                 if (!editor.isFocused()) {
-                /* Set focus, as after rotate focus is lost and it's impossible to insert an image */
+                    /* Set focus, as after rotate focus is lost and it's impossible to insert an image */
                     editor.focusEditor();
                 }
                 editor.insertImage(imageEncoded, alt);
                 putImage(alt, imageEncoded);
-            }else{
+            } else {
                 Toast.makeText(activity, R.string.image_too_big, Toast.LENGTH_LONG).show();
             }
 
@@ -807,27 +807,27 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             if (activity instanceof OnFragmentCallback) {
                 ((OnFragmentCallback) activity).fileSelected();
             }
-        }catch(IOException e){
-            Log.e("onActivityResult",e.toString());
+        } catch (IOException e) {
+            Log.e("onActivityResult", e.toString());
         }
     }
 
-    String getNotebookSpinnerSelectionName(){
+    String getNotebookSpinnerSelectionName() {
         Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
 
-        if(spinner.getSelectedItem() == null){
+        if (spinner.getSelectedItem() == null) {
             return null;
         }
 
         return spinner.getSelectedItem().toString();
     }
 
-    void setSpinnerSelection(String notebookSummary){
+    void setSpinnerSelection(String notebookSummary) {
         Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
         SpinnerAdapter adapter = spinner.getAdapter();
-        for(int i=0;i<adapter.getCount();i++){
+        for (int i = 0; i < adapter.getCount(); i++) {
             String nbsummary = adapter.getItem(i).toString();
-            if(nbsummary.equals(notebookSummary)){
+            if (nbsummary.equals(notebookSummary)) {
                 spinner.setSelection(i);
                 break;
             }
@@ -843,20 +843,20 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         setToolbarColor();
     }
 
-    String setShareIntentSubject(Intent shareIntent){
+    String setShareIntentSubject(Intent shareIntent) {
         EditText summary = (EditText) activity.findViewById(R.id.detail_summary);
         String ssummary = summary.getText().toString();
-        if(!TextUtils.isEmpty(ssummary)) {
+        if (!TextUtils.isEmpty(ssummary)) {
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, ssummary);
             return ssummary;
         }
         return null;
     }
 
-    String setShareIntentDescription(Intent shareIntent){
+    String setShareIntentDescription(Intent shareIntent) {
         String descriptionValue = repairImages(getDescriptionFromView());
-        if(descriptionValue != null) {
-            if(!descriptionValue.startsWith("<!DOCTYPE HTML")) {
+        if (descriptionValue != null) {
+            if (!descriptionValue.startsWith("<!DOCTYPE HTML")) {
                 descriptionValue = HTMLSTART + repairImages(getDescriptionFromView()) + HTMLEND;
             }
 
@@ -871,9 +871,9 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         setShareIntentSubject(shareIntent);
         String descriptionValue = setShareIntentDescription(shareIntent);
 
-        if(!TextUtils.isEmpty(descriptionValue)) {
+        if (!TextUtils.isEmpty(descriptionValue)) {
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
-        }else{
+        } else {
             Toast.makeText(activity, R.string.empty_note, Toast.LENGTH_LONG).show();
         }
         return false;
@@ -891,7 +891,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.ok_menu:
                 saveNote(true);
                 break;
@@ -929,7 +929,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         return true;
     }
 
-    void chooseColor(){
+    void chooseColor() {
 
         final int initialColor = selectedColor == null ? Color.WHITE : Color.parseColor(selectedColor.getHexcode());
 
@@ -948,7 +948,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                 .show();
     }
 
-    void showMetainformation(){
+    void showMetainformation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.title_metainformation);
@@ -981,7 +981,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         builder.show();
     }
 
-    void editClassification(){
+    void editClassification() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_change_classification);
@@ -999,9 +999,9 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             }
         });
 
-        if(selectedClassification == null){
+        if (selectedClassification == null) {
             ((RadioButton) view.findViewById(R.id.radio_public)).toggle();
-        }else {
+        } else {
 
             switch (selectedClassification) {
                 case PUBLIC:
@@ -1020,15 +1020,15 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     }
 
 
-    void showAccountChooseDialog(){
-        AccountChooserActivity chooser = (AccountChooserActivity)this.activity;
+    void showAccountChooseDialog() {
+        AccountChooserActivity chooser = (AccountChooserActivity) this.activity;
         chooser.showAccountChooseDialog();
     }
 
     @Override
     public void onAccountSwitched(String name, AccountIdentifier accountIdentifier) {
         resetSpinner();
-        if(toolbar != null){
+        if (toolbar != null) {
             toolbar.setTitle(name);
         }
         this.accountGotChanged = true;
@@ -1039,14 +1039,14 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         private final View view;
 
-        public OnClassificationChange(View view){
+        public OnClassificationChange(View view) {
             this.view = view;
         }
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
             RadioGroup group = (RadioGroup) view.findViewById(R.id.dialog_classification);
-            switch(group.getCheckedRadioButtonId()){
+            switch (group.getCheckedRadioButtonId()) {
                 case R.id.radio_public:
                     DetailFragment.this.selectedClassification = Note.Classification.PUBLIC;
                     break;
@@ -1060,7 +1060,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         }
     }
 
-    void editTags(){
+    void editTags() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.dialog_change_tags);
 
@@ -1072,10 +1072,10 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         final boolean[] selectionArr = new boolean[tagArr.length];
 
-        final ArrayList<Integer> selectedItems=new ArrayList<Integer> ();
+        final ArrayList<Integer> selectedItems = new ArrayList<Integer>();
 
-        for(int i=0;i<tagArr.length;i++){
-            if(selectedTags.contains(tagArr[i])){
+        for (int i = 0; i < tagArr.length; i++) {
+            if (selectedTags.contains(tagArr[i])) {
                 selectionArr[i] = true;
                 selectedItems.add(i);
             }
@@ -1083,7 +1083,6 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         builder.setMultiChoiceItems(tagArr, selectionArr,
                 new DialogInterface.OnMultiChoiceClickListener() {
-
 
 
                     @Override
@@ -1119,10 +1118,10 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         builder.show();
     }
 
-    String getDescriptionFromView(){
-        if(editor != null){
+    String getDescriptionFromView() {
+        if (editor != null) {
             final String html = editor.getHtml();
-            if(TextUtils.isEmpty(html)){
+            if (TextUtils.isEmpty(html)) {
                 return null;
             }
             return html;
@@ -1134,7 +1133,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         return sb.toString();
     }
 
-    private AlertDialog createNotebookDialog(){
+    private AlertDialog createNotebookDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_input_text_notebook);
@@ -1154,7 +1153,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         return builder.create();
     }
 
-    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener{
+    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener {
 
         private final EditText textField;
 
@@ -1165,19 +1164,19 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if(textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0){
+            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
                 return;
             }
 
             ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
 
-            Identification ident = new Identification(UUID.randomUUID().toString(),"kolabnotes-android");
+            Identification ident = new Identification(UUID.randomUUID().toString(), "kolabnotes-android");
             Timestamp now = new Timestamp(System.currentTimeMillis());
-            AuditInformation audit = new AuditInformation(now,now);
+            AuditInformation audit = new AuditInformation(now, now);
 
             String value = textField.getText().toString();
 
-            Notebook nb = new Notebook(ident,audit, Note.Classification.PUBLIC, value);
+            Notebook nb = new Notebook(ident, audit, Note.Classification.PUBLIC, value);
             nb.setDescription(value);
             notebookRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), nb);
 
@@ -1189,22 +1188,22 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     @Override
     public void save() {
-        if(!saveNotRequiredAnymore){
+        if (!saveNotRequiredAnymore) {
             saveNote(false);
         }
     }
 
-    void saveNote(boolean closeWhenSaved){
+    void saveNote(boolean closeWhenSaved) {
         EditText summary = (EditText) activity.findViewById(R.id.detail_summary);
 
         Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
 
-        if(spinner.getSelectedItem() == null){
+        if (spinner.getSelectedItem() == null) {
             //Just possible if there is no notebook created
             AlertDialog notebookDialog = createNotebookDialog();
 
             notebookDialog.show();
-        }else {
+        } else {
 
             if (TextUtils.isEmpty(summary.getText().toString())) {
                 summary.setError(getString(R.string.error_field_required));
@@ -1217,7 +1216,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             String beforeRepair = getDescriptionFromView();
             String descriptionValue = repairImages(beforeRepair);
 
-            if(descriptionValue != null && !descriptionValue.startsWith("<!DOCTYPE HTML")){
+            if (descriptionValue != null && !descriptionValue.startsWith("<!DOCTYPE HTML")) {
                 descriptionValue = HTMLSTART + repairImages(beforeRepair) + HTMLEND;
             }
 
@@ -1235,8 +1234,8 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                 Notebook book = notebookRepository.getBySummary(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookName);
 
                 // not null because of issue 167
-                if(book != null && book.isShared()){
-                    if(!((SharedNotebook)book).isNoteCreationAllowed()){
+                if (book != null && book.isShared()) {
+                    if (!((SharedNotebook) book).isNoteCreationAllowed()) {
                         Toast.makeText(activity, R.string.no_create_permissions, Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -1245,10 +1244,10 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                 noteRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), note, book.getIdentification().getUid());
                 noteTagRepository.delete(activeAccount.getAccount(), activeAccount.getRootFolder(), uuid);
                 for (String tag : selectedTags) {
-                    if(accountGotChanged){
+                    if (accountGotChanged) {
                         //search for the selected tag, if it  not exists, create it
                         boolean existsTag = tagRepository.existsTagNameFor(activeAccount.getAccount(), activeAccount.getRootFolder(), tag);
-                        if(!existsTag){
+                        if (!existsTag) {
                             final Tag newTag = Tag.createNewTag(tag);
                             tagRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), newTag);
                         }
@@ -1278,25 +1277,25 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
                 String corrSumm = book.getSummary();
 
-                if(book.isShared()){
-                    corrSumm = ((SharedNotebook)book).getShortName();
+                if (book.isShared()) {
+                    corrSumm = ((SharedNotebook) book).getShortName();
                 }
 
-                if(selectedNotebookName != null && !selectedNotebookName.equals(corrSumm)){
-                    Utils.setSelectedNotebookName(activity,corrSumm);
+                if (selectedNotebookName != null && !selectedNotebookName.equals(corrSumm)) {
+                    Utils.setSelectedNotebookName(activity, corrSumm);
                 }
             }
 
             if (isNewNote) {
-                if(Utils.getSelectedNotebookName(activity) != null){
-                    Utils.setSelectedNotebookName(activity,notebookName);
+                if (Utils.getSelectedNotebookName(activity) != null) {
+                    Utils.setSelectedNotebookName(activity, notebookName);
                 }
             }
             isDescriptionDirty = false;
 
             Utils.updateWidgetsForChange(activity);
 
-            if(closeWhenSaved) {
+            if (closeWhenSaved) {
                 Intent returnIntent = new Intent();
                 ((OnFragmentCallback) activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.SAVED);
             }
@@ -1309,57 +1308,58 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     /**
      * Android WebView adds line terminators to inline images, these must be deleted
+     *
      * @param html
      */
-    String repairImages(String html){
+    String repairImages(String html) {
         //issue 127
-        if(!Utils.getUseRicheditor(activity)){
+        if (!Utils.getUseRicheditor(activity)) {
             return html;
         }
 
-        if(html == null || html.trim().length() == 0){
+        if (html == null || html.trim().length() == 0) {
             return null;
         }
 
         final StringBuilder repaired = new StringBuilder(html);
 
         int start = 0;
-        while((start = html.indexOf("<img src",start)) != -1){
-            int withoutTag = start+10;
-            int endOfImage = html.indexOf("\"",withoutTag);
+        while ((start = html.indexOf("<img src", start)) != -1) {
+            int withoutTag = start + 10;
+            int endOfImage = html.indexOf("\"", withoutTag);
 
-            int startOfAltContent = endOfImage+7;
-            int endOfAlt = html.indexOf("\"",startOfAltContent);
+            int startOfAltContent = endOfImage + 7;
+            int endOfAlt = html.indexOf("\"", startOfAltContent);
 
-            String altContent = html.substring(startOfAltContent,endOfAlt);
+            String altContent = html.substring(startOfAltContent, endOfAlt);
 
             start = endOfAlt;
 
-            repaired.replace(withoutTag, endOfImage,base64Images.get(altContent));
+            repaired.replace(withoutTag, endOfImage, base64Images.get(altContent));
         }
 
         return repaired.toString();
     }
 
-    String initImageMap(String description){
+    String initImageMap(String description) {
         int start = 0;
         StringBuilder withAlts = new StringBuilder(description);
-        while((start = description.indexOf("<img src",start)) != -1){
-            int withoutTag = start+10;
-            int end = description.indexOf("\"",withoutTag);
+        while ((start = description.indexOf("<img src", start)) != -1) {
+            int withoutTag = start + 10;
+            int end = description.indexOf("\"", withoutTag);
 
-            String image = description.substring(withoutTag,end);
+            String image = description.substring(withoutTag, end);
 
             //check if the alt tag is present (will be used to identify an image)
-            String possibleAlt = description.substring(end+2,end+5);
-            if(possibleAlt.equals("alt")){
-                int startAltContent = end+7;
-                String altContent = description.substring(startAltContent,description.indexOf("\"",startAltContent));
-                base64Images.put(altContent,image);
-            }else{
+            String possibleAlt = description.substring(end + 2, end + 5);
+            if (possibleAlt.equals("alt")) {
+                int startAltContent = end + 7;
+                String altContent = description.substring(startAltContent, description.indexOf("\"", startAltContent));
+                base64Images.put(altContent, image);
+            } else {
                 String uid = UUID.randomUUID().toString();
-                base64Images.put(UUID.randomUUID().toString(),image);
-                withAlts.insert(end+2,"alt=\""+uid+"\"");
+                base64Images.put(UUID.randomUUID().toString(), image);
+                withAlts.insert(end + 2, "alt=\"" + uid + "\"");
             }
             start = end;
         }
@@ -1367,16 +1367,16 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         return withAlts.toString();
     }
 
-    void putImage(String alt, String image){
-        this.base64Images.put(alt,image);
+    void putImage(String alt, String image) {
+        this.base64Images.put(alt, image);
     }
 
-    void deleteNote(){
-        if(note != null && !accountGotChanged){
+    void deleteNote() {
+        if (note != null && !accountGotChanged) {
             Notebook book = notebookRepository.getByUID(activeAccountRepository.getActiveAccount().getAccount(), activeAccountRepository.getActiveAccount().getRootFolder(), noteRepository.getUIDofNotebook(activeAccountRepository.getActiveAccount().getAccount(), activeAccountRepository.getActiveAccount().getRootFolder(), note.getIdentification().getUid()));
 
-            if(book.isShared()){
-                if(!((SharedNotebook)book).isNoteModificationAllowed()){
+            if (book.isShared()) {
+                if (!((SharedNotebook) book).isNoteModificationAllowed()) {
                     Toast.makeText(activity, R.string.no_change_permissions, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -1386,20 +1386,20 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
             builder.setTitle(R.string.dialog_delete_note);
             builder.setMessage(R.string.dialog_question_delete);
-            builder.setPositiveButton(R.string.yes,new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-                    DetailFragment.this.noteRepository.delete( activeAccount.getAccount(), activeAccount.getRootFolder(),note);
+                    DetailFragment.this.noteRepository.delete(activeAccount.getAccount(), activeAccount.getRootFolder(), note);
 
                     new AttachmentRepository(activity).deleteForNote(activeAccount.getAccount(), activeAccount.getRootFolder(), note.getIdentification().getUid());
 
                     Utils.updateWidgetsForChange(activity.getApplication());
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("selectedNotebookName",givenNotebook);
+                    returnIntent.putExtra("selectedNotebookName", givenNotebook);
 
-                    ((OnFragmentCallback)activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.DELETED);
+                    ((OnFragmentCallback) activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.DELETED);
                 }
             });
             builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -1412,12 +1412,12 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         }
     }
 
-    public void resetSpinner(){
+    public void resetSpinner() {
         Spinner spinner = initSpinner();
         spinner.setSelection(0);
     }
 
-    Spinner initSpinner(){
+    Spinner initSpinner() {
         Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
 
         final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
@@ -1426,11 +1426,11 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         String[] notebookArr = new String[notebooks.size()];
 
-        for(int i=0; i<notebooks.size();i++){
+        for (int i = 0; i < notebooks.size(); i++) {
             String summary = notebooks.get(i).getSummary();
 
-            if(notebooks.get(i).isShared()){
-                summary = ((SharedNotebook)notebooks.get(i)).getShortName();
+            if (notebooks.get(i).isShared()) {
+                summary = ((SharedNotebook) notebooks.get(i)).getShortName();
             }
 
             notebookArr[i] = summary;
@@ -1438,7 +1438,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
         Arrays.sort(notebookArr);
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(activity,R.layout.notebook_spinner_item,notebookArr);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(activity, R.layout.notebook_spinner_item, notebookArr);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -1448,7 +1448,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //outState.putParcelable("appInfo", appInfo.getComponentName());
-        if(editText == null && editor == null){
+        if (editText == null && editor == null) {
             //in multiwindowmode it could be that both are null
             return;
         }
@@ -1459,10 +1459,10 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     }
 
     public void onBackPressed() {
-        if(note != null){
+        if (note != null) {
             boolean differences = checkDifferences();
 
-            if(differences) {
+            if (differences) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
                 builder.setTitle(R.string.dialog_cancel_warning);
@@ -1480,7 +1480,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
                     }
                 });
                 builder.show();
-            }else{
+            } else {
                 goBack();
             }
         } else if (/* GitHub issue 197 */(editor != null && editor.getHtml() != null) || !TextUtils.isEmpty(
@@ -1492,12 +1492,12 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(isNewNote){
+                    if (isNewNote) {
                         final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
                         new AttachmentRepository(activity).deleteForNote(activeAccount.getAccount(), activeAccount.getRootFolder(), getUUIDForCreation());
 
                         // If the  activity was paused, the note got stored in the meantime
-                        if(note != null) {
+                        if (note != null) {
                             noteRepository.delete(activeAccount.getAccount(), activeAccount.getRootFolder(), note);
                             noteTagRepository.delete(activeAccount.getAccount(), activeAccount.getRootFolder(), note.getIdentification().getUid());
                         }
@@ -1517,13 +1517,13 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         }
     }
 
-    public boolean checkDifferences(){
+    public boolean checkDifferences() {
         EditText summary = (EditText) activity.findViewById(R.id.detail_summary);
 
         Spinner spinner = (Spinner) activity.findViewById(R.id.spinner_notebook);
 
         boolean differences = false;
-        if(summary != null && spinner != null && note != null){
+        if (summary != null && spinner != null && note != null) {
 
             Note newNote = new Note(note.getIdentification(), note.getAuditInformation(),
                     selectedClassification == null ? Note.Classification.PUBLIC : selectedClassification,
@@ -1545,13 +1545,13 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             boolean nbSameNames = false;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 //NPE prevention
-                nbSameNames = Objects.equals(nb,intialNotebookName);
-            }else{
+                nbSameNames = Objects.equals(nb, intialNotebookName);
+            } else {
                 nbSameNames = nb.equals(intialNotebookName);
             }
             differences = Utils.differentMutableData(note, newNote) || !nbSameNames || isDescriptionDirty;
         }
-        return  differences;
+        return differences;
     }
 
     private void printNote() {
@@ -1560,12 +1560,12 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             String jobName = getString(R.string.app_name) + " Document";
 
             // GitHub issue 197
-            if(editor != null){
+            if (editor != null) {
                 PrintDocumentAdapter printAdapter = editor.createPrintDocumentAdapter();
                 printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
-            }else if(editText != null){
+            } else if (editText != null) {
                 printEditText(jobName);
-            }else{
+            } else {
                 Toast.makeText(activity, R.string.empty_note_description, Toast.LENGTH_LONG).show();
             }
 
@@ -1611,22 +1611,22 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
 
     private void showAttachments() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Intent intent = new Intent(activity,AttachmentActivity.class);
-            if(isNewNote){
+            Intent intent = new Intent(activity, AttachmentActivity.class);
+            if (isNewNote) {
                 intent.putExtra(Utils.NOTE_UID, getUUIDForCreation());
-            }else {
+            } else {
                 intent.putExtra(Utils.NOTE_UID, note.getIdentification().getUid());
             }
             startActivityForResult(intent, ATTACHMENT_ACTIVITY_RESULT_CODE);
         }
     }
 
-    private void goBack(){
+    private void goBack() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("selectedNotebookName",givenNotebook);
+        returnIntent.putExtra("selectedNotebookName", givenNotebook);
 
         saveNotRequiredAnymore = true;
 
-        ((OnFragmentCallback)activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.BACK);
+        ((OnFragmentCallback) activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.BACK);
     }
 }

@@ -229,14 +229,14 @@
     <string name="attachment_already_exist">Um anexo com esse nome já existe</string>
     <string name="attachment_send_to">Compartilhar anexo com...</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Olá fragmento em branco</string>
     <string name="no_preview">Nenhum preview selecionado</string>
     <string name="attachment_not_previewable">Não é possível visualizar o anexo</string>
     <string name="attachment_now_playing">Reproduzindo agora:</string>
     <string name="pref_preview">Preview das notas</string>
     <string name="pref_desc_preview">Mostra um preview do texto da nota</string>
-    <string name="empty_note_description" >Nenhum texto na nota</string>
+    <string name="empty_note_description">Nenhum texto na nota</string>
     <string name="image_too_big">Imagem muito grande (o tamanho do arquivo deve ser inferior a 900 kB)</string>
     <string name="changeAccount">Escolher conta</string>
     <string name="drawer_organise_tags">Organizar Tags</string>

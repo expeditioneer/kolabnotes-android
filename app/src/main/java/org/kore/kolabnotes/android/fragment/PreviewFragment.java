@@ -35,10 +35,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- *
- *@author Konrad Renner
+ * @author Konrad Renner
  */
-public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl{
+public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NOTEUID = "noteUID";
@@ -66,7 +65,7 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param noteUID Parameter 1.
+     * @param noteUID      Parameter 1.
      * @param attachmentID Parameter 2.
      * @return A new instance of fragment PreviewFragment.
      */
@@ -78,6 +77,7 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         fragment.setArguments(args);
         return fragment;
     }
+
     public PreviewFragment() {
         // Required empty public constructor
     }
@@ -130,7 +130,7 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         displayPreview(activeAccount, noteUID, null);
     }
 
-    public void displayPreview(ActiveAccount account, String noteUID, Attachment attachment){
+    public void displayPreview(ActiveAccount account, String noteUID, Attachment attachment) {
 
         webView.setVisibility(View.INVISIBLE);
         textView.setVisibility(View.INVISIBLE);
@@ -138,63 +138,63 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         videoView.setVisibility(View.INVISIBLE);
         imageView.setVisibility(View.INVISIBLE);
 
-        if(attachment == null){
+        if (attachment == null) {
             emptyView.setVisibility(View.VISIBLE);
             return;
-        }else{
+        } else {
             emptyView.setVisibility(View.INVISIBLE);
         }
 
-        if(attachment.getMimeType().startsWith("text/html")){
+        if (attachment.getMimeType().startsWith("text/html")) {
             displayHTML(account, noteUID, attachment);
-        }else if(attachment.getMimeType().startsWith("text/")){
-            displayText(account, noteUID,attachment);
-        }else if(attachment.getMimeType().startsWith("audio/")){
-            displayAudio(account, noteUID,attachment);
-        }else if(attachment.getMimeType().startsWith("video/")){
-            displayVideo(account, noteUID,attachment);
-        }else if(attachment.getMimeType().startsWith("image/")){
+        } else if (attachment.getMimeType().startsWith("text/")) {
+            displayText(account, noteUID, attachment);
+        } else if (attachment.getMimeType().startsWith("audio/")) {
+            displayAudio(account, noteUID, attachment);
+        } else if (attachment.getMimeType().startsWith("video/")) {
+            displayVideo(account, noteUID, attachment);
+        } else if (attachment.getMimeType().startsWith("image/")) {
             displayImage(account, noteUID, attachment);
         }
     }
 
-    void displayHTML(ActiveAccount account, String noteUID,Attachment attachment){
+    void displayHTML(ActiveAccount account, String noteUID, Attachment attachment) {
         webView.setVisibility(View.VISIBLE);
 
         webView.loadUrl(attachmentRepository.getUriFromAttachment(account.getAccount(), account.getRootFolder(), noteUID, attachment).toString());
     }
 
-    void displayImage(ActiveAccount account, String noteUID,Attachment attachment){
+    void displayImage(ActiveAccount account, String noteUID, Attachment attachment) {
         imageView.setVisibility(View.VISIBLE);
 
         imageView.setImageURI(attachmentRepository.getUriFromAttachment(account.getAccount(), account.getRootFolder(), noteUID, attachment));
     }
 
-    void displayText(ActiveAccount account, String noteUID,Attachment attachment){
+    void displayText(ActiveAccount account, String noteUID, Attachment attachment) {
         textView.setVisibility(View.VISIBLE);
 
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ContentResolver contentResolver = getActivity().getContentResolver();
             Uri uri = attachmentRepository.getUriFromAttachment(account.getAccount(), account.getRootFolder(), noteUID, attachment);
 
 
-            try(BufferedReader reader = new BufferedReader(new InputStreamReader(contentResolver.openInputStream(uri)))){
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(contentResolver.openInputStream(uri)))) {
 
                 StringBuilder text = new StringBuilder();
-                String  line;
-                while((line =reader.readLine()) != null){
+                String line;
+                while ((line = reader.readLine()) != null) {
                     text.append(line);
                     text.append(System.lineSeparator());
                 }
 
                 textView.setText(text);
             } catch (IOException e) {
-                Log.e("displayText","Exception while opening file:",e);
+                Log.e("displayText", "Exception while opening file:", e);
             }
         }
     }
 
-    void displayAudio(ActiveAccount account, String noteUID,Attachment attachment){
+    void displayAudio(ActiveAccount account, String noteUID, Attachment attachment) {
         musicView.setVisibility(View.VISIBLE);
 
         try {
@@ -210,13 +210,13 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
             mediaPlayer.prepare();
 
             mediaController.show(0);
-        }catch (IOException e){
+        } catch (IOException e) {
             Toast.makeText(getActivity(), R.string.attachment_not_previewable, Toast.LENGTH_LONG).show();
         }
 
     }
 
-    void displayVideo(ActiveAccount account, String noteUID,Attachment attachment){
+    void displayVideo(ActiveAccount account, String noteUID, Attachment attachment) {
         videoView.setVisibility(View.VISIBLE);
 
         MediaController mediaController = new MediaController(getActivity());
@@ -229,17 +229,17 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         mediaController.show(0);
     }
 
-    public static boolean previewableMimetype(String mimeType){
-        if(mimeType.startsWith("text/")){
+    public static boolean previewableMimetype(String mimeType) {
+        if (mimeType.startsWith("text/")) {
             return true;
         }
-        if(mimeType.startsWith("audio/")){
+        if (mimeType.startsWith("audio/")) {
             return true;
         }
-        if(mimeType.startsWith("video/")){
+        if (mimeType.startsWith("video/")) {
             return true;
         }
-        if(mimeType.startsWith("image/")){
+        if (mimeType.startsWith("image/")) {
             return true;
         }
 
@@ -255,10 +255,10 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
     @Override
     public void onStop() {
         super.onStop();
-        if(mediaController != null) {
+        if (mediaController != null) {
             mediaController.hide();
         }
-        if(mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }

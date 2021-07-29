@@ -16,27 +16,27 @@ public final class NotebookContentResolver {
 
     private final static String BASE_URI = "content://kore.kolabnotes/notebook/";
 
-    private NotebookContentResolver(){
+    private NotebookContentResolver() {
         //Stateless class
     }
 
-    public static List<Notebook> getAll(Context context, String rootFolder){
+    public static List<Notebook> getAll(Context context, String rootFolder) {
         Uri uri = Uri.parse(BASE_URI + rootFolder);
         Cursor cursor = context.getContentResolver().query(uri, new String[0], null, null, null);
 
-        if(cursor == null){
+        if (cursor == null) {
             if (cursor != null) {
-				cursor.close();
-			}
-			return Collections.emptyList();
+                cursor.close();
+            }
+            return Collections.emptyList();
         }
-        
-        while(cursor.moveToNext()){
+
+        while (cursor.moveToNext()) {
             //TODO was machen
         }
-		if (cursor != null) {
-			cursor.close();
-		}
+        if (cursor != null) {
+            cursor.close();
+        }
         return null;
     }
 

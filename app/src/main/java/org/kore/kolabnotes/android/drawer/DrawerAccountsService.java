@@ -42,27 +42,27 @@ public class DrawerAccountsService {
         this.nav = view;
     }
 
-    public void changeSelectedAccount(Context context, String name, String mail, String accountType){
+    public void changeSelectedAccount(Context context, String name, String mail, String accountType) {
         TextView tname = (TextView) headerView.findViewById(R.id.drawer_header_name);
         TextView tmail = (TextView) headerView.findViewById(R.id.drawer_header_mail);
         ImageView accountImage = (ImageView) headerView.findViewById(R.id.drawer_account_image);
 
         tname.setText(name);
         String corrmail = mail;
-        if("local".equalsIgnoreCase(mail)){
+        if ("local".equalsIgnoreCase(mail)) {
             corrmail = "";
         }
         tmail.setText(corrmail);
 
         final Drawable icon = evaluateIcon(context, accountType);
-        if(icon != null){
+        if (icon != null) {
             accountImage.setImageDrawable(icon);
-        }else{
+        } else {
             accountImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_kolabnotes_breeze));
         }
     }
 
-    public Set<AccountIdentifier> overrideAccounts(OnAccountSwitchedFromNavListener list, Account[] accounts, AccountManager accountManager, DrawerLayout layout){
+    public Set<AccountIdentifier> overrideAccounts(OnAccountSwitchedFromNavListener list, Account[] accounts, AccountManager accountManager, DrawerLayout layout) {
         Set<AccountIdentifier> createdAccounts = new LinkedHashSet<>();
         final Menu menu = nav.getMenu();
         final Context context = nav.getContext();
@@ -71,12 +71,12 @@ public class DrawerAccountsService {
 
         createMenuItem(list, menu, context, 0, "local", context.getString(R.string.drawer_account_local), "Notes", "local", layout);
 
-        for(int i=0;i<accounts.length;i++) {
+        for (int i = 0; i < accounts.length; i++) {
             String email = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_EMAIL);
-            String name = accountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ACCOUNT_NAME);
-            String rootFolder = accountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ROOT_FOLDER);
+            String name = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_NAME);
+            String rootFolder = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ROOT_FOLDER);
             String accountType = accountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_TYPE);
-            final AccountIdentifier accountIdentifier = createMenuItem(list, menu, context, i+1, email, name, rootFolder, accountType, layout);
+            final AccountIdentifier accountIdentifier = createMenuItem(list, menu, context, i + 1, email, name, rootFolder, accountType, layout);
 
             createdAccounts.remove(accountIdentifier);
         }
@@ -99,42 +99,42 @@ public class DrawerAccountsService {
     private void setIcon(Context context, String accountType, MenuItem accountEntry) {
         final Drawable icon = evaluateIcon(context, accountType);
 
-        if(icon != null){
+        if (icon != null) {
             accountEntry.setIcon(icon);
         }
     }
 
     private Drawable evaluateIcon(Context context, String accountType) {
-        if(accountType == null) {
+        if (accountType == null) {
             return null;
         }
 
-        if("local".equalsIgnoreCase(accountType)){
+        if ("local".equalsIgnoreCase(accountType)) {
             return context.getResources().getDrawable(R.drawable.ic_local_account);
         }
 
         int type = Integer.parseInt(accountType);
 
-        if(type == AuthenticatorActivity.ID_ACCOUNT_TYPE_KOLABNOW){
+        if (type == AuthenticatorActivity.ID_ACCOUNT_TYPE_KOLABNOW) {
             return context.getResources().getDrawable(R.drawable.ic_kolabnow);
-        }else if(type == AuthenticatorActivity.ID_ACCOUNT_TYPE_KOLAB){
+        } else if (type == AuthenticatorActivity.ID_ACCOUNT_TYPE_KOLAB) {
             return context.getResources().getDrawable(R.drawable.ic_kolab);
         }
         return context.getResources().getDrawable(R.drawable.ic_imap);
     }
 
 
-    public void displayAccounts(){
+    public void displayAccounts() {
         nav.getMenu().setGroupVisible(R.id.drawer_accounts, true);
         nav.getMenu().setGroupVisible(R.id.drawer_navigation, false);
     }
 
-    public void displayNavigation(){
+    public void displayNavigation() {
         nav.getMenu().setGroupVisible(R.id.drawer_accounts, false);
         nav.getMenu().setGroupVisible(R.id.drawer_navigation, true);
     }
 
-    static class AccountSwichtedACL implements MenuItem.OnMenuItemClickListener{
+    static class AccountSwichtedACL implements MenuItem.OnMenuItemClickListener {
         private final String name;
         private final AccountIdentifier id;
         private final OnAccountSwitchedFromNavListener listener;
@@ -161,7 +161,7 @@ public class DrawerAccountsService {
 
             layout.closeDrawer(Gravity.LEFT);
 
-            if(!accountEquals(activeAccount)){
+            if (!accountEquals(activeAccount)) {
                 listener.onAccountSwitchedFromNav(name, id);
             }
             return true;

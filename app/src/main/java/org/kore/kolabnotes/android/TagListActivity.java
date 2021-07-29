@@ -23,11 +23,11 @@ public class TagListActivity extends AppCompatActivity implements OnFragmentCall
         setContentView(R.layout.activity_tag_list);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_tag_list);
-        if (toolbar != null){
+        if (toolbar != null) {
             toolbar.setTitle(R.string.title_activity_tag_list);
         }
 
-        tagListFragment = (TagListFragment)getFragmentManager().findFragmentById(R.id.tag_list_fragment);
+        tagListFragment = (TagListFragment) getFragmentManager().findFragmentById(R.id.tag_list_fragment);
     }
 
     @Override
@@ -37,10 +37,10 @@ public class TagListActivity extends AppCompatActivity implements OnFragmentCall
 
     @Override
     public void fragmentFinished(Intent resultIntent, ResultCode code) {
-        if(ResultCode.OK == code || ResultCode.SAVED == code || ResultCode.DELETED == code) {
+        if (ResultCode.OK == code || ResultCode.SAVED == code || ResultCode.DELETED == code) {
             Utils.setReloadDataAfterDetail(this, true);
             setResult(RESULT_OK, resultIntent);
-        }else{
+        } else {
             setResult(RESULT_CANCELED, resultIntent);
         }
         finish();

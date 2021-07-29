@@ -31,11 +31,11 @@ public class DetailActivity extends AppCompatActivity implements OnFragmentCallb
         setContentView(R.layout.activity_detail);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null){
+        if (toolbar != null) {
             toolbar.setTitle("");
         }
 
-        detailFragment = (DetailFragment)getFragmentManager().findFragmentById(R.id.detail_fragment);
+        detailFragment = (DetailFragment) getFragmentManager().findFragmentById(R.id.detail_fragment);
 
         Intent startIntent = getIntent();
         String uid = startIntent.getStringExtra(Utils.NOTE_UID);
@@ -65,17 +65,17 @@ public class DetailActivity extends AppCompatActivity implements OnFragmentCallb
     }
 
     @Override
-    public void onAccountSwitched(String name, AccountIdentifier accountIdentifier){
+    public void onAccountSwitched(String name, AccountIdentifier accountIdentifier) {
         detailFragment.onAccountSwitched(name, accountIdentifier);
     }
 
     @Override
     public void fragmentFinished(Intent resultIntent, ResultCode code) {
-        if(ResultCode.OK == code || ResultCode.SAVED == code || ResultCode.DELETED == code){
-            Utils.setReloadDataAfterDetail(this,true);
+        if (ResultCode.OK == code || ResultCode.SAVED == code || ResultCode.DELETED == code) {
+            Utils.setReloadDataAfterDetail(this, true);
             setResult(RESULT_OK, resultIntent);
-        }else{
-            setResult(RESULT_CANCELED,resultIntent);
+        } else {
+            setResult(RESULT_CANCELED, resultIntent);
         }
         finish();
     }

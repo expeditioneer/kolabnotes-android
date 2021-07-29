@@ -27,11 +27,11 @@ public abstract class OnDrawerItemClickListener implements MenuItem.OnMenuItemCl
         return true;
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return layout.getContext();
     }
 
-    public OnDrawerSelectionChangedListener getListener(){
+    public OnDrawerSelectionChangedListener getListener() {
         return listener;
     }
 

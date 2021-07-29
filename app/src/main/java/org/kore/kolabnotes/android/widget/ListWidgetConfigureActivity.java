@@ -127,10 +127,10 @@ public class ListWidgetConfigureActivity extends Activity {
             final Context context = ListWidgetConfigureActivity.this;
 
             // When the button is clicked, store the string locally
-            if(selectedAccount == null){
-                saveListWidgetPref(context, mAppWidgetId, "local", selectedNotebook, selectedTag, new NoteSorting(Utils.SortingColumns.findValue(selectedColumn),selectedDirection));
-            }else{
-                saveListWidgetPref(context, mAppWidgetId, mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ACCOUNT_NAME), selectedNotebook, selectedTag, new NoteSorting(Utils.SortingColumns.findValue(selectedColumn),selectedDirection));
+            if (selectedAccount == null) {
+                saveListWidgetPref(context, mAppWidgetId, "local", selectedNotebook, selectedTag, new NoteSorting(Utils.SortingColumns.findValue(selectedColumn), selectedDirection));
+            } else {
+                saveListWidgetPref(context, mAppWidgetId, mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ACCOUNT_NAME), selectedNotebook, selectedTag, new NoteSorting(Utils.SortingColumns.findValue(selectedColumn), selectedDirection));
             }
 
             // It is the responsibility of the configuration activity to update the app widget
@@ -145,7 +145,7 @@ public class ListWidgetConfigureActivity extends Activity {
         }
     };
 
-    static void saveListWidgetPref(Context context, int appWidgetId,String accountName, String notebook,String tag, NoteSorting noteSorting) {
+    static void saveListWidgetPref(Context context, int appWidgetId, String accountName, String notebook, String tag, NoteSorting noteSorting) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, accountName);
         prefs.putString(PREF_PREFIX_KEY_NOTEBOOK + appWidgetId, notebook);
@@ -175,7 +175,7 @@ public class ListWidgetConfigureActivity extends Activity {
         String direction = prefs.getString(PREF_PREFIX_KEY_DIRECTION + appWidgetId, null);
         String column = prefs.getString(PREF_PREFIX_KEY_COLUMN + appWidgetId, null);
 
-        if(TextUtils.isEmpty(direction) || TextUtils.isEmpty(column)){
+        if (TextUtils.isEmpty(direction) || TextUtils.isEmpty(column)) {
             return new NoteSorting();
         }
         return new NoteSorting(Utils.SortingColumns.findValue(column), NoteSorting.Direction.valueOf(direction));
@@ -191,11 +191,11 @@ public class ListWidgetConfigureActivity extends Activity {
         prefs.commit();
     }
 
-    void initSpinners(){
+    void initSpinners() {
         initAccountSpinner();
         updateNotebookSpinner();
         updateTagSpinner();
-        Utils.initColumnSpinner(this, columnSpinner,R.layout.widget_config_spinner_item, new AdapterView.OnItemSelectedListener() {
+        Utils.initColumnSpinner(this, columnSpinner, R.layout.widget_config_spinner_item, new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedColumn = Utils.getColumnNameOfSelection(adapterView.getSelectedItemPosition());
@@ -208,38 +208,38 @@ public class ListWidgetConfigureActivity extends Activity {
         });
     }
 
-    void initAccountSpinner(){
+    void initAccountSpinner() {
         Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-        String[] accountNames = new String[accounts.length+1];
+        String[] accountNames = new String[accounts.length + 1];
 
         accountNames[0] = localAccountName;
-        for(int i=0; i< accounts.length;i++){
-            accountNames[i+1] = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ACCOUNT_NAME);
+        for (int i = 0; i < accounts.length; i++) {
+            accountNames[i + 1] = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_NAME);
         }
 
-        Arrays.sort(accountNames,1,accountNames.length);
+        Arrays.sort(accountNames, 1, accountNames.length);
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,R.layout.widget_config_spinner_item,accountNames);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.widget_config_spinner_item, accountNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountSpinner.setAdapter(adapter);
         accountSpinner.setOnItemSelectedListener(new OnAccountItemClicked());
         accountSpinner.setSelection(0);
     }
 
-    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener{
+    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String name = parent.getSelectedItem().toString();
 
-            if(localAccountName.equalsIgnoreCase(name)){
+            if (localAccountName.equalsIgnoreCase(name)) {
                 selectedAccount = null;
-            }else{
+            } else {
                 Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-                for(Account account : accounts){
-                    if(name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))){
+                for (Account account : accounts) {
+                    if (name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
                         selectedAccount = account;
                         break;
                     }
@@ -256,31 +256,31 @@ public class ListWidgetConfigureActivity extends Activity {
         }
     }
 
-    void updateNotebookSpinner(){
+    void updateNotebookSpinner() {
         String rootFolder;
         String email;
-        if(selectedAccount == null){
+        if (selectedAccount == null) {
             rootFolder = "Notes";
             email = "local";
-        }else{
-            rootFolder = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_ROOT_FOLDER);
-            email = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_EMAIL);
+        } else {
+            rootFolder = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ROOT_FOLDER);
+            email = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_EMAIL);
         }
 
         List<Notebook> notebooks = new ArrayList<>(notebookRepository.getAll(email, rootFolder));
 
         Collections.sort(notebooks);
 
-        String[] notebookArr = new String[notebooks.size()+1];
+        String[] notebookArr = new String[notebooks.size() + 1];
         notebookArr[0] = getResources().getString(R.string.no_selection);
-        for(int i=0; i<notebooks.size();i++){
+        for (int i = 0; i < notebooks.size(); i++) {
             String summary = notebooks.get(i).getSummary();
 
-            if(notebooks.get(i).isShared()){
-                summary = ((SharedNotebook)notebooks.get(i)).getShortName();
+            if (notebooks.get(i).isShared()) {
+                summary = ((SharedNotebook) notebooks.get(i)).getShortName();
             }
 
-            notebookArr[i+1] = summary;
+            notebookArr[i + 1] = summary;
         }
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.widget_config_spinner_item, notebookArr);
@@ -292,7 +292,7 @@ public class ListWidgetConfigureActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedNotebook = parent.getSelectedItem().toString();
 
-                if(getResources().getString(R.string.no_selection).equals(selectedNotebook)){
+                if (getResources().getString(R.string.no_selection).equals(selectedNotebook)) {
                     selectedNotebook = null;
                 }
             }
@@ -304,29 +304,29 @@ public class ListWidgetConfigureActivity extends Activity {
         });
     }
 
-    void updateTagSpinner(){
+    void updateTagSpinner() {
         String rootFolder;
         String email;
-        if(selectedAccount == null){
+        if (selectedAccount == null) {
             rootFolder = "Notes";
             email = "local";
-        }else{
-            rootFolder = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_ROOT_FOLDER);
-            email = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_EMAIL);
+        } else {
+            rootFolder = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ROOT_FOLDER);
+            email = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_EMAIL);
         }
 
-        List<String> tags = tagRepository.getAllTagNames(email,rootFolder);
+        List<String> tags = tagRepository.getAllTagNames(email, rootFolder);
 
-        Log.d("updateTagSpinner","email:"+email);
-        Log.d("updateTagSpinner","rootFolder:"+rootFolder);
-        Log.d("updateTagSpinner","tags:"+tags);
+        Log.d("updateTagSpinner", "email:" + email);
+        Log.d("updateTagSpinner", "rootFolder:" + rootFolder);
+        Log.d("updateTagSpinner", "tags:" + tags);
 
         Collections.sort(tags);
 
-        String[] tagArr = new String[tags.size()+1];
+        String[] tagArr = new String[tags.size() + 1];
         tagArr[0] = getResources().getString(R.string.no_selection);
-        for(int i=0;i<tags.size();i++){
-            tagArr[i+1] = tags.get(i);
+        for (int i = 0; i < tags.size(); i++) {
+            tagArr[i + 1] = tags.get(i);
         }
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.widget_config_spinner_item, tagArr);
@@ -338,7 +338,7 @@ public class ListWidgetConfigureActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedTag = parent.getSelectedItem().toString();
 
-                if(getResources().getString(R.string.no_selection).equals(selectedTag)){
+                if (getResources().getString(R.string.no_selection).equals(selectedTag)) {
                     selectedTag = null;
                 }
             }

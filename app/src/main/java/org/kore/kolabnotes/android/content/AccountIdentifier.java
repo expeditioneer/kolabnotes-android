@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by koni on 11.06.15.
  */
-public class AccountIdentifier implements Serializable{
+public class AccountIdentifier implements Serializable {
 
     private final String accountEmail;
     private final String rootFolder;

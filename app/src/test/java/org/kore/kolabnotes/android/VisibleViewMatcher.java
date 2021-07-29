@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibilit
 /**
  * Custom ViewMatcher to match a view that has a "Visible" state but that is not necessarily
  * displayed to the user.
- *
+ * <p>
  * Specifically, it matches with views that have "Visible" visibility and positive height and width.
  * A typical example is when a long form has a visible view at the bottom, but the UI needs to be
  * scrolled to reach it.

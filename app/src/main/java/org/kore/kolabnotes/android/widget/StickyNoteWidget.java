@@ -34,7 +34,7 @@ public class StickyNoteWidget extends AppWidgetProvider {
         NoteRepository notesRepository = new NoteRepository(context);
         final int N = appWidgetIds.length;
         for (int i = 0; i < N; i++) {
-            updateAppWidget(context, appWidgetManager, appWidgetIds[i],notesRepository);
+            updateAppWidget(context, appWidgetManager, appWidgetIds[i], notesRepository);
         }
     }
 
@@ -63,12 +63,12 @@ public class StickyNoteWidget extends AppWidgetProvider {
         String account = StickyNoteWidgetConfigureActivity.loadStickyNoteWidgetAccountPref(context, appWidgetId);
         String rootFolder = "Notes";
         String accountEmail = "local";
-        if(account != null && !account.equals("local")) {
+        if (account != null && !account.equals("local")) {
             AccountManager accountManager = AccountManager.get(context);
             Account[] accounts = accountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
             for (Account acc : accounts) {
-                if(account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))){
+                if (account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
                     accountEmail = accountManager.getUserData(acc, AuthenticatorActivity.KEY_EMAIL);
                     rootFolder = accountManager.getUserData(acc, AuthenticatorActivity.KEY_ROOT_FOLDER);
                 }
@@ -80,14 +80,14 @@ public class StickyNoteWidget extends AppWidgetProvider {
         Note note = notesRepository.getByUID(accountEmail, rootFolder, noteUID);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.sticky_note_widget);
-        if(note == null){
+        if (note == null) {
             views.setTextViewText(R.id.sticky_note_summary, context.getResources().getString(R.string.note_not_found));
 
             //GitHub issue 198
             views.setOnClickPendingIntent(R.id.sticky_note_summary, null);
 
             views.setTextViewText(R.id.sticky_note_description, "");
-        }else {
+        } else {
 
             // Construct the RemoteViews object
             String uidofNotebook = notesRepository.getUIDofNotebook(accountEmail, rootFolder, noteUID);
@@ -105,9 +105,9 @@ public class StickyNoteWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.sticky_note_summary, note.getSummary());
 
             Spanned fromHtml;
-            if(TextUtils.isEmpty(note.getDescription())){
+            if (TextUtils.isEmpty(note.getDescription())) {
                 fromHtml = new SpannableString("");
-            }else{
+            } else {
                 fromHtml = Html.fromHtml(note.getDescription());
             }
 

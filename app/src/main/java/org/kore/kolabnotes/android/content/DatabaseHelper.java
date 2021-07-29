@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database creation sql statement
     private static final String CREATE_NOTES = "create table "
             + TABLE_NOTES +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null, "
             + COLUMN_DISCRIMINATOR + " text not null, "
@@ -80,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TAGS = "create table "
             + TABLE_TAGS +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null, "
             + COLUMN_UID + " text not null unique, "
@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TAGS_NOTES = "create table "
             + TABLE_NOTE_TAGS +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null, "
             + COLUMN_IDNOTE + " text not null, "
@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_ATTACHMENT = "create table "
             + TABLE_ATTACHMENT +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null, "
             + COLUMN_IDNOTE + " text not null, "
@@ -114,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_MODIFICATION = "create table "
             + TABLE_MODIFICATION +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null, "
             + COLUMN_UID + " text not null unique, "
@@ -125,13 +125,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_ACTIVEACCOUNT = "create table "
             + TABLE_ACTIVEACCOUNT +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null );";
 
     private static final String CREATE_ACCOUNTS = "create table "
             + TABLE_ACCOUNTS +
-            "(" + COLUMN_ID+ " integer primary key autoincrement, "
+            "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ACCOUNT + " text not null, "
             + COLUMN_ROOT_FOLDER + " text not null );";
 
@@ -170,25 +170,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(DatabaseHelper.class.getName(), "Upgrading database from version " + oldVersion + " to version "+ newVersion);
-        if(oldVersion == 2){
-            db.execSQL("ALTER TABLE "+TABLE_TAGS+" ADD COLUMN "+COLUMN_TAG_UID+" text ");
-        }else if(oldVersion < 2){
+        Log.w(DatabaseHelper.class.getName(), "Upgrading database from version " + oldVersion + " to version " + newVersion);
+        if (oldVersion == 2) {
+            db.execSQL("ALTER TABLE " + TABLE_TAGS + " ADD COLUMN " + COLUMN_TAG_UID + " text ");
+        } else if (oldVersion < 2) {
             db.execSQL(CREATE_TAGS);
         }
 
-        if(oldVersion < 4){
-            db.execSQL("ALTER TABLE "+TABLE_NOTES+" ADD COLUMN "+COLUMN_SHARED+" text ");
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE " + TABLE_NOTES + " ADD COLUMN " + COLUMN_SHARED + " text ");
         }
 
-        if(oldVersion < 5){
-            db.execSQL("ALTER TABLE "+TABLE_NOTES+" ADD COLUMN "+COLUMN_MODIFICATION_ALLOWED+" text ");
-            db.execSQL("ALTER TABLE "+TABLE_NOTES+" ADD COLUMN "+COLUMN_CREATION_ALLOWED+" text ");
+        if (oldVersion < 5) {
+            db.execSQL("ALTER TABLE " + TABLE_NOTES + " ADD COLUMN " + COLUMN_MODIFICATION_ALLOWED + " text ");
+            db.execSQL("ALTER TABLE " + TABLE_NOTES + " ADD COLUMN " + COLUMN_CREATION_ALLOWED + " text ");
         }
-        if(oldVersion < 6){
+        if (oldVersion < 6) {
             db.execSQL(CREATE_ATTACHMENT);
         }
-        if(oldVersion < 7){
+        if (oldVersion < 7) {
             db.execSQL(CREATE_ACCOUNTS);
         }
     }

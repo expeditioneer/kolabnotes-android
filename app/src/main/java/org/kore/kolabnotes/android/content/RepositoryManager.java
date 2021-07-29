@@ -31,7 +31,7 @@ import java.util.UUID;
 
 /**
  * This class syncs the database with data from a given repository
- *
+ * <p>
  * Created by koni on 18.04.15.
  */
 public class RepositoryManager {
@@ -61,32 +61,32 @@ public class RepositoryManager {
         this.localChangedNotes = new HashSet<>();
     }
 
-    public void sync(String email, String rootFolder){
+    public void sync(String email, String rootFolder) {
         putLocalDataIntoRepository(email, rootFolder);
-        cleanLocalData(email,rootFolder);
-        putDataIntoDB(email,rootFolder);
-        modificationRepository.cleanAccount(email,rootFolder);
+        cleanLocalData(email, rootFolder);
+        putDataIntoDB(email, rootFolder);
+        modificationRepository.cleanAccount(email, rootFolder);
     }
 
-    void putDataIntoDB(String email, String rootFolder){
+    void putDataIntoDB(String email, String rootFolder) {
         Collection<Notebook> notebooks = repo.getNotebooks();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
         int i = 5;
-        for(Notebook book : notebooks){
-            notebookRepository.insert(email,rootFolder,book);
+        for (Notebook book : notebooks) {
+            notebookRepository.insert(email, rootFolder, book);
 
-            for(Note note : book.getNotes()){
-                noteRepository.insert(email,rootFolder,note,book.getIdentification().getUid());
-                for(Attachment attachment : note.getAttachments()){
-                    attachmentRepository.insert(email,rootFolder,note.getIdentification().getUid(),attachment);
+            for (Note note : book.getNotes()) {
+                noteRepository.insert(email, rootFolder, note, book.getIdentification().getUid());
+                for (Attachment attachment : note.getAttachments()) {
+                    attachmentRepository.insert(email, rootFolder, note.getIdentification().getUid(), attachment);
                 }
 
                 //inform user for new or updated notes in shared notebooks
-                if(Utils.getShowSyncNotifications(context) && book.isShared() && !localChangedNotes.contains(note.getIdentification().getUid()) && lastSync != null){
+                if (Utils.getShowSyncNotifications(context) && book.isShared() && !localChangedNotes.contains(note.getIdentification().getUid()) && lastSync != null) {
 
-                    Intent startDetailIntent = new Intent(context,DetailActivity.class);
+                    Intent startDetailIntent = new Intent(context, DetailActivity.class);
                     startDetailIntent.setAction(UUID.randomUUID().toString());
                     startDetailIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startDetailIntent.putExtra(Utils.NOTE_UID, note.getIdentification().getUid());
@@ -95,7 +95,7 @@ public class RepositoryManager {
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, startDetailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    if(lastSync.getTime() < note.getAuditInformation().getCreationDate().getTime()){
+                    if (lastSync.getTime() < note.getAuditInformation().getCreationDate().getTime()) {
                         final Notification notification = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
                                 .setContentTitle(context.getResources().getString(R.string.changed_content_shared_folder))
@@ -104,8 +104,8 @@ public class RepositoryManager {
                                 .setContentIntent(pendingIntent)
                                 .setAutoCancel(true).build();
 
-                        notificationManager.notify(i++,notification);
-                    }else if(lastSync.getTime() < note.getAuditInformation().getLastModificationDate().getTime()){
+                        notificationManager.notify(i++, notification);
+                    } else if (lastSync.getTime() < note.getAuditInformation().getLastModificationDate().getTime()) {
                         final Notification notification = new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
                                 .setContentTitle(context.getResources().getString(R.string.changed_content_shared_folder))
@@ -114,7 +114,7 @@ public class RepositoryManager {
                                 .setContentIntent(pendingIntent)
                                 .setAutoCancel(true).build();
 
-                        notificationManager.notify(i++,notification);
+                        notificationManager.notify(i++, notification);
                     }
                 }
             }
@@ -122,35 +122,35 @@ public class RepositoryManager {
 
         RemoteTags remoteTags = repo.getRemoteTags();
 
-        for(RemoteTags.TagDetails detail : remoteTags.getTags()){
+        for (RemoteTags.TagDetails detail : remoteTags.getTags()) {
             final Tag tag = detail.getTag();
             String remoteName = tag.getName();
-            tagRepository.insert(email,rootFolder, tag);
+            tagRepository.insert(email, rootFolder, tag);
 
-            for(String noteUid : detail.getMembers()){
-                noteTagRepository.insert(email,rootFolder,noteUid,remoteName);
+            for (String noteUid : detail.getMembers()) {
+                noteTagRepository.insert(email, rootFolder, noteUid, remoteName);
             }
         }
     }
 
-    void cleanLocalData(String email, String rootFolder){
-        noteRepository.cleanAccount(email,rootFolder);
-        noteTagRepository.cleanAccount(email,rootFolder);
-        tagRepository.cleanAccount(email,rootFolder);
-        attachmentRepository.cleanAccount(email,rootFolder);
+    void cleanLocalData(String email, String rootFolder) {
+        noteRepository.cleanAccount(email, rootFolder);
+        noteTagRepository.cleanAccount(email, rootFolder);
+        tagRepository.cleanAccount(email, rootFolder);
+        attachmentRepository.cleanAccount(email, rootFolder);
 
     }
 
-    private Notebook searchNotebookOfNote(NotesRepository repo, String noteUID){
-        for(Notebook notebook : repo.getNotebooks()){
-            if(notebook.getNote(noteUID) != null){
+    private Notebook searchNotebookOfNote(NotesRepository repo, String noteUID) {
+        for (Notebook notebook : repo.getNotebooks()) {
+            if (notebook.getNote(noteUID) != null) {
                 return notebook;
             }
         }
         return null;
     }
 
-    void putLocalDataIntoRepository(String email, String rootFolder){
+    void putLocalDataIntoRepository(String email, String rootFolder) {
         boolean withLatest = Utils.clearConflictWithLatest(context);
         boolean withLocal = Utils.clearConflictWithLocal(context);
 
@@ -160,7 +160,7 @@ public class RepositoryManager {
 
         final RemoteTags remoteTags = repo.getRemoteTags();
 
-        for(Note note : localNotes){
+        for (Note note : localNotes) {
             Modification modification = modificationRepository.getUnique(email, rootFolder, note.getIdentification().getUid());
 
             final List<Attachment> allForNote = attachmentRepository.getAllForNote(email, rootFolder, note.getIdentification().getUid(), true);
@@ -169,43 +169,43 @@ public class RepositoryManager {
             boolean attachmentsCreated = attachmentRepository.attachmentsCreatedAfterLastSync(email, rootFolder, note.getIdentification().getUid(), lastSync);
             List<Modification> deletedAttachments = modificationRepository.getDeletions(email, rootFolder, Modification.Descriminator.ATTACHMENT, note.getIdentification().getUid());
 
-            if(modification != null || attachmentsCreated || deletedAttachments.size() > 0){
+            if (modification != null || attachmentsCreated || deletedAttachments.size() > 0) {
                 Notebook localNotebook = notebookRepository.getByUID(email, rootFolder, noteRepository.getUIDofNotebook(email, rootFolder, note.getIdentification().getUid()));
                 Notebook remoteNotebook = repo.getNotebookBySummary(localNotebook.getSummary());
 
-                if(remoteNotebook == null){
-                    Log.d("localIntoRepository","Creating new notebook on server:"+localNotebook.getSummary());
+                if (remoteNotebook == null) {
+                    Log.d("localIntoRepository", "Creating new notebook on server:" + localNotebook.getSummary());
                     remoteNotebook = repo.createNotebook(localNotebook.getIdentification().getUid(), localNotebook.getSummary());
                 }
 
-                if(modification != null && ModificationRepository.ModificationType.INS.equals(modification.getType())){
-                    Log.d("localIntoRepository","Creating new note:"+note);
+                if (modification != null && ModificationRepository.ModificationType.INS.equals(modification.getType())) {
+                    Log.d("localIntoRepository", "Creating new note:" + note);
                     remoteNotebook.addNote(note);
 
                     Set<Tag> localCategories = note.getCategories();
                     final Tag[] tagArray = localCategories.toArray(new Tag[localCategories.size()]);
                     remoteTags.attachTags(note.getIdentification().getUid(), tagArray);
                     localChangedNotes.add(note.getIdentification().getUid());
-                }else{
+                } else {
                     Note remoteNote = remoteNotebook.getNote(note.getIdentification().getUid());
 
                     //if the notebook of the note was changed locally
-                    if(remoteNote == null){
+                    if (remoteNote == null) {
                         final Notebook notebook = searchNotebookOfNote(repo, note.getIdentification().getUid());
 
                         //the note exists in another notebook
-                        if(notebook != null){
+                        if (notebook != null) {
                             notebook.deleteNote(note.getIdentification().getUid());
                             remoteNotebook.addNote(note);
                             remoteNote = note;
-                        }else if(withLocal){
+                        } else if (withLocal) {
                             //if local changes should always overrule server, recreate the note
                             remoteNotebook.addNote(note);
                             remoteNote = note;
                         }
                     }
 
-                    if(remoteNote != null) {
+                    if (remoteNote != null) {
                         //If there is a conflict
                         if (remoteNote.getAuditInformation().getLastModificationDate().after(lastSync)) {
                             if (withLatest) {
@@ -221,39 +221,39 @@ public class RepositoryManager {
                         }
                     }
                 }
-            }else{
+            } else {
                 //Fill the unchanged, unloaded notes, so that in the later step, everything can be replaced in the local repo with data from the remote repo
                 repo.fillUnloadedNote(note);
             }
         }
 
         List<Modification> deletions = modificationRepository.getDeletions(email, rootFolder, Modification.Descriminator.NOTE);
-        for(Modification deletion : deletions){
+        for (Modification deletion : deletions) {
             Note remoteNote = repo.getNote(deletion.getUid());
 
-            if(remoteNote != null){
-                if(withLatest){
-                    if(deletion.getModificationDate().after(remoteNote.getAuditInformation().getLastModificationDate())){
-                        Log.d("localIntoRepository","Deleting note:"+remoteNote);
+            if (remoteNote != null) {
+                if (withLatest) {
+                    if (deletion.getModificationDate().after(remoteNote.getAuditInformation().getLastModificationDate())) {
+                        Log.d("localIntoRepository", "Deleting note:" + remoteNote);
                         Notebook localNotebook = notebookRepository.getByUID(email, rootFolder, deletion.getUidNotebook());
                         repo.getNotebookBySummary(localNotebook.getSummary()).deleteNote(deletion.getUid());
                     }
-                }else if(withLocal){
-                    Log.d("localIntoRepository","Deleting note:"+remoteNote);
+                } else if (withLocal) {
+                    Log.d("localIntoRepository", "Deleting note:" + remoteNote);
                     Notebook localNotebook = notebookRepository.getByUID(email, rootFolder, deletion.getUidNotebook());
                     repo.getNotebookBySummary(localNotebook.getSummary()).deleteNote(deletion.getUid());
                 }
             }
         }
 
-        for(Modification deletion : deletedNbs){
+        for (Modification deletion : deletedNbs) {
 
             //Because Notebooks are IMAP-Folders, there is no persistent UID, so in the UidNotebook field, ist the summary of the notebook, which identifies the notebook persistent
             Notebook toDelete = repo.getNotebookBySummary(deletion.getUidNotebook());
 
             //Also there is no modification date, so if there is a notebook (folder) with this name, delete it
-            if(toDelete != null){
-                Log.d("localIntoRepository","Deleting notebook:"+toDelete.getSummary());
+            if (toDelete != null) {
+                Log.d("localIntoRepository", "Deleting notebook:" + toDelete.getSummary());
                 repo.deleteNotebook(toDelete.getIdentification().getUid());
             }
         }
@@ -264,17 +264,17 @@ public class RepositoryManager {
 
         List<Modification> deletedTags = modificationRepository.getDeletions(email, rootFolder, Modification.Descriminator.TAG);
         List<Identification> toDeleteUIDs = new ArrayList<>();
-        for(Modification deletion : deletedTags){
+        for (Modification deletion : deletedTags) {
             //in case of tags, is in the uidNotebook the tagname
             RemoteTags.TagDetails remoteTag = remoteTags.getTag(deletion.getUidNotebook());
 
-            if(remoteTag != null){
-                if(withLatest){
-                    if(deletion.getModificationDate().after(remoteTag.getAuditInformation().getLastModificationDate())){
+            if (remoteTag != null) {
+                if (withLatest) {
+                    if (deletion.getModificationDate().after(remoteTag.getAuditInformation().getLastModificationDate())) {
                         Log.d("localIntoRepository", "Deleting tag:" + remoteTag);
                     }
                     toDeleteUIDs.add(remoteTag.getIdentification());
-                }else if(withLocal){
+                } else if (withLocal) {
                     Log.d("localIntoRepository", "Deleting tag:" + remoteTag);
                     toDeleteUIDs.add(remoteTag.getIdentification());
                 }

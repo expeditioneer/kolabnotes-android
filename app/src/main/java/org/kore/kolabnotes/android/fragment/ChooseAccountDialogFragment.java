@@ -23,7 +23,7 @@ import java.util.Arrays;
 /**
  * Created by koni on 10.09.15.
  */
-public class ChooseAccountDialogFragment extends DialogFragment implements View.OnClickListener{
+public class ChooseAccountDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private ActiveAccountRepository activeAccountRepository;
 
@@ -60,7 +60,7 @@ public class ChooseAccountDialogFragment extends DialogFragment implements View.
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.select_button) {
+        if (view.getId() == R.id.select_button) {
             OnAccountSwitchedListener listener = (OnAccountSwitchedListener) getActivity();
 
             String name = accountSpinner.getSelectedItem().toString();
@@ -70,7 +70,7 @@ public class ChooseAccountDialogFragment extends DialogFragment implements View.
             final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
             final AccountIdentifier id = new AccountIdentifier(activeAccount.getAccount(), activeAccount.getRootFolder());
 
-            if(!id.equals(selectedAccount)) {
+            if (!id.equals(selectedAccount)) {
                 activeAccountRepository.switchAccount(selectedAccount.getAccount(), selectedAccount.getRootFolder());
 
                 listener.onAccountSwitched(name, selectedAccount);
@@ -79,30 +79,30 @@ public class ChooseAccountDialogFragment extends DialogFragment implements View.
         this.dismiss();
     }
 
-    void initAccountSpinner(){
+    void initAccountSpinner() {
         Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-        String[] accountNames = new String[accounts.length+1];
+        String[] accountNames = new String[accounts.length + 1];
 
         accountNames[0] = localAccountName;
         int selection = 0;
 
         final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
 
-        for(int i=0; i< accounts.length;i++){
-            accountNames[i+1] = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ACCOUNT_NAME);
+        for (int i = 0; i < accounts.length; i++) {
+            accountNames[i + 1] = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_NAME);
 
-            String folder = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ROOT_FOLDER);
-            String email = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_EMAIL);
+            String folder = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ROOT_FOLDER);
+            String email = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_EMAIL);
 
-            if(activeAccount.getAccount().equals(email) && activeAccount.getRootFolder().equals(folder)){
-                selection = i+1;
+            if (activeAccount.getAccount().equals(email) && activeAccount.getRootFolder().equals(folder)) {
+                selection = i + 1;
             }
         }
 
         Arrays.sort(accountNames, 1, accountNames.length);
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),R.layout.widget_config_spinner_item,accountNames);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), R.layout.widget_config_spinner_item, accountNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountSpinner.setAdapter(adapter);
         accountSpinner.setSelection(selection);

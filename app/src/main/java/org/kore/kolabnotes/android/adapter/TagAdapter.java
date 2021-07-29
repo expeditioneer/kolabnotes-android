@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by yaroslav on 10.01.16.
  */
-public class TagAdapter extends SelectableAdapter<TagAdapter.ViewHolder>{
+public class TagAdapter extends SelectableAdapter<TagAdapter.ViewHolder> {
 
     DateFormat dateFormatter;
     Context context;
@@ -165,7 +165,9 @@ public class TagAdapter extends SelectableAdapter<TagAdapter.ViewHolder>{
 
         public interface ClickListener {
             void onColorPickerClicked(int position, Tag tag);
+
             void onItemClicked(int position, Tag tag);
+
             boolean onItemLongClicked(int position, Tag tag);
         }
     }

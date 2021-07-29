@@ -90,9 +90,9 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
 
-            if(selectedNote == null){
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.no_selection), Toast.LENGTH_SHORT);
-            }else {
+            if (selectedNote == null) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_selection), Toast.LENGTH_SHORT);
+            } else {
 
                 final Context context = StickyNoteWidgetConfigureActivity.this;
 
@@ -105,7 +105,7 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
 
                 // It is the responsibility of the configuration activity to update the app widget
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                StickyNoteWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId,noteRepository);
+                StickyNoteWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, noteRepository);
 
                 // Make sure we pass back the original appWidgetId
                 Intent resultValue = new Intent();
@@ -140,43 +140,43 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
         prefs.commit();
     }
 
-    void initSpinners(){
+    void initSpinners() {
         initAccountSpinner();
         updateNoteSpinner();
     }
 
-    void initAccountSpinner(){
+    void initAccountSpinner() {
         Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-        String[] accountNames = new String[accounts.length+1];
+        String[] accountNames = new String[accounts.length + 1];
 
         accountNames[0] = localAccountName;
-        for(int i=0; i< accounts.length;i++){
-            accountNames[i+1] = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ACCOUNT_NAME);
+        for (int i = 0; i < accounts.length; i++) {
+            accountNames[i + 1] = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ACCOUNT_NAME);
         }
 
         Arrays.sort(accountNames, 1, accountNames.length);
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,R.layout.widget_config_spinner_item,accountNames);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.widget_config_spinner_item, accountNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountSpinner.setAdapter(adapter);
         accountSpinner.setOnItemSelectedListener(new OnAccountItemClicked());
         accountSpinner.setSelection(0);
     }
 
-    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener{
+    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String name = parent.getSelectedItem().toString();
 
-            if(localAccountName.equalsIgnoreCase(name)){
+            if (localAccountName.equalsIgnoreCase(name)) {
                 selectedAccount = null;
-            }else{
+            } else {
                 Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-                for(Account account : accounts){
-                    if(name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))){
+                for (Account account : accounts) {
+                    if (name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
                         selectedAccount = account;
                         break;
                     }
@@ -192,24 +192,24 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
         }
     }
 
-    void updateNoteSpinner(){
+    void updateNoteSpinner() {
         String rootFolder;
         String email;
-        if(selectedAccount == null){
+        if (selectedAccount == null) {
             rootFolder = "Notes";
             email = "local";
-        }else{
-            rootFolder = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_ROOT_FOLDER);
-            email = mAccountManager.getUserData(selectedAccount,AuthenticatorActivity.KEY_EMAIL);
+        } else {
+            rootFolder = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ROOT_FOLDER);
+            email = mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_EMAIL);
         }
 
         List<Note> notes = new ArrayList<>(noteRepository.getAll(email, rootFolder, new NoteSorting(Utils.SortingColumns.summary, NoteSorting.Direction.ASC)));
 
         Collections.sort(notes);
 
-        if(notes.size() > 0) {
+        if (notes.size() > 0) {
             selectedNote = notes.get(0).getIdentification().getUid();
-        }else{
+        } else {
             selectedNote = null;
         }
 
@@ -220,7 +220,7 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
         noteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedNote = ((Note)parent.getSelectedItem()).getIdentification().getUid();
+                selectedNote = ((Note) parent.getSelectedItem()).getIdentification().getUid();
             }
 
             @Override

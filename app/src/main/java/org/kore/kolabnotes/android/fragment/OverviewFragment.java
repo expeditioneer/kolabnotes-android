@@ -158,7 +158,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = (MainActivity)activity;
+        this.activity = (MainActivity) activity;
 
         notesRepository = new NoteRepository(activity);
         notebookRepository = new NotebookRepository(activity);
@@ -189,7 +189,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
         Set<AccountIdentifier> allAccounts = activeAccountRepository.getAllAccounts();
 
-        if(allAccounts.size() == 0){
+        if (allAccounts.size() == 0) {
             allAccounts = activeAccountRepository.initAccounts();
         }
 
@@ -198,12 +198,12 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
         //For accounts cleanup
         Set<AccountIdentifier> accountsForDeletion = new LinkedHashSet<>(allAccounts);
-        accountsForDeletion.remove(new AccountIdentifier("local","Notes"));
+        accountsForDeletion.remove(new AccountIdentifier("local", "Notes"));
 
-        for(int i=0;i<accounts.length;i++) {
-            String email = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_EMAIL);
-            String rootFolder = mAccountManager.getUserData(accounts[i],AuthenticatorActivity.KEY_ROOT_FOLDER);
-            accountsForDeletion.remove(new AccountIdentifier(email,rootFolder));
+        for (int i = 0; i < accounts.length; i++) {
+            String email = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_EMAIL);
+            String rootFolder = mAccountManager.getUserData(accounts[i], AuthenticatorActivity.KEY_ROOT_FOLDER);
+            accountsForDeletion.remove(new AccountIdentifier(email, rootFolder));
         }
 
         cleanupAccounts(accountsForDeletion);
@@ -225,7 +225,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         //mRecyclerView.setItemAnimator(new CustomItemAnimator());
         //mRecyclerView.setItemAnimator(new ReboundItemAnimator());
 
-        mAdapter = new NoteAdapter(new ArrayList<Note>(), R.layout.row_note_overview, activity, this, attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(),activeAccount.getRootFolder()));
+        mAdapter = new NoteAdapter(new ArrayList<Note>(), R.layout.row_note_overview, activity, this, attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(), activeAccount.getRootFolder()));
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_container);
@@ -235,7 +235,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             @Override
             public void onRefresh() {
                 ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-                if(!"local".equalsIgnoreCase(activeAccount.getAccount())) {
+                if (!"local".equalsIgnoreCase(activeAccount.getAccount())) {
                     Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
                     Account selectedAccount = null;
 
@@ -248,7 +248,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                         }
                     }
 
-                    if(selectedAccount == null){
+                    if (selectedAccount == null) {
                         return;
                     }
 
@@ -258,8 +258,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                     settingsBundle.putBoolean(
                             ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
-                    ContentResolver.requestSync(selectedAccount,MainActivity.AUTHORITY, settingsBundle);
-                }else{
+                    ContentResolver.requestSync(selectedAccount, MainActivity.AUTHORITY, settingsBundle);
+                } else {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -278,8 +278,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         new InitializeApplicationsTask().execute();
 
         if (savedInstanceState != null) {
-            mSelectedNotes = (HashMap<Integer, String>)savedInstanceState.getSerializable(TAG_SELECTED_NOTES);
-            if (savedInstanceState.getBoolean(TAG_ACTION_MODE, false)){
+            mSelectedNotes = (HashMap<Integer, String>) savedInstanceState.getSerializable(TAG_SELECTED_NOTES);
+            if (savedInstanceState.getBoolean(TAG_ACTION_MODE, false)) {
                 mActionMode = activity.startActionMode(mActionModeCallback);
                 mAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(TAG_SELECTABLE_ADAPTER));
                 mActionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
@@ -292,7 +292,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         setListState();
     }
 
-    private void cleanupAccounts(Set<AccountIdentifier> accountsForDeletion){
+    private void cleanupAccounts(Set<AccountIdentifier> accountsForDeletion) {
         Thread cleanupThread = new Thread(new AccountsCleaner(accountsForDeletion));
         cleanupThread.start();
     }
@@ -305,28 +305,28 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         reloadData();
     }
 
-    final class AccountsCleaner implements Runnable{
+    final class AccountsCleaner implements Runnable {
 
         private final Set<AccountIdentifier> accountsForDeletion;
 
-        public  AccountsCleaner(Set<AccountIdentifier> accountsForDeletion){
+        public AccountsCleaner(Set<AccountIdentifier> accountsForDeletion) {
             this.accountsForDeletion = accountsForDeletion;
         }
 
         @Override
         public void run() {
-            for(AccountIdentifier identifier : accountsForDeletion){
+            for (AccountIdentifier identifier : accountsForDeletion) {
                 String email = identifier.getAccount();
                 String rootFolder = identifier.getRootFolder();
-                activeAccountRepository.deleteAccount(identifier.getAccount(),identifier.getRootFolder());
+                activeAccountRepository.deleteAccount(identifier.getAccount(), identifier.getRootFolder());
 
                 notesRepository.cleanAccount(email, rootFolder);
-                notetagRepository.cleanAccount(email,rootFolder);
-                tagRepository.cleanAccount(email,rootFolder);
+                notetagRepository.cleanAccount(email, rootFolder);
+                tagRepository.cleanAccount(email, rootFolder);
                 attachmentRepository.cleanAccount(email, rootFolder);
-                modificationRepository.cleanAccount(email,rootFolder);
+                modificationRepository.cleanAccount(email, rootFolder);
 
-                Log.d("AccountsCleaner","Cleaned account:"+identifier);
+                Log.d("AccountsCleaner", "Cleaned account:" + identifier);
             }
         }
     }
@@ -385,15 +385,15 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    public void select(final Note note,final boolean sameSelection) {
-        if(tabletMode){
+    public void select(final Note note, final boolean sameSelection) {
+        if (tabletMode) {
             Fragment fragment = getFragmentManager().findFragmentById(R.id.details_fragment);
             final ActiveAccount activeAccount = this.activeAccountRepository.getActiveAccount();
-            if(fragment instanceof  DetailFragment){
-                DetailFragment detail = (DetailFragment)fragment;
+            if (fragment instanceof DetailFragment) {
+                DetailFragment detail = (DetailFragment) fragment;
                 boolean changes = detail.checkDifferences();
 
-                if(changes) {
+                if (changes) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
                     builder.setTitle(R.string.dialog_cancel_warning);
@@ -411,13 +411,13 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                         }
                     });
                     builder.show();
-                }else{
-                    setDetailFragment(activeAccount, note,sameSelection);
+                } else {
+                    setDetailFragment(activeAccount, note, sameSelection);
                 }
-            }else{
-                setDetailFragment(activeAccount, note,sameSelection);
+            } else {
+                setDetailFragment(activeAccount, note, sameSelection);
             }
-        }else {
+        } else {
             Intent i = new Intent(activity, DetailActivity.class);
             i.putExtra(Utils.NOTE_UID, note.getIdentification().getUid());
 
@@ -426,8 +426,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
                 final Notebook bySummary = notebookRepository.getBySummary(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedNotebookName);
                 // not null because of issue 167
-                if(bySummary != null) {
-                    i.putExtra(Utils.NOTEBOOK_UID,bySummary.getIdentification().getUid());
+                if (bySummary != null) {
+                    i.putExtra(Utils.NOTEBOOK_UID, bySummary.getIdentification().getUid());
                 }
             }
 
@@ -435,8 +435,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    public Context getContext(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+    public Context getContext() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return super.getContext();
         }
         return activity;
@@ -520,8 +520,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                     .setCallback(new Snackbar.Callback() {
                         @Override
                         public void onDismissed(Snackbar snackbar, int event) {
-                            switch(event) {
-                        /* If undo button pressed */
+                            switch (event) {
+                                /* If undo button pressed */
                                 case Snackbar.Callback.DISMISS_EVENT_ACTION:
                                     mAdapter.clearNotes();
                                     mAdapter.addNotes(notesRepository.getAll(account, rootFolder, Utils.getNoteSorting(getActivity())));
@@ -537,7 +537,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                                         }
                                     }
                                     reloadData();
-                                    Utils.setSelectedTagName(activity,null);
+                                    Utils.setSelectedTagName(activity, null);
                                     Utils.setSelectedNotebookName(activity, null);
                                     if (tabletMode) {
                                         displayBlankFragment();
@@ -548,7 +548,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                     }).setAction(R.string.snackbar_undo_delete, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                    /* Nothing */
+                            /* Nothing */
                         }
                     });
 
@@ -564,7 +564,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(R.string.dialog_change_tags);
 
-            Map<String,Tag> allTags = new HashMap<>();
+            Map<String, Tag> allTags = new HashMap<>();
             allTags.putAll(tagRepository.getAllAsMap(account, rootFolder));
             final Set<String> tagNames = allTags.keySet();
             final String[] tagArr = tagNames.toArray(new String[tagNames.size()]);
@@ -584,8 +584,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                         selectedTags.add(tag.getName());
                     }
 
-                    for(int i = 0; i < tagArr.length; i++){
-                        if(selectedTags.contains(tagArr[i])){
+                    for (int i = 0; i < tagArr.length; i++) {
+                        if (selectedTags.contains(tagArr[i])) {
                             selectionArr[i] = true;
                             selectedItems.put(i, i);
                         }
@@ -628,7 +628,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                                 }
                             }
                             mSelectedNotes.clear();
-                            Utils.setSelectedTagName(activity,null);
+                            Utils.setSelectedTagName(activity, null);
                             Utils.setSelectedNotebookName(activity, null);
                             reloadData();
                         }
@@ -685,7 +685,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
         mSelectedNotes.clear();
         Utils.setSelectedTagName(activity, null);
-        Utils.setSelectedNotebookName(activity,null);
+        Utils.setSelectedNotebookName(activity, null);
         reloadData();
     }
 
@@ -737,7 +737,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                             final String uid = mSelectedNotes.get(position);
                             final Note note = notesRepository.getByUID(account, rootFolder, uid);
                             if (note != null) {
-                                if(Utils.checkNotebookPermissions(activity,activeAccount,note,book)){
+                                if (Utils.checkNotebookPermissions(activity, activeAccount, note, book)) {
                                     Toast.makeText(activity, R.string.no_change_permissions, Toast.LENGTH_LONG).show();
                                     continue;
                                 }
@@ -747,7 +747,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                             }
                         }
                         mSelectedNotes.clear();
-                        Utils.setSelectedTagName(activity,null);
+                        Utils.setSelectedTagName(activity, null);
                         Utils.setSelectedNotebookName(activity, null);
                         reloadData();
                     }
@@ -755,7 +755,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                /* Nothing */
+                    /* Nothing */
                 }
             });
 
@@ -767,25 +767,25 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         note.getAuditInformation().setLastModificationDate(System.currentTimeMillis());
 
         Notebook book = notebookRepository.getByUID(account, rootFolder, notesRepository
-                        .getUIDofNotebook(account, rootFolder, note.getIdentification().getUid()));
+                .getUIDofNotebook(account, rootFolder, note.getIdentification().getUid()));
         notesRepository.update(account, rootFolder, note, book.getIdentification().getUid());
     }
 
-    public void displayBlankFragment(){
+    public void displayBlankFragment() {
         Log.d("displayBlankFragment", "tabletMode:" + tabletMode);
-        if(tabletMode){
+        if (tabletMode) {
             BlankFragment blank = BlankFragment.newInstance();
-            FragmentTransaction ft = getFragmentManager(). beginTransaction();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.details_fragment, blank);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
 
-            ((OnFragmentCallback)activity).fragementAttached(this);
+            ((OnFragmentCallback) activity).fragementAttached(this);
         }
     }
 
-    void setDetailFragment(ActiveAccount account, Note note, boolean sameSelection){
-        DetailFragment detail = DetailFragment.newInstance(note.getIdentification().getUid(),null);
+    void setDetailFragment(ActiveAccount account, Note note, boolean sameSelection) {
+        DetailFragment detail = DetailFragment.newInstance(note.getIdentification().getUid(), null);
         if (detail.getNote() == null || !sameSelection) {
 
             String notebook = null;
@@ -801,33 +801,33 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
     }
 
     private void replaceDetailFragment(DetailFragment detail, String noteUID, String notebookUID, ActiveAccount account) {
-        FragmentTransaction ft = getFragmentManager(). beginTransaction();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.details_fragment, detail);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ft.commitNow();
             detail.updateFragmentDataWithNewNoteSelection(noteUID, notebookUID, account);
-        }else{
+        } else {
             ft.commit();
             getFragmentManager().executePendingTransactions();
             detail.updateFragmentDataWithNewNoteSelection(noteUID, notebookUID, account);
         }
     }
 
-    public void preventBlankDisplaying(){
+    public void preventBlankDisplaying() {
         this.preventBlankDisplaying = true;
 
-        if(mAdapter != null && mRecyclerView != null){
+        if (mAdapter != null && mRecyclerView != null) {
             mAdapter.restoreElevation(mRecyclerView);
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         // Resume the search view with the last keyword
-        if(mSearchView != null) {
+        if (mSearchView != null) {
             mSearchView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -838,7 +838,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
         toolbar.setNavigationIcon(R.drawable.drawer_icon);
         toolbar.setBackgroundColor(getResources().getColor(R.color.theme_default_primary));
-        Utils.setToolbarTextAndIconColor(activity, toolbar,true);
+        Utils.setToolbarTextAndIconColor(activity, toolbar, true);
         //displayBlankFragment();
 
         Intent startIntent = getActivity().getIntent();
@@ -849,23 +849,23 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         String tagName = startIntent.getStringExtra(Utils.SELECTED_TAG_NAME);
 
         ActiveAccount activeAccount;
-        if(email != null && rootFolder != null) {
-            activeAccount = activeAccountRepository.switchAccount(email,rootFolder);
+        if (email != null && rootFolder != null) {
+            activeAccount = activeAccountRepository.switchAccount(email, rootFolder);
 
             //remove the values because if one selects an other account and then goes into detail an then back, the values will be present, in phone mode
             startIntent.removeExtra(Utils.INTENT_ACCOUNT_EMAIL);
             startIntent.removeExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER);
-        }else{
+        } else {
             activeAccount = activeAccountRepository.getActiveAccount();
         }
 
         //if called from the widget
-        if(notebookName != null){
+        if (notebookName != null) {
             Utils.setSelectedNotebookName(activity, notebookName);
-            Utils.setSelectedTagName(activity,null);
-        }else if(tagName != null){
+            Utils.setSelectedTagName(activity, null);
+        } else if (tagName != null) {
             Utils.setSelectedNotebookName(activity, null);
-            Utils.setSelectedTagName(activity,tagName);
+            Utils.setSelectedTagName(activity, tagName);
         }
 
         String selectedNotebookName = Utils.getSelectedNotebookName(activity);
@@ -873,12 +873,12 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         final String nameOfActiveAccount = Utils.getNameOfActiveAccount(activity, activeAccount.getAccount(), activeAccount.getRootFolder());
         mDrawerAccountsService.changeSelectedAccount(activity, nameOfActiveAccount, activeAccount.getAccount(), Utils.getAccountType(activity, activeAccount));
 
-        if(initPhase){
+        if (initPhase) {
             initPhase = false;
             return;
         }
 
-        if(selectedNotebookName != null) {
+        if (selectedNotebookName != null) {
             Notebook nb = notebookRepository.getBySummary(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedNotebookName);
 
             //GitHub Issue 31
@@ -888,11 +888,11 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
 
         //Refresh the loaded data because it could be that something changed, after coming back from detail activity
-        new AccountChangeThread(activeAccount,notebookName).run();
+        new AccountChangeThread(activeAccount, notebookName).run();
     }
 
 
-    class AccountChangeThread extends Thread{
+    class AccountChangeThread extends Thread {
 
         private final String account;
         private final String rootFolder;
@@ -910,7 +910,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
 
         AccountChangeThread(ActiveAccount activeAccount) {
-            this(activeAccount.getAccount(),activeAccount.getRootFolder());
+            this(activeAccount.getAccount(), activeAccount.getRootFolder());
             this.activeAccount = activeAccount;
         }
 
@@ -919,18 +919,18 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             this.notebookUID = notebookUID;
         }
 
-        public void disableProfileChangeing(){
+        public void disableProfileChangeing() {
             changeDrawerAccount = false;
         }
 
-        public void resetDrawerSelection(){
+        public void resetDrawerSelection() {
             this.resetDrawerSelection = true;
         }
 
 
         @Override
         public void run() {
-            if(activeAccount == null) {
+            if (activeAccount == null) {
                 activeAccount = activeAccountRepository.switchAccount(account, rootFolder);
             }
 
@@ -938,7 +938,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 @Override
                 public void run() {
                     String name = Utils.getNameOfActiveAccount(activity, activeAccount.getAccount(), activeAccount.getRootFolder());
-                    if(changeDrawerAccount){
+                    if (changeDrawerAccount) {
                         mDrawerAccountsService.changeSelectedAccount(activity, name, activeAccount.getAccount(), Utils.getAccountType(activity, activeAccount));
                     }
                     toolbar.setTitle(name);
@@ -947,24 +947,24 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
             List<Note> notes;
             String selectedTagName = Utils.getSelectedTagName(activity);
-            if(resetDrawerSelection || (notebookUID == null && selectedTagName == null)){
-                if(resetDrawerSelection){
+            if (resetDrawerSelection || (notebookUID == null && selectedTagName == null)) {
+                if (resetDrawerSelection) {
                     Utils.setSelectedNotebookName(activity, null);
                     Utils.setSelectedTagName(activity, null);
                 }
-                notes = notesRepository.getAll(activeAccount.getAccount(),activeAccount.getRootFolder(),Utils.getNoteSorting(getActivity()));
-            }else if(selectedTagName != null){
+                notes = notesRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder(), Utils.getNoteSorting(getActivity()));
+            } else if (selectedTagName != null) {
                 notes = notetagRepository.getNotesWith(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedTagName, Utils.getNoteSorting(activity));
-            }else{
-                notes = notesRepository.getFromNotebook(activeAccount.getAccount(),activeAccount.getRootFolder(),notebookUID,Utils.getNoteSorting(getActivity()));
+            } else {
+                notes = notesRepository.getFromNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookUID, Utils.getNoteSorting(getActivity()));
             }
 
-            Map<String,Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
-            List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(),activeAccount.getRootFolder());
+            Map<String, Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
+            List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
 
-            if(preventBlankDisplaying) {
+            if (preventBlankDisplaying) {
                 preventBlankDisplaying = false;
-            } else if(getFragmentManager().findFragmentById(R.id.details_fragment) == null) {
+            } else if (getFragmentManager().findFragmentById(R.id.details_fragment) == null) {
                 displayBlankFragment();
             }
 
@@ -973,13 +973,12 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
     }
 
 
-
-    public class ReloadDataThread extends Thread{
+    public class ReloadDataThread extends Thread {
         private final List<Notebook> notebooks;
         private final List<Note> notes;
-        private final Map<String,Tag> tags;
+        private final Map<String, Tag> tags;
 
-        ReloadDataThread(List<Notebook> notebooks, List<Note> notes, Map<String,Tag> tags) {
+        ReloadDataThread(List<Notebook> notebooks, List<Note> notes, Map<String, Tag> tags) {
             this.notebooks = notebooks;
             this.notes = notes;
             this.tags = tags;
@@ -991,8 +990,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    public void refreshFinished(Account selectedAccount){
-        if(selectedAccount == null || !ContentResolver.isSyncActive(selectedAccount,MainActivity.AUTHORITY)){
+    public void refreshFinished(Account selectedAccount) {
+        if (selectedAccount == null || !ContentResolver.isSyncActive(selectedAccount, MainActivity.AUTHORITY)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1006,12 +1005,12 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main_toolbar, menu);
 
         // Create the search view
         mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id
-            .action_search));
+                .action_search));
         setUpSearchView(mSearchView);
     }
 
@@ -1050,8 +1049,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
     private void searchNotes(String keyWord) {
         ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
         List<Note> notes = notesRepository.searchNotes(activeAccount
-                .getAccount(),
-            activeAccount.getRootFolder(), keyWord, Utils.getNoteSorting(activity));
+                        .getAccount(),
+                activeAccount.getRootFolder(), keyWord, Utils.getNoteSorting(activity));
 
         // Update the search view with the result notes
         mAdapter.clearNotes();
@@ -1072,7 +1071,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 activity.getDrawerLayout().openDrawer(GravityCompat.START);
                 break;
@@ -1084,9 +1083,9 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 AlertDialog deleteNBDialog = deleteNotebookDialog();
 
                 final String selectedNotebookName = Utils.getSelectedNotebookName(activity);
-                if(selectedNotebookName == null){
-                    Toast.makeText(activity,R.string.no_nb_selected,Toast.LENGTH_LONG).show();
-                }else {
+                if (selectedNotebookName == null) {
+                    Toast.makeText(activity, R.string.no_nb_selected, Toast.LENGTH_LONG).show();
+                } else {
                     deleteNBDialog.show();
                 }
                 break;
@@ -1094,8 +1093,8 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 Intent i = new Intent(activity, TagListActivity.class);
                 startActivityForResult(i, TAG_LIST_ACTIVITY_RESULT_CODE);
                 break;
-           case R.id.settings_menu:
-                Intent settingsIntent = new Intent(activity,SettingsActivity.class);
+            case R.id.settings_menu:
+                Intent settingsIntent = new Intent(activity, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
             case R.id.import_menu:
@@ -1111,7 +1110,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         return true;
     }
 
-    private void importNotebook(){
+    private void importNotebook() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -1128,7 +1127,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         if (requestCode == Utils.READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (resultData != null) {
 
-                try{
+                try {
                     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.importing), Toast.LENGTH_SHORT).show();
                     Uri uri = resultData.getData();
                     String path = uri.getPath();
@@ -1147,15 +1146,15 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
                         notebookName = withouFileEnding(path.substring(path.lastIndexOf("/") + 1));
                     }
-					if (cursor != null) {
-						cursor.close();
-					}
+                    if (cursor != null) {
+                        cursor.close();
+                    }
 
                     InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
 
-                    new ImportNotebook(getActivity(),inputStream).execute(activeAccount.getAccount(),activeAccount.getRootFolder(),notebookName);
+                    new ImportNotebook(getActivity(), inputStream).execute(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookName);
 
-                }catch (FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     Log.e("result", e.getMessage(), e);
                     NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -1168,7 +1167,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                     notificationManager.notify(Utils.WRITE_REQUEST_CODE, notification);
                 }
             }
-        }else if(requestCode == Utils.WRITE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        } else if (requestCode == Utils.WRITE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 Uri uri = resultData.getData();
                 String path = uri.getPath();
@@ -1187,14 +1186,14 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
                     notebookName = withouFileEnding(path.substring(path.lastIndexOf("/") + 1));
                 }
-				if (cursor != null) {
-					cursor.close();
-				}
+                if (cursor != null) {
+                    cursor.close();
+                }
 
                 ParcelFileDescriptor pfd = getActivity().getContentResolver().openFileDescriptor(uri, "w");
 
                 new ExportNotebook(getActivity(), uri, pfd).execute(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookName);
-            }catch (FileNotFoundException e){
+            } catch (FileNotFoundException e) {
                 Log.e("result", e.getMessage(), e);
                 NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -1212,20 +1211,20 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
     @NonNull
     private String withouFileEnding(String notebookName) {
         //if there already existed a file with that name
-        if(notebookName.lastIndexOf('(') > 0){
+        if (notebookName.lastIndexOf('(') > 0) {
             notebookName = notebookName.substring(0, notebookName.lastIndexOf('('));
-        }else if (notebookName.endsWith(".zip") || notebookName.endsWith(".ZIP")) {
+        } else if (notebookName.endsWith(".zip") || notebookName.endsWith(".ZIP")) {
             notebookName = notebookName.substring(0, notebookName.length() - 4);
         }
         return notebookName;
     }
 
-    class ImportNotebook extends AsyncTask<String, Void, String>{
+    class ImportNotebook extends AsyncTask<String, Void, String> {
 
         private final Context context;
         private final InputStream pathToZip;
 
-        ImportNotebook(Context context, InputStream zip){
+        ImportNotebook(Context context, InputStream zip) {
             this.context = context;
             this.pathToZip = zip;
         }
@@ -1238,27 +1237,27 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 LocalNotesRepository repo = new LocalNotesRepository(new KolabNotesParserV3(), "tmp");
 
 
-                Notebook notebook = repo.importNotebook(params[2],new KolabNotesParserV3(), pathToZip);
+                Notebook notebook = repo.importNotebook(params[2], new KolabNotesParserV3(), pathToZip);
 
                 Notebook bySummary = notebookRepository.getBySummary(params[0], params[1], notebook.getSummary());
-                if(bySummary == null){
-                    notebookRepository.insert(params[0],params[1], notebook);
+                if (bySummary == null) {
+                    notebookRepository.insert(params[0], params[1], notebook);
                     bySummary = notebook;
                 }
 
-                for(Note note : notebook.getNotes()){
+                for (Note note : notebook.getNotes()) {
                     Note byUID = notesRepository.getByUID(params[0], params[1], note.getIdentification().getUid());
 
-                    if(byUID == null){
-                        notesRepository.insert(params[0],params[1],note, bySummary.getIdentification().getUid());
+                    if (byUID == null) {
+                        notesRepository.insert(params[0], params[1], note, bySummary.getIdentification().getUid());
                     }
                 }
 
                 return notebook.getSummary();
             } catch (Exception e) {
-                Log.e("import", e.getMessage(),e);
+                Log.e("import", e.getMessage(), e);
                 cancel(false);
-                return params[0] +"/" + params[1] +"/"+ params[2] +"/"+e.getMessage();
+                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
             }
         }
 
@@ -1294,14 +1293,14 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    private void exportNotebooks(){
+    private void exportNotebooks() {
 
         Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.exporting), Toast.LENGTH_SHORT).show();
         ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-        if(Utils.getSelectedNotebookName(activity) == null){
+        if (Utils.getSelectedNotebookName(activity) == null) {
             List<Notebook> all = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
 
-            for(Notebook book : all){
+            for (Notebook book : all) {
 
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 
@@ -1311,26 +1310,26 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 intent.putExtra(Intent.EXTRA_TITLE, book.getSummary());
                 startActivityForResult(intent, Utils.WRITE_REQUEST_CODE);
             }
-        }else{
+        } else {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 
             intent.addCategory(Intent.CATEGORY_OPENABLE);
 
             intent.setType("application/zip");
             String notebookName = Utils.getSelectedNotebookName(activity);
-            intent.putExtra(Intent.EXTRA_TITLE, notebookName+".zip");
+            intent.putExtra(Intent.EXTRA_TITLE, notebookName + ".zip");
             startActivityForResult(intent, Utils.WRITE_REQUEST_CODE);
         }
     }
 
-    class ExportNotebook extends AsyncTask<String, Void, String>{
+    class ExportNotebook extends AsyncTask<String, Void, String> {
 
         private final Context context;
         private final ParcelFileDescriptor pfd;
         private final Uri fileUri;
         private final Random random;
 
-        ExportNotebook(Context context, Uri fileUri, ParcelFileDescriptor pfd){
+        ExportNotebook(Context context, Uri fileUri, ParcelFileDescriptor pfd) {
             this.context = context;
             this.pfd = pfd;
             random = new Random();
@@ -1346,7 +1345,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
                 Notebook notebook = notebookRepository.getBySummary(params[0], params[1], params[2]);
                 List<Note> fromNotebook = notesRepository.getFromNotebookWithDescriptionLoaded(params[0], params[1], notebook.getIdentification().getUid(), new NoteSorting());
 
-                for(Note note : fromNotebook){
+                for (Note note : fromNotebook) {
                     notebook.addNote(note);
                 }
 
@@ -1362,9 +1361,9 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
                 return fileUri.toString();
             } catch (Exception e) {
-                Log.e("export",e.getMessage(),e);
+                Log.e("export", e.getMessage(), e);
                 cancel(false);
-                return params[0] +"/" + params[1] +"/"+ params[2] +"/"+  e.getMessage();
+                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
             }
         }
 
@@ -1399,7 +1398,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    private AlertDialog deleteNotebookDialog(){
+    private AlertDialog deleteNotebookDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_delete_nb_warning);
@@ -1411,7 +1410,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
                 final String selectedNotebookName = Utils.getSelectedNotebookName(activity);
                 Notebook book = null;
-                if(selectedNotebookName != null) {
+                if (selectedNotebookName != null) {
                     book = notebookRepository.getBySummary(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedNotebookName);
                 }
 
@@ -1419,7 +1418,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
                 new DrawerService(activity.getNavigationView(), activity.getDrawerLayout()).deleteNotebook(book.getSummary());
                 Utils.setSelectedNotebookName(activity, null);
-                Utils.setSelectedTagName(activity,null);
+                Utils.setSelectedTagName(activity, null);
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -1431,7 +1430,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         return builder.create();
     }
 
-    private AlertDialog createNotebookDialog(Intent startActivity){
+    private AlertDialog createNotebookDialog(Intent startActivity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_input_text_notebook);
@@ -1441,7 +1440,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
         builder.setView(view);
 
-        builder.setPositiveButton(R.string.ok,new CreateNotebookButtonListener(startActivity, (EditText)view.findViewById(R.id.dialog_text_input_field)));
+        builder.setPositiveButton(R.string.ok, new CreateNotebookButtonListener(startActivity, (EditText) view.findViewById(R.id.dialog_text_input_field)));
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -1451,12 +1450,12 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         return builder.create();
     }
 
-    private AlertDialog createNotebookDialog(){
-        return  createNotebookDialog(null);
+    private AlertDialog createNotebookDialog() {
+        return createNotebookDialog(null);
     }
 
 
-    private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> implements Runnable{
+    private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> implements Runnable {
 
         @Override
         protected void onPreExecute() {
@@ -1475,9 +1474,9 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             String rootFolder = startIntent.getStringExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER);
 
             ActiveAccount activeAccount;
-            if(email != null && rootFolder != null){
-                activeAccount = activeAccountRepository.switchAccount(email,rootFolder);
-            }else{
+            if (email != null && rootFolder != null) {
+                activeAccount = activeAccountRepository.switchAccount(email, rootFolder);
+            } else {
                 activeAccount = activeAccountRepository.getActiveAccount();
             }
 
@@ -1512,29 +1511,28 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
     }
 
-    final synchronized void reloadData(List<Notebook> notebooks, List<Note> notes, Map<String,Tag> tags){
+    final synchronized void reloadData(List<Notebook> notebooks, List<Note> notes, Map<String, Tag> tags) {
         DrawerService drawerService = new DrawerService(activity.getNavigationView(), activity.getDrawerLayout());
-        if(notebooks != null) {
+        if (notebooks != null) {
             drawerService.overrideNotebooks(this, notebooks);
         }
-        if(tags != null) {
+        if (tags != null) {
             drawerService.overrideTags(this, tags.values());
         }
 
-        if(mAdapter == null){
+        if (mAdapter == null) {
             final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-            mAdapter = new NoteAdapter(new ArrayList<Note>(), R.layout.row_note_overview, activity, this, attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(),activeAccount.getRootFolder()));
-        }else{
+            mAdapter = new NoteAdapter(new ArrayList<Note>(), R.layout.row_note_overview, activity, this, attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(), activeAccount.getRootFolder()));
+        } else {
             final ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-            mAdapter.setNotesWithAttachment(attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(),activeAccount.getRootFolder()));
+            mAdapter.setNotesWithAttachment(attachmentRepository.getNoteIDsWithAttachments(activeAccount.getAccount(), activeAccount.getRootFolder()));
         }
 
 
-
         mAdapter.clearNotes();
-        if(notes.size() == 0){
+        if (notes.size() == 0) {
             mAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             mAdapter.addNotes(notes);
         }
         setListState();
@@ -1588,37 +1586,37 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         reloadData(null, notes, null);
     }
 
-    final void reloadData(){
+    final void reloadData() {
         ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
         final List<Note> notes = notesRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder(), Utils.getNoteSorting(getActivity()));
         final List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
-        final Map<String,Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
+        final Map<String, Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
         reloadData(notebooks, notes, tags);
     }
 
-    class CreateButtonListener implements View.OnClickListener{
+    class CreateButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-            Intent intent = new Intent(activity,DetailActivity.class);
+            Intent intent = new Intent(activity, DetailActivity.class);
 
             String selectedNotebookName = Utils.getSelectedNotebookName(activity);
             Notebook notebook = selectedNotebookName == null ? null : notebookRepository.getBySummary(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedNotebookName);
 
-            if(notebookRepository.getAll(activeAccount.getAccount(),activeAccount.getRootFolder()).isEmpty()){
+            if (notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder()).isEmpty()) {
                 //Create first a notebook, so that note creation is possible
                 createNotebookDialog(intent).show();
-            }else{
+            } else {
 
-                if(tabletMode){
+                if (tabletMode) {
                     String notebookUID = null;
                     if (notebook != null) {
                         notebookUID = notebook.getIdentification().getUid();
                     }
 
-                    DetailFragment detail = DetailFragment.newInstance(null,notebookUID);
+                    DetailFragment detail = DetailFragment.newInstance(null, notebookUID);
                     replaceDetailFragment(detail, null, notebookUID, activeAccount);
-                }else {
+                } else {
                     if (notebook != null) {
                         intent.putExtra(Utils.NOTEBOOK_UID, notebook.getIdentification().getUid());
                     }
@@ -1628,7 +1626,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         }
     }
 
-    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener{
+    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener {
 
         private final EditText textField;
         private Intent intent;
@@ -1640,37 +1638,37 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if(textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0){
+            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
                 return;
             }
 
             ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
 
-            Identification ident = new Identification(UUID.randomUUID().toString(),"kolabnotes-android");
+            Identification ident = new Identification(UUID.randomUUID().toString(), "kolabnotes-android");
             Timestamp now = new Timestamp(System.currentTimeMillis());
-            AuditInformation audit = new AuditInformation(now,now);
+            AuditInformation audit = new AuditInformation(now, now);
 
             String value = textField.getText().toString();
 
-            Utils.setSelectedNotebookName(activity,value);
+            Utils.setSelectedNotebookName(activity, value);
 
-            Notebook nb = new Notebook(ident,audit, Note.Classification.PUBLIC, value);
+            Notebook nb = new Notebook(ident, audit, Note.Classification.PUBLIC, value);
             nb.setDescription(value);
-            if(notebookRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), nb)) {
+            if (notebookRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), nb)) {
                 DrawerService service = new DrawerService(activity.getNavigationView(), activity.getDrawerLayout());
                 service.addNotebook(OverviewFragment.this, nb);
             }
 
-            if(intent != null){
-                if(tabletMode){
-                    DetailFragment detail = DetailFragment.newInstance(null,nb.getIdentification().getUid());
+            if (intent != null) {
+                if (tabletMode) {
+                    DetailFragment detail = DetailFragment.newInstance(null, nb.getIdentification().getUid());
                     replaceDetailFragment(detail, null, nb.getIdentification().getUid(), activeAccount);
-                }else {
+                } else {
 
                     intent.putExtra(Utils.NOTEBOOK_UID, nb.getIdentification().getUid());
                     startActivityForResult(intent, DETAIL_ACTIVITY_RESULT_CODE);
                 }
-            }else{
+            } else {
                 displayBlankFragment();
             }
         }

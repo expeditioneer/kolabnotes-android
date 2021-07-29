@@ -119,7 +119,7 @@
     <string name="color">Farbe</string>
     <string name="account_choose_title">Kontoauswahl</string>
     <string name="select_button">Übernehmen</string>
-    <string name="extended_options" >Mehr Optionen</string>
+    <string name="extended_options">Mehr Optionen</string>
 
     <string name="day">Tag(e)</string>
     <string name="hour">Stunde(n)</string>
@@ -205,7 +205,7 @@
     <string name="attachment_now_playing">Aktueller Titel:</string>
     <string name="pref_preview">Notiz Vorschau</string>
     <string name="pref_desc_preview">Anzeige eines Teils der Notiz als Vorschau</string>
-    <string name="empty_note_description" >Kein Notiztext</string>
+    <string name="empty_note_description">Kein Notiztext</string>
     <string name="image_too_big">Bild ist zu groß (Datei muss kleiner 900 kB sein!)</string>
     <string name="changeAccount">Konto wählen</string>
     <string name="drawer_organise_tags">Kategorien verwalten</string>

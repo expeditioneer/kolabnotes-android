@@ -37,7 +37,7 @@ import java.util.Set;
  */
 public class AttachmentRepository {
     // Database fields
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER,
             DatabaseHelper.COLUMN_IDNOTE,
@@ -56,20 +56,19 @@ public class AttachmentRepository {
     }
 
 
+    public boolean insert(String account, String rootFolder, String noteUID, Attachment attachment) {
 
-    public boolean insert(String account, String rootFolder, String noteUID,  Attachment attachment) {
-
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             SQLiteDatabase database = ConnectionManager.getDatabase(context);
             boolean ret = false;
             try {
 
-                File folder = Utils.getAttachmentDirForNote(context,account,rootFolder,noteUID);
+                File folder = Utils.getAttachmentDirForNote(context, account, rootFolder, noteUID);
 
                 File file = new File(folder, attachment.getFileName());
                 boolean newFile = file.createNewFile();
-                if(newFile) {
+                if (newFile) {
                     long akttime = System.currentTimeMillis();
                     long rowId = doInsert(database, account, rootFolder, noteUID, attachment, akttime);
 
@@ -110,10 +109,10 @@ public class AttachmentRepository {
                         }
 
                         noteRepository.updateAuditInformation(account, rootFolder, noteUID, akttime);
-                    }else{
+                    } else {
                         Toast.makeText(context, context.getResources().getString(R.string.attachment_already_exist), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(context, context.getResources().getString(R.string.attachment_already_exist), Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
@@ -124,13 +123,13 @@ public class AttachmentRepository {
         return false;
     }
 
-    private long doInsert(SQLiteDatabase db, String account, String rootFolder, String noteUID, Attachment attachment, long aktTime){
+    private long doInsert(SQLiteDatabase db, String account, String rootFolder, String noteUID, Attachment attachment, long aktTime) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_ACCOUNT,account);
-        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER,rootFolder);
+        values.put(DatabaseHelper.COLUMN_ACCOUNT, account);
+        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER, rootFolder);
         values.put(DatabaseHelper.COLUMN_IDNOTE, noteUID);
         values.put(DatabaseHelper.COLUMN_IDATTACHMENT, attachment.getId());
-        values.put(DatabaseHelper.COLUMN_FILESIZE,attachment.getData().length);
+        values.put(DatabaseHelper.COLUMN_FILESIZE, attachment.getData().length);
         values.put(DatabaseHelper.COLUMN_FILENAME, attachment.getFileName());
         values.put(DatabaseHelper.COLUMN_MIMETYPE, attachment.getMimeType());
         values.put(DatabaseHelper.COLUMN_CREATIONDATE, aktTime);
@@ -147,16 +146,16 @@ public class AttachmentRepository {
                 null);
 
 
-        File filesDir = Utils.getAttachmentDirForNote(context,account,rootFolder,noteUID);
-        File file = new File(filesDir,attachment.getFileName());
-        if(file.exists()){
+        File filesDir = Utils.getAttachmentDirForNote(context, account, rootFolder, noteUID);
+        File file = new File(filesDir, attachment.getFileName());
+        if (file.exists()) {
             file.delete();
         }
 
         ModificationRepository modificationRepository = new ModificationRepository(context);
-        Modification modification = modificationRepository.getUnique(account,rootFolder,attachment.getId());
+        Modification modification = modificationRepository.getUnique(account, rootFolder, attachment.getId());
 
-        if(modification == null){
+        if (modification == null) {
             modificationRepository.insert(account, rootFolder, attachment.getId(), ModificationRepository.ModificationType.DEL, noteUID, Modification.Descriminator.ATTACHMENT);
         }
     }
@@ -180,14 +179,14 @@ public class AttachmentRepository {
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
                         DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' ",
                 null);
-        
+
         File folder = Utils.getAttachmentDirForAccount(context, account, rootFolder);
         deleteAttachmentsFromFolder(folder);
     }
 
-    public Uri getUriFromAttachment(String account, String rootFolder, String noteUID, Attachment attachment){
+    public Uri getUriFromAttachment(String account, String rootFolder, String noteUID, Attachment attachment) {
         File filesDir = Utils.getAttachmentDirForNote(context, account, rootFolder, noteUID);
-        File file = new File(filesDir,attachment.getFileName());
+        File file = new File(filesDir, attachment.getFileName());
 
         return FileProvider.getUriForFile(
                 context,
@@ -197,7 +196,7 @@ public class AttachmentRepository {
     }
 
 
-    public Attachment getAttachmentWithAttachmentID(String account, String rootFolder, String noteUID, String attachmentid){
+    public Attachment getAttachmentWithAttachmentID(String account, String rootFolder, String noteUID, String attachmentid) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_ATTACHMENT,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -210,7 +209,7 @@ public class AttachmentRepository {
                 null);
 
         Attachment attachment = null;
-        if(cursor.moveToNext()){
+        if (cursor.moveToNext()) {
             attachment = cursorToAttachmment(cursor, true);
         }
 
@@ -264,7 +263,7 @@ public class AttachmentRepository {
                 null);
 
         HashSet<String> ids = new HashSet<>();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             ids.add(cursor.getString(0));
         }
 
@@ -294,14 +293,13 @@ public class AttachmentRepository {
     }
 
     private void deleteAttachmentsFromFolder(File directory) {
-        if(directory.exists()){
+        if (directory.exists()) {
             String[] children = directory.list();
-            for (int i = 0; i < children.length; i++)
-            {
+            for (int i = 0; i < children.length; i++) {
                 File file = new File(directory, children[i]);
-                if(file.isDirectory()){
+                if (file.isDirectory()) {
                     deleteAttachmentsFromFolder(file);
-                }else{
+                } else {
                     file.delete();
                 }
             }
@@ -310,7 +308,7 @@ public class AttachmentRepository {
         }
     }
 
-    private Attachment cursorToAttachmment(Cursor cursor, boolean withFile){
+    private Attachment cursorToAttachmment(Cursor cursor, boolean withFile) {
         String account = cursor.getString(1);
         String rootFolder = cursor.getString(2);
         String noteUID = cursor.getString(3);
@@ -319,12 +317,12 @@ public class AttachmentRepository {
         String filename = cursor.getString(7);
         String mimetype = cursor.getString(8);
 
-        Attachment attachment = new Attachment(id,filename,mimetype);
+        Attachment attachment = new Attachment(id, filename, mimetype);
 
-        if(withFile && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            File filesDir = Utils.getAttachmentDirForNote(context,account,rootFolder,noteUID);
-            File file = new File(filesDir,filename);
-            try(FileInputStream inputStream = new FileInputStream(file); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
+        if (withFile && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            File filesDir = Utils.getAttachmentDirForNote(context, account, rootFolder, noteUID);
+            File file = new File(filesDir, filename);
+            try (FileInputStream inputStream = new FileInputStream(file); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 int bytes;
                 byte[] buffer = new byte[1024];
                 while ((bytes = inputStream.read(buffer)) != -1) {
@@ -332,14 +330,14 @@ public class AttachmentRepository {
                 }
 
                 attachment.setData(outputStream.toByteArray());
-            }catch (FileNotFoundException e){
-                Log.e("attachment","could not find attachement "+file, e);
+            } catch (FileNotFoundException e) {
+                Log.e("attachment", "could not find attachement " + file, e);
                 attachment.setData(new byte[0]);
             } catch (IOException e) {
                 Log.e("attachment", "problem loading attachment " + file, e);
                 attachment.setData(new byte[0]);
             }
-        }else{
+        } else {
             attachment.setData(new byte[filesize]);
         }
 

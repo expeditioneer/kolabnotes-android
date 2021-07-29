@@ -10,12 +10,12 @@ public final class ConnectionManager {
     private final static ConnectionManager INSTANCE = new ConnectionManager();
     private DatabaseHelper helper;
 
-    private ConnectionManager(){
+    private ConnectionManager() {
         //nothing
     }
 
-    public static synchronized SQLiteDatabase getDatabase(Context context){
-        if(INSTANCE.helper == null){
+    public static synchronized SQLiteDatabase getDatabase(Context context) {
+        if (INSTANCE.helper == null) {
             INSTANCE.helper = new DatabaseHelper(context);
         }
         return INSTANCE.helper.getWritableDatabase();

@@ -11,13 +11,17 @@
 
     <Preference android:title="@string/title_add_account">
         <intent android:action="org.kore.kolabnotes.android.security.AuthenticatorActivity">
-            <extra android:name="changeAccount" android:value="false" />
+            <extra
+                android:name="changeAccount"
+                android:value="false" />
         </intent>
     </Preference>
 
     <Preference android:title="@string/title_update_account">
         <intent android:action="org.kore.kolabnotes.android.security.AuthenticatorActivity">
-            <extra android:name="changeAccount" android:value="true" />
+            <extra
+                android:name="changeAccount"
+                android:value="true" />
         </intent>
     </Preference>
 

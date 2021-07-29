@@ -104,7 +104,7 @@
     <string name="color">Colore</string>
     <string name="account_choose_title">Seleziona un account</string>
     <string name="select_button">Seleziona</string>
-    <string name="extended_options" >Mostra più opzioni</string>
+    <string name="extended_options">Mostra più opzioni</string>
 
     <string name="day">Giorni</string>
     <string name="hour">Ore</string>
@@ -208,7 +208,7 @@
     <string name="attachment_now_playing"> Ora giocando:</string>
     <string name="pref_preview"> Nota anteprima</string>
     <string name="pref_desc_preview"> Mostra alcuni caratteri anteprima del testo di testo della nota </string>
-    <string name="empty_note_description" > Nessun testo della nota</string>
+    <string name="empty_note_description"> Nessun testo della nota</string>
     <string name="image_too_big">Immagine troppo grande (dimensione del file deve essere inferiore a 900 kB)</string>
     <string name="changeAccount">Scegli Account</string>
     <string name="drawer_organise_tags">" Organizza i tag"</string>

@@ -24,7 +24,7 @@ import static org.kore.kolabnotes.android.VisibleViewMatcher.isVisible;
 
 /**
  * Custom click action similar to the GeneralClickAction provided by Espresso.
- *
+ * <p>
  * The only difference is that it does not force the target view to be displayed at least 90% on
  * screen (i.e., 90% of the view in sight of the user).
  * In this custom class, the only constraint is that the view needs to have "Visible" visibility and

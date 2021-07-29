@@ -15,20 +15,20 @@ import java.util.List;
  */
 public class ModificationRepository {
 
-    public enum ModificationType{
-        UPD,DEL,INS;
+    public enum ModificationType {
+        UPD, DEL, INS;
     }
 
     private Context context;
     // Database fields
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER,
             DatabaseHelper.COLUMN_UID,
             DatabaseHelper.COLUMN_MODIFICATIONTYPE,
             DatabaseHelper.COLUMN_MODIFICATIONDATE,
             DatabaseHelper.COLUMN_UID_NOTEBOOK,
-            DatabaseHelper.COLUMN_DISCRIMINATOR };
+            DatabaseHelper.COLUMN_DISCRIMINATOR};
 
     public ModificationRepository(Context context) {
         this.context = context;
@@ -36,7 +36,7 @@ public class ModificationRepository {
 
 
     public void insert(String account, String rootFolder, String uid, ModificationType type, String uidNotebook, Modification.Descriminator desc) {
-        if(Utils.isLocalAccount(account, rootFolder)){
+        if (Utils.isLocalAccount(account, rootFolder)) {
             return;
         }
 
@@ -52,7 +52,7 @@ public class ModificationRepository {
         ConnectionManager.getDatabase(context).insert(DatabaseHelper.TABLE_MODIFICATION, null, values);
     }
 
-    public void cleanAccount(String account, String rootFolder){
+    public void cleanAccount(String account, String rootFolder) {
         ConnectionManager.getDatabase(context).delete(DatabaseHelper.TABLE_MODIFICATION,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
                         DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' ",
@@ -124,7 +124,7 @@ public class ModificationRepository {
         return mod;
     }
 
-    public Modification getUnique(String account, String rootFolder,String uid) {
+    public Modification getUnique(String account, String rootFolder, String uid) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_MODIFICATION,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -152,7 +152,7 @@ public class ModificationRepository {
         String uidNotebook = cursor.getString(6);
         Modification.Descriminator desc = Modification.Descriminator.valueOf(cursor.getString(7));
 
-        Modification modification = new Modification(account, rootFolder,uid, type, new Timestamp(modDate),uidNotebook,desc);
+        Modification modification = new Modification(account, rootFolder, uid, type, new Timestamp(modDate), uidNotebook, desc);
         return modification;
     }
 }

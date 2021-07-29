@@ -27,9 +27,9 @@ import org.kore.kolabnotes.android.content.ActiveAccountRepository;
 
 /**
  * The Authenticator activity.
- *
+ * <p>
  * Called by the Authenticator and in charge of identifing the user.
- *
+ * <p>
  * It sends back to the Authenticator the result.
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity {
@@ -102,12 +102,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mSyncView = (EditText) findViewById(R.id.sync_intervall);
         mKolabView = (Switch) findViewById(R.id.enable_kolab);
         mSharedFoldersView = (Switch) findViewById(R.id.enable_shared_folders);
-        mRootFolderView = (EditText)findViewById(R.id.imap_root_folder);
-        mIMAPServerView = (EditText)findViewById(R.id.imap_server_url);
-        mAccountType = (Spinner)findViewById(R.id.spinner_accountType);
-        mIntervallType = (Spinner)findViewById(R.id.spinner_intervall);
+        mRootFolderView = (EditText) findViewById(R.id.imap_root_folder);
+        mIMAPServerView = (EditText) findViewById(R.id.imap_server_url);
+        mAccountType = (Spinner) findViewById(R.id.spinner_accountType);
+        mIntervallType = (Spinner) findViewById(R.id.spinner_intervall);
 
-        mAccountNameView = (EditText)findViewById(R.id.accountName);
+        mAccountNameView = (EditText) findViewById(R.id.accountName);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.accountPassword);
 
@@ -116,9 +116,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                   showExtendedOptions();
-                }else{
+                if (b) {
+                    showExtendedOptions();
+                } else {
                     hideExtendedOptions();
                 }
             }
@@ -130,35 +130,35 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         hideExtendedOptions();
 
         startIntent = getIntent();
-        if(startIntent != null && startIntent.getBooleanExtra("changeAccount",false)){
+        if (startIntent != null && startIntent.getBooleanExtra("changeAccount", false)) {
             ActiveAccountRepository accountRepo = new ActiveAccountRepository(this);
             ActiveAccount activeAccount = accountRepo.getActiveAccount();
-            if(activeAccount.getAccount().equals("local") && activeAccount.getRootFolder().equals("Notes")) {
-                Toast.makeText(this,R.string.local_account_change,Toast.LENGTH_LONG).show();
+            if (activeAccount.getAccount().equals("local") && activeAccount.getRootFolder().equals("Notes")) {
+                Toast.makeText(this, R.string.local_account_change, Toast.LENGTH_LONG).show();
                 finish();
-            }else {
+            } else {
                 initViews(activeAccount.getAccount(), activeAccount.getRootFolder());
             }
         }
     }
 
-    private void initViews(String email, String rootFolder){
-       if((email == null || "local".equals(email)) && (rootFolder == null || "Notes".equals(rootFolder)) ){
-           return;
-       }
+    private void initViews(String email, String rootFolder) {
+        if ((email == null || "local".equals(email)) && (rootFolder == null || "Notes".equals(rootFolder))) {
+            return;
+        }
 
         Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
         for (Account acc : accounts) {
-            String pemail = mAccountManager.getUserData(acc,AuthenticatorActivity.KEY_EMAIL);
-            String name = mAccountManager.getUserData(acc,AuthenticatorActivity.KEY_ACCOUNT_NAME);
-            String prootFolder = mAccountManager.getUserData(acc,AuthenticatorActivity.KEY_ROOT_FOLDER);
+            String pemail = mAccountManager.getUserData(acc, AuthenticatorActivity.KEY_EMAIL);
+            String name = mAccountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME);
+            String prootFolder = mAccountManager.getUserData(acc, AuthenticatorActivity.KEY_ROOT_FOLDER);
 
-            if(pemail.equals(email) && prootFolder.equals(rootFolder)){
+            if (pemail.equals(email) && prootFolder.equals(rootFolder)) {
                 accountToChange = acc;
 
-                String accType = mAccountManager.getUserData(acc,AuthenticatorActivity.KEY_ACCOUNT_TYPE);
-                if(accType != null) {
+                String accType = mAccountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_TYPE);
+                if (accType != null) {
                     mAccountType.setSelection(Integer.parseInt(accType));
                 }
                 mAccountType.setVisibility(View.GONE);
@@ -185,9 +185,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                 mIntervallType.setSelection(type);
 
                 long intervalLength = intervall == null || intervall.trim().length() == 0 ? 24L : Long.parseLong(intervall);
-                if(intervalLength == 24) {
+                if (intervalLength == 24) {
                     mSyncView.setText(Long.toString(intervalLength));
-                }else{
+                } else {
                     mSyncView.setText(Long.toString(divideIntervall(intervalLength)));
                 }
 
@@ -200,8 +200,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    void initAccountTypeSpinner(){
-        String[] values = {"KolabNow","Kolab Server","IMAP Server"};
+    void initAccountTypeSpinner() {
+        String[] values = {"KolabNow", "Kolab Server", "IMAP Server"};
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.accounttype_spinner_item, values);
         adapter.setDropDownViewResource(R.layout.accounttype_spinner_item);
@@ -210,7 +210,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mAccountType.setOnItemSelectedListener(new AccountTypeSelectedListener());
     }
 
-    void initIntervallSpinner(){
+    void initIntervallSpinner() {
         String[] values = getResources().getStringArray(R.array.sync_intervall_types);
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, R.layout.intervall_spinner_item, values);
@@ -219,7 +219,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mIntervallType.setSelection(1);
     }
 
-    void showExtendedOptions(){
+    void showExtendedOptions() {
         mPortView.setVisibility(View.VISIBLE);
         mEnableSSLView.setVisibility(View.VISIBLE);
         mSyncView.setVisibility(View.VISIBLE);
@@ -229,7 +229,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mIntervallType.setVisibility(View.VISIBLE);
     }
 
-    void hideExtendedOptions(){
+    void hideExtendedOptions() {
         mPortView.setVisibility(View.INVISIBLE);
         mEnableSSLView.setVisibility(View.INVISIBLE);
         mSyncView.setVisibility(View.INVISIBLE);
@@ -271,19 +271,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                 mAccountNameView.setError(getString(R.string.error_field_required));
                 focusView = mAccountNameView;
                 cancel = true;
-            }else if (TextUtils.isEmpty(imapServer)) {
+            } else if (TextUtils.isEmpty(imapServer)) {
                 mIMAPServerView.setError(getString(R.string.error_field_required));
                 focusView = mIMAPServerView;
                 cancel = true;
-            }else if (TextUtils.isEmpty(email)) {
+            } else if (TextUtils.isEmpty(email)) {
                 mEmailView.setError(getString(R.string.error_field_required));
                 focusView = mEmailView;
                 cancel = true;
-            }else if (TextUtils.isEmpty(password)) {
+            } else if (TextUtils.isEmpty(password)) {
                 mPasswordView.setError(getString(R.string.error_field_required));
                 focusView = mPasswordView;
                 cancel = true;
-            }else if (syncIntervall < 1 || syncIntervall > 90) {
+            } else if (syncIntervall < 1 || syncIntervall > 90) {
                 mSyncView.setError(getString(R.string.error_field_to_low));
                 focusView = mSyncView;
                 cancel = true;
@@ -298,27 +298,27 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
                 AccountInformation.Builder builder = AccountInformation.createForHost(imapServer).username(email).password(password).port(port);
 
-                if(!mEnableSSLView.isChecked()){
+                if (!mEnableSSLView.isChecked()) {
                     builder.disableSSL();
                 }
 
-                if(!mKolabView.isChecked()){
+                if (!mKolabView.isChecked()) {
                     builder.disableFolderAnnotation();
                 }
 
-                if(mSharedFoldersView.isChecked()){
+                if (mSharedFoldersView.isChecked()) {
                     builder.enableSharedFolders();
                 }
 
                 AccountInformation accountInformation = builder.build();
-                KolabAccount serverInfo = new KolabAccount(accountName,rootFolder,accountInformation);
+                KolabAccount serverInfo = new KolabAccount(accountName, rootFolder, accountInformation);
 
                 final long intervall = calculateIntervall(syncIntervall);
 
-                if(accountToChange == null) {
+                if (accountToChange == null) {
                     Account account = new Account(accountName, ARG_ACCOUNT_TYPE);
 
-                    Bundle userData = createAuthBundle(serverInfo,intervall);
+                    Bundle userData = createAuthBundle(serverInfo, intervall);
 
                     if (mAccountManager.addAccountExplicitly(account, password, userData)) {
                         new ActiveAccountRepository(this).insertAccount(email, rootFolder);
@@ -340,7 +340,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
                     } else {
                         Toast.makeText(getBaseContext(), R.string.error_duplicate_account, Toast.LENGTH_LONG).show();
                     }
-                }else{
+                } else {
                     mAccountManager.setPassword(accountToChange, password);
                     setAuthBundle(accountToChange, serverInfo, intervall);
 
@@ -360,22 +360,22 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    private long calculateIntervall(long given){
-        if(mIntervallType.getSelectedItemPosition() == 0){
-            return given*SECONDS_PER_MINUTE;
-        }else if(mIntervallType.getSelectedItemPosition() == 1){
-            return given*MINUTES_PER_HOUR*SECONDS_PER_MINUTE;
+    private long calculateIntervall(long given) {
+        if (mIntervallType.getSelectedItemPosition() == 0) {
+            return given * SECONDS_PER_MINUTE;
+        } else if (mIntervallType.getSelectedItemPosition() == 1) {
+            return given * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
         }
-        return given*HOURS_PER_DAY*MINUTES_PER_HOUR*SECONDS_PER_MINUTE;
+        return given * HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE;
     }
 
-    private long divideIntervall(long given){
-        if(mIntervallType.getSelectedItemPosition() == 0){
-            return given/SECONDS_PER_MINUTE;
-        }else if(mIntervallType.getSelectedItemPosition() == 1){
-            return given/MINUTES_PER_HOUR/SECONDS_PER_MINUTE;
+    private long divideIntervall(long given) {
+        if (mIntervallType.getSelectedItemPosition() == 0) {
+            return given / SECONDS_PER_MINUTE;
+        } else if (mIntervallType.getSelectedItemPosition() == 1) {
+            return given / MINUTES_PER_HOUR / SECONDS_PER_MINUTE;
         }
-        return given/HOURS_PER_DAY/MINUTES_PER_HOUR/SECONDS_PER_MINUTE;
+        return given / HOURS_PER_DAY / MINUTES_PER_HOUR / SECONDS_PER_MINUTE;
     }
 
     private Bundle createAuthBundle(KolabAccount kolabAccount, long intervall) {
@@ -392,9 +392,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         bundle.putString(KEY_KOLAB, kolab);
         bundle.putString(KEY_SHARED_FOLDERS, shared);
 
-        bundle.putString(KEY_ACCOUNT_TYPE,Integer.toString(mAccountType.getSelectedItemPosition()));
-        bundle.putString(KEY_INTERVALL_TYPE,Integer.toString(mIntervallType.getSelectedItemPosition()));
-        bundle.putString(KEY_INTERVALL,Long.toString(intervall));
+        bundle.putString(KEY_ACCOUNT_TYPE, Integer.toString(mAccountType.getSelectedItemPosition()));
+        bundle.putString(KEY_INTERVALL_TYPE, Integer.toString(mIntervallType.getSelectedItemPosition()));
+        bundle.putString(KEY_INTERVALL, Long.toString(intervall));
 
         return bundle;
     }
@@ -417,14 +417,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mAccountManager.setUserData(account, KEY_INTERVALL, Long.toString(intervall));
     }
 
-    class AccountTypeSelectedListener implements AdapterView.OnItemSelectedListener{
+    class AccountTypeSelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(position == ID_ACCOUNT_TYPE_KOLABNOW){
+            if (position == ID_ACCOUNT_TYPE_KOLABNOW) {
                 setKolabNowValues();
-            }else if(position == ID_ACCOUNT_TYPE_KOLAB){
+            } else if (position == ID_ACCOUNT_TYPE_KOLAB) {
                 setKolabValues();
-            }else{
+            } else {
                 setIMAPValues();
             }
         }
@@ -434,7 +434,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             //nothing
         }
 
-        private void setKolabNowValues(){
+        private void setKolabNowValues() {
             mPortView.setText("993");
             mEnableSSLView.setChecked(true);
             mKolabView.setChecked(true);
@@ -442,13 +442,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mIMAPServerView.setText("imap.kolabnow.com");
         }
 
-        private void setKolabValues(){
+        private void setKolabValues() {
             mKolabView.setChecked(true);
             mSharedFoldersView.setChecked(false);
             mIMAPServerView.setText("");
         }
 
-        private void setIMAPValues(){
+        private void setIMAPValues() {
             mKolabView.setChecked(false);
             mSharedFoldersView.setChecked(false);
             mIMAPServerView.setText("");

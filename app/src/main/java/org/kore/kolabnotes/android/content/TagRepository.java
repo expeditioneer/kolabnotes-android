@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class TagRepository {
     // Database fields
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER,
             DatabaseHelper.COLUMN_TAG_UID,
@@ -41,7 +41,7 @@ public class TagRepository {
 
     public boolean insert(String account, String rootFolder, Tag tag) {
 
-        if(existsTagNameForAccount(account,rootFolder,tag.getName())){
+        if (existsTagNameForAccount(account, rootFolder, tag.getName())) {
             //do nothing if the tag already exists with this name, for this account
             return false;
         }
@@ -50,34 +50,34 @@ public class TagRepository {
         return rowId >= 0;
     }
 
-    private long doInsert(String account, String rootFolder, Tag tag){
+    private long doInsert(String account, String rootFolder, Tag tag) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_ACCOUNT,account);
-        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER,rootFolder);
+        values.put(DatabaseHelper.COLUMN_ACCOUNT, account);
+        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER, rootFolder);
         values.put(DatabaseHelper.COLUMN_UID, UUID.randomUUID().toString());
-        values.put(DatabaseHelper.COLUMN_TAG_UID,tag.getIdentification().getUid());
-        values.put(DatabaseHelper.COLUMN_PRODUCTID,tag.getIdentification().getProductId());
-        values.put(DatabaseHelper.COLUMN_CREATIONDATE,tag.getAuditInformation().getCreationDate().getTime());
-        values.put(DatabaseHelper.COLUMN_MODIFICATIONDATE,tag.getAuditInformation().getLastModificationDate().getTime());
-        values.put(DatabaseHelper.COLUMN_TAGNAME,tag.getName());
-        values.put(DatabaseHelper.COLUMN_COLOR,tag.getColor() == null ? null : tag.getColor().getHexcode());
-        values.put(DatabaseHelper.COLUMN_PRIORITY,tag.getPriority());
+        values.put(DatabaseHelper.COLUMN_TAG_UID, tag.getIdentification().getUid());
+        values.put(DatabaseHelper.COLUMN_PRODUCTID, tag.getIdentification().getProductId());
+        values.put(DatabaseHelper.COLUMN_CREATIONDATE, tag.getAuditInformation().getCreationDate().getTime());
+        values.put(DatabaseHelper.COLUMN_MODIFICATIONDATE, tag.getAuditInformation().getLastModificationDate().getTime());
+        values.put(DatabaseHelper.COLUMN_TAGNAME, tag.getName());
+        values.put(DatabaseHelper.COLUMN_COLOR, tag.getColor() == null ? null : tag.getColor().getHexcode());
+        values.put(DatabaseHelper.COLUMN_PRIORITY, tag.getPriority());
 
         return ConnectionManager.getDatabase(context).insert(DatabaseHelper.TABLE_TAGS, null, values);
     }
 
-    public void update(String account, String rootFolder,Tag tag){
+    public void update(String account, String rootFolder, Tag tag) {
         Tag oldTag = getTagWithUID(account, rootFolder, tag.getIdentification().getUid());
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_ACCOUNT,account);
-        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER,rootFolder);
-        values.put(DatabaseHelper.COLUMN_TAG_UID,tag.getIdentification().getUid());
-        values.put(DatabaseHelper.COLUMN_PRODUCTID,tag.getIdentification().getProductId());
-        values.put(DatabaseHelper.COLUMN_CREATIONDATE,tag.getAuditInformation().getCreationDate().getTime());
-        values.put(DatabaseHelper.COLUMN_MODIFICATIONDATE,tag.getAuditInformation().getLastModificationDate().getTime());
-        values.put(DatabaseHelper.COLUMN_TAGNAME,tag.getName());
-        values.put(DatabaseHelper.COLUMN_COLOR,tag.getColor() == null ? null : tag.getColor().getHexcode());
+        values.put(DatabaseHelper.COLUMN_ACCOUNT, account);
+        values.put(DatabaseHelper.COLUMN_ROOT_FOLDER, rootFolder);
+        values.put(DatabaseHelper.COLUMN_TAG_UID, tag.getIdentification().getUid());
+        values.put(DatabaseHelper.COLUMN_PRODUCTID, tag.getIdentification().getProductId());
+        values.put(DatabaseHelper.COLUMN_CREATIONDATE, tag.getAuditInformation().getCreationDate().getTime());
+        values.put(DatabaseHelper.COLUMN_MODIFICATIONDATE, tag.getAuditInformation().getLastModificationDate().getTime());
+        values.put(DatabaseHelper.COLUMN_TAGNAME, tag.getName());
+        values.put(DatabaseHelper.COLUMN_COLOR, tag.getColor() == null ? null : tag.getColor().getHexcode());
         values.put(DatabaseHelper.COLUMN_PRIORITY, tag.getPriority());
 
         ConnectionManager.getDatabase(context).update(DatabaseHelper.TABLE_TAGS,
@@ -87,7 +87,7 @@ public class TagRepository {
                         DatabaseHelper.COLUMN_TAG_UID + " = '" + tag.getIdentification().getUid() + "' ",
                 null);
 
-        new NoteTagRepository(context).updateTagID(account,rootFolder,oldTag.getName(),tag.getName());
+        new NoteTagRepository(context).updateTagID(account, rootFolder, oldTag.getName(), tag.getName());
     }
 
     public void delete(String account, String rootFolder, Tag tag) {
@@ -99,19 +99,19 @@ public class TagRepository {
         new NoteTagRepository(context).deleteWithTagName(account, rootFolder, tag.getName());
 
         ModificationRepository modificationRepository = new ModificationRepository(context);
-        Modification modification = modificationRepository.getUnique(account,rootFolder,tag.getIdentification().getUid());
+        Modification modification = modificationRepository.getUnique(account, rootFolder, tag.getIdentification().getUid());
 
-        if(modification == null){
-            modificationRepository.insert(account,rootFolder,tag.getIdentification().getUid(), ModificationRepository.ModificationType.DEL,tag.getName(), Modification.Descriminator.TAG);
+        if (modification == null) {
+            modificationRepository.insert(account, rootFolder, tag.getIdentification().getUid(), ModificationRepository.ModificationType.DEL, tag.getName(), Modification.Descriminator.TAG);
         }
     }
 
-    public boolean existsTagNameFor(String account, String rootFolder, String tagName){
-        boolean ret = existsTagNameForAccount(account,rootFolder,tagName);
+    public boolean existsTagNameFor(String account, String rootFolder, String tagName) {
+        boolean ret = existsTagNameForAccount(account, rootFolder, tagName);
         return ret;
     }
 
-    private boolean existsTagNameForAccount(String account, String rootFolder, String tagName){
+    private boolean existsTagNameForAccount(String account, String rootFolder, String tagName) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_TAGS,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -122,14 +122,14 @@ public class TagRepository {
                 null,
                 null);
 
-        if(cursor.moveToNext()){
+        if (cursor.moveToNext()) {
             return true;
         }
 
         return false;
     }
 
-    public Tag getTagWithName(String account, String rootFolder, String tagName){
+    public Tag getTagWithName(String account, String rootFolder, String tagName) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_TAGS,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -141,13 +141,13 @@ public class TagRepository {
                 null);
 
         Tag tag = null;
-        if(cursor.moveToNext()){
+        if (cursor.moveToNext()) {
             tag = cursorToTag(cursor);
         }
         return tag;
     }
 
-    public Tag getTagWithUID(String account, String rootFolder, String uid){
+    public Tag getTagWithUID(String account, String rootFolder, String uid) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_TAGS,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -159,7 +159,7 @@ public class TagRepository {
                 null);
 
         Tag tag = null;
-        if(cursor.moveToNext()){
+        if (cursor.moveToNext()) {
             tag = cursorToTag(cursor);
         }
 
@@ -224,15 +224,15 @@ public class TagRepository {
         return tags;
     }
 
-    public void cleanAccount(String account, String rootFolder){
+    public void cleanAccount(String account, String rootFolder) {
         ConnectionManager.getDatabase(context).delete(DatabaseHelper.TABLE_TAGS,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
                         DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' ",
                 null);
     }
 
-    public Map<String,Tag> getAllAsMap(String account, String rootFolder) {
-        HashMap<String,Tag> tags = new HashMap<String,Tag>();
+    public Map<String, Tag> getAllAsMap(String account, String rootFolder) {
+        HashMap<String, Tag> tags = new HashMap<String, Tag>();
 
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_TAGS,
                 allColumns,
@@ -256,7 +256,7 @@ public class TagRepository {
     }
 
 
-    private Tag cursorToTag(Cursor cursor){
+    private Tag cursorToTag(Cursor cursor) {
         String uid = cursor.getString(3);
         String productId = cursor.getString(4);
         Long creationDate = cursor.getLong(5);
@@ -267,14 +267,14 @@ public class TagRepository {
         String oldUID = cursor.getString(10);
 
         String correctUID = uid;
-        if(correctUID == null){
+        if (correctUID == null) {
             correctUID = oldUID;
         }
 
-        AuditInformation audit = new AuditInformation(new Timestamp(creationDate),new Timestamp(modificationDate));
-        Identification ident = new Identification(correctUID,productId);
+        AuditInformation audit = new AuditInformation(new Timestamp(creationDate), new Timestamp(modificationDate));
+        Identification ident = new Identification(correctUID, productId);
 
-        Tag tag = new Tag(ident,audit);
+        Tag tag = new Tag(ident, audit);
         tag.setColor(Colors.getColor(color));
         tag.setName(tagName);
         tag.setPriority(priority);

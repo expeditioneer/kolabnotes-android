@@ -214,7 +214,7 @@
     <string name="attachment_now_playing"> Đang chơi:</string>
     <string name="pref_preview">Chú ý xem trước </string>
     <string name="pref_desc_preview">Hiển thị một số ký tự văn bản xem trước của văn bản lưu ý </string>
-    <string name="empty_note_description" >Không có văn bản lưu ý</string>
+    <string name="empty_note_description">Không có văn bản lưu ý</string>
     <string name="image_too_big">Hình ảnh quá lớn (kích thước tệp phải nhỏ hơn 900 kB)</string>
     <string name="changeAccount">Chọn Tài khoản</string>
     <string name="drawer_organise_tags">Tổ chức thẻ</string>

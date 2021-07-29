@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     android:paddingTop="@dimen/tool_bar_top_padding"
     android:gravity="center"
     android:background="@color/background_material_dark">
@@ -28,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:text="@string/sort_with_heading"/>
+        android:text="@string/sort_with_heading" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -42,19 +44,24 @@
         android:orientation="vertical"
         android:id="@+id/radio_group_sort_direction">
 
-        <RadioButton android:id="@+id/radio_asc"
+        <RadioButton
+            android:id="@+id/radio_asc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/radio_asc"/>
+            android:text="@string/radio_asc" />
 
-        <RadioButton android:id="@+id/radio_desc"
+        <RadioButton
+            android:id="@+id/radio_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/radio_desc"/>
+            android:text="@string/radio_desc" />
     </RadioGroup>
 
-    <Button android:id="@+id/add_button" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="@string/add_widget"
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_widget"
         android:layout_marginTop="8dp" />
 
 </LinearLayout>

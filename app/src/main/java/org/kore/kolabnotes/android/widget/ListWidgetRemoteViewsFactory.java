@@ -54,7 +54,7 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         refreshData();
     }
 
-    void refreshData(){
+    void refreshData() {
         notes.clear();
         Context context = app.getApplicationContext();
         notesRepository = new NoteRepository(context);
@@ -64,16 +64,16 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         String account = ListWidgetConfigureActivity.loadListWidgetAccountPref(context, appWidgetId);
         String notebook = ListWidgetConfigureActivity.loadListWidgetNotebookPref(context, appWidgetId);
         String tag = ListWidgetConfigureActivity.loadListWidgetTagPref(context, appWidgetId);
-        NoteSorting noteSorting = ListWidgetConfigureActivity.loadListWidgetOrderingPref(context,appWidgetId);
+        NoteSorting noteSorting = ListWidgetConfigureActivity.loadListWidgetOrderingPref(context, appWidgetId);
 
         rootFolder = "Notes";
         accountEmail = "local";
-        if(account != null && !account.equals("local")) {
+        if (account != null && !account.equals("local")) {
             AccountManager accountManager = AccountManager.get(context);
             Account[] accounts = accountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
             for (Account acc : accounts) {
-                if(account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))){
+                if (account.equals(accountManager.getUserData(acc, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
                     accountEmail = accountManager.getUserData(acc, AuthenticatorActivity.KEY_EMAIL);
                     rootFolder = accountManager.getUserData(acc, AuthenticatorActivity.KEY_ROOT_FOLDER);
                 }
@@ -81,22 +81,22 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
         }
 
         List<Note> notes;
-        if(notebook == null){
-            notes = notesRepository.getAll(accountEmail,rootFolder, noteSorting);
-        }else{
-            String notebookUID = notebookRepository.getBySummary(accountEmail,rootFolder,notebook).getIdentification().getUid();
-            notes = notesRepository.getFromNotebook(accountEmail,rootFolder, notebookUID, noteSorting);
+        if (notebook == null) {
+            notes = notesRepository.getAll(accountEmail, rootFolder, noteSorting);
+        } else {
+            String notebookUID = notebookRepository.getBySummary(accountEmail, rootFolder, notebook).getIdentification().getUid();
+            notes = notesRepository.getFromNotebook(accountEmail, rootFolder, notebookUID, noteSorting);
         }
 
         ArrayList<Note> filtered = new ArrayList<>();
-        if(tag != null){
-            Tag tagObject = tagRepository.getTagWithName(accountEmail,rootFolder,tag);
-            for(Note note : notes){
-                if(note.getCategories().contains(tagObject)){
+        if (tag != null) {
+            Tag tagObject = tagRepository.getTagWithName(accountEmail, rootFolder, tag);
+            for (Note note : notes) {
+                if (note.getCategories().contains(tagObject)) {
                     filtered.add(note);
                 }
             }
-        }else{
+        } else {
             filtered.addAll(notes);
         }
 
@@ -107,7 +107,7 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
 
     @Override
     public void onDestroy() {
-        ListWidgetConfigureActivity.deleteListWidgetPref(app.getApplicationContext(),appWidgetId);
+        ListWidgetConfigureActivity.deleteListWidgetPref(app.getApplicationContext(), appWidgetId);
     }
 
     @Override
@@ -125,8 +125,8 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
 
         Intent i = new Intent();
         i.putExtra(Utils.NOTE_UID, note.getIdentification().getUid());
-        i.putExtra(Utils.INTENT_ACCOUNT_EMAIL,accountEmail);
-        i.putExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER,rootFolder);
+        i.putExtra(Utils.INTENT_ACCOUNT_EMAIL, accountEmail);
+        i.putExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER, rootFolder);
 
         //if the widget is not updated after a sync, the UID of the notebook is not OK, the notebook UID mus always be read when needed
         //String correctNotebookUID= notesRepository.getUIDofNotebook(accountEmail,rootFolder,note.getIdentification().getUid());

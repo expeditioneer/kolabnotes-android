@@ -43,8 +43,8 @@ public class NoteListAdapater extends ArrayAdapter<Note> {
 
     @Override
     public int getPosition(Note item) {
-        for(int i=0; i<notes.size();i++){
-            if(item.equals(notes.get(i))){
+        for (int i = 0; i < notes.size(); i++) {
+            if (item.equals(notes.get(i))) {
                 return i;
             }
         }
@@ -58,12 +58,12 @@ public class NoteListAdapater extends ArrayAdapter<Note> {
 
     @Override
     public void sort(Comparator<? super Note> comparator) {
-        Collections.sort(notes,comparator);
+        Collections.sort(notes, comparator);
     }
 
     @Override
     public void insert(Note object, int index) {
-        notes.add(index,object);
+        notes.add(index, object);
     }
 
     @Override
@@ -87,23 +87,23 @@ public class NoteListAdapater extends ArrayAdapter<Note> {
     }
 
 
-    View getRow(int position, View convertView, ViewGroup parent){
+    View getRow(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         NoteHolder holder;
 
-        if(row == null){
-            row = LayoutInflater.from(getContext()).inflate(layoutResourceId,parent,false);
+        if (row == null) {
+            row = LayoutInflater.from(getContext()).inflate(layoutResourceId, parent, false);
 
             holder = new NoteHolder();
-            holder.summaryText = (TextView)row.findViewById(R.id.list_note_row_summary);
+            holder.summaryText = (TextView) row.findViewById(R.id.list_note_row_summary);
 
             row.setTag(holder);
-        }else{
-            holder = (NoteHolder)row.getTag();
+        } else {
+            holder = (NoteHolder) row.getTag();
 
-            if(holder == null){
+            if (holder == null) {
                 holder = new NoteHolder();
-                holder.summaryText = (TextView)row.findViewById(R.id.list_note_row_summary);
+                holder.summaryText = (TextView) row.findViewById(R.id.list_note_row_summary);
 
                 row.setTag(holder);
             }
@@ -116,10 +116,10 @@ public class NoteListAdapater extends ArrayAdapter<Note> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return getRow(position,convertView,parent);
+        return getRow(position, convertView, parent);
     }
 
-    static class NoteHolder{
+    static class NoteHolder {
 
         private TextView summaryText;
     }

@@ -51,7 +51,7 @@ import java.util.List;
  * Fragment which displays, edits and deletes tags
  */
 
-public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.ClickListener{
+public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.ClickListener {
 
     private static final String TAG_ACTION_MODE = "ActionMode";
     private static final String TAG_SELECTED_TAGS = "SelectedTags";
@@ -82,7 +82,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof AppCompatActivity) {
-            this.activity = (AppCompatActivity)context;
+            this.activity = (AppCompatActivity) context;
         }
         this.tagRepository = new TagRepository(context);
         this.activeAccountRepository = new ActiveAccountRepository(context);
@@ -94,19 +94,19 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_tag_list);
 
-        if(activity == null){
-            activity = (AppCompatActivity)getActivity();
+        if (activity == null) {
+            activity = (AppCompatActivity) getActivity();
         }
 
-        if(tagRepository == null){
+        if (tagRepository == null) {
             this.tagRepository = new TagRepository(activity);
         }
-        if(activeAccountRepository == null){
+        if (activeAccountRepository == null) {
             this.activeAccountRepository = new ActiveAccountRepository(activity);
         }
 
         activity.setSupportActionBar(toolbar);
-        if(activity.getSupportActionBar() != null) {
+        if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         setHasOptionsMenu(true);
@@ -128,8 +128,8 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         mRecyclerView.setAdapter(mAdapter);
 
         if (savedInstanceState != null) {
-            if (savedInstanceState != null && savedInstanceState.getBoolean(TAG_ACTION_MODE, false)){
-                mSelectedTags = (HashMap<Integer, String>)savedInstanceState.getSerializable(TAG_SELECTED_TAGS);
+            if (savedInstanceState != null && savedInstanceState.getBoolean(TAG_ACTION_MODE, false)) {
+                mSelectedTags = (HashMap<Integer, String>) savedInstanceState.getSerializable(TAG_SELECTED_TAGS);
                 mActionMode = activity.startActionMode(mActionModeCallback);
                 mAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(TAG_SELECTABLE_ADAPTER));
                 mActionMode.setTitle(String.valueOf(mAdapter.getSelectedItemCount()));
@@ -200,8 +200,8 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         chooseColor(item);
     }
 
-    public Context getContext(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+    public Context getContext() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return super.getContext();
         }
         return activity;
@@ -272,7 +272,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         }
     }
 
-    void setColor(final List<Integer> items, org.kore.kolab.notes.Color newColor){
+    void setColor(final List<Integer> items, org.kore.kolab.notes.Color newColor) {
         final String account = activeAccountRepository.getActiveAccount().getAccount();
         final String rootFolder = activeAccountRepository.getActiveAccount().getRootFolder();
 
@@ -310,47 +310,47 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
 
             mSnackbarDelete = Snackbar.make(activity.findViewById(R.id.tag_list_fragment), R.string.snackbar_delete_message, Snackbar.LENGTH_LONG)
                     .setCallback(new Snackbar.Callback() {
-                @Override
-                public void onDismissed(Snackbar snackbar, int event) {
-                    switch(event) {
-                        /* If undo button pressed */
-                        case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                            mAdapter.clearTags();
-                            mAdapter.addTags(tagRepository.getAll(account, rootFolder));
-                            setListState();
-                            break;
-                        default:
-                            for (Tag tag : tags) {
-                                if (tag != null) {
-                                    tagRepository.delete(account, rootFolder, tag);
-                                }
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            switch (event) {
+                                /* If undo button pressed */
+                                case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                    mAdapter.clearTags();
+                                    mAdapter.addTags(tagRepository.getAll(account, rootFolder));
+                                    setListState();
+                                    break;
+                                default:
+                                    for (Tag tag : tags) {
+                                        if (tag != null) {
+                                            tagRepository.delete(account, rootFolder, tag);
+                                        }
+                                    }
+                                    reloadData();
+                                    break;
                             }
-                            reloadData();
-                            break;
-                    }
-                }
+                        }
                     }).setAction(R.string.snackbar_undo_delete, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* Nothing */
-                }
-            });
+                        @Override
+                        public void onClick(View v) {
+                            /* Nothing */
+                        }
+                    });
 
             mSnackbarDelete.show();
         }
     }
 
-    class CreateButtonListener implements View.OnClickListener{
+    class CreateButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             LayoutInflater inflater = activity.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_text_input, null);
-            AlertDialog newTagDialog = createTagDialog(view, new CreateTagButtonListener((EditText)view.findViewById(R.id.dialog_text_input_field)));
+            AlertDialog newTagDialog = createTagDialog(view, new CreateTagButtonListener((EditText) view.findViewById(R.id.dialog_text_input_field)));
             newTagDialog.show();
         }
     }
 
-    private AlertDialog createTagDialog(View view, DialogInterface.OnClickListener listener){
+    private AlertDialog createTagDialog(View view, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_input_text_tag);
@@ -367,7 +367,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         return builder.create();
     }
 
-    private AlertDialog updateTagDialog(View view, DialogInterface.OnClickListener listener){
+    private AlertDialog updateTagDialog(View view, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.dialog_input_update_tag_text);
@@ -385,7 +385,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         return builder.create();
     }
 
-    public class CreateTagButtonListener implements DialogInterface.OnClickListener{
+    public class CreateTagButtonListener implements DialogInterface.OnClickListener {
         private final EditText textField;
 
         public CreateTagButtonListener(EditText textField) {
@@ -394,7 +394,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if(textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0){
+            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
                 return;
             }
 
@@ -403,13 +403,13 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
             final String account = activeAccountRepository.getActiveAccount().getAccount();
             final String rootFolder = activeAccountRepository.getActiveAccount().getRootFolder();
 
-            if(tagRepository.insert(account, rootFolder, Tag.createNewTag(value))) {
+            if (tagRepository.insert(account, rootFolder, Tag.createNewTag(value))) {
                 reloadData();
             }
         }
     }
 
-    public class UpdateTagButtonListener implements DialogInterface.OnClickListener{
+    public class UpdateTagButtonListener implements DialogInterface.OnClickListener {
         private final EditText textField;
         private final Tag tag;
         private final String account;
@@ -421,14 +421,14 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
             this.rootFolder = activeAccountRepository.getActiveAccount().getRootFolder();
             this.textField = textField;
             this.tag = tagRepository.getTagWithUID(account, rootFolder, uid);
-            if(textField != null && tag != null){
+            if (textField != null && tag != null) {
                 textField.setText(tag.getName());
             }
         }
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if(textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0){
+            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
                 return;
             }
 
@@ -446,7 +446,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         List<Tag> tags = tagRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
 
         mAdapter.clearTags();
-        if(tags.size() == 0) {
+        if (tags.size() == 0) {
             mAdapter.notifyDataSetChanged();
         } else {
             mAdapter.addTags(tags);
@@ -482,6 +482,6 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
     }
 
     public void onBackPressed() {
-        ((OnFragmentCallback)activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
+        ((OnFragmentCallback) activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
     }
 }

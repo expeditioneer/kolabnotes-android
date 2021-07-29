@@ -27,15 +27,15 @@ public class OnHeaderClicked implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        ImageButton button = (ImageButton)view.findViewById(R.id.drawer_openclose_button);
+        ImageButton button = (ImageButton) view.findViewById(R.id.drawer_openclose_button);
 
         final Drawable drawable = button.getDrawable();
 
-        if(arrowDown){
+        if (arrowDown) {
             button.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_arrow_drop_up_white_24dp));
             drawerAccountsService.displayAccounts();
             arrowDown = false;
-        }else{
+        } else {
             button.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_arrow_drop_down_white_24dp));
             drawerAccountsService.displayNavigation();
             arrowDown = true;

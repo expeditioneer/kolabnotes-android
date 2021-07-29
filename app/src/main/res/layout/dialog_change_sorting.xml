@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingTop="5dp"
     android:layout_marginTop="16dp"
@@ -23,14 +24,16 @@
         android:padding="5dp"
         android:id="@+id/radio_group_sort_direction">
 
-        <RadioButton android:id="@+id/radio_asc"
+        <RadioButton
+            android:id="@+id/radio_asc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/radio_asc"/>
+            android:text="@string/radio_asc" />
 
-        <RadioButton android:id="@+id/radio_desc"
+        <RadioButton
+            android:id="@+id/radio_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/radio_desc"/>
+            android:text="@string/radio_desc" />
     </RadioGroup>
 </LinearLayout>

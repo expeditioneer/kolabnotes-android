@@ -40,9 +40,9 @@ public class DrawEditorActivity extends AppCompatActivity implements OnFragmentC
 
     @Override
     public void fragmentFinished(Intent resultIntent, ResultCode code) {
-        if(ResultCode.OK == code) {
+        if (ResultCode.OK == code) {
             setResult(RESULT_OK, resultIntent);
-        }else{
+        } else {
             setResult(RESULT_CANCELED, resultIntent);
         }
         finish();

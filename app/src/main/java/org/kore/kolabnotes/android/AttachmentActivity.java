@@ -49,7 +49,7 @@ public class AttachmentActivity extends AppCompatActivity implements AttachmentF
                 return;
             }
 
-            previewFragment = PreviewFragment.newInstance(noteUID,null);
+            previewFragment = PreviewFragment.newInstance(noteUID, null);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.preview_fragment, previewFragment).commit();
@@ -58,9 +58,9 @@ public class AttachmentActivity extends AppCompatActivity implements AttachmentF
 
     @Override
     public void fragmentFinished(Intent resultIntent, OnFragmentCallback.ResultCode code) {
-        if(OnFragmentCallback.ResultCode.OK == code) {
+        if (OnFragmentCallback.ResultCode.OK == code) {
             setResult(RESULT_OK, resultIntent);
-        }else{
+        } else {
             setResult(RESULT_CANCELED, resultIntent);
         }
         finish();
@@ -79,12 +79,12 @@ public class AttachmentActivity extends AppCompatActivity implements AttachmentF
 
     @Override
     public void onListFragmentInteraction(AttachmentFragment.OnListFragmentInteractionListener.Operation operation, Attachment item) {
-        if(Operation.DELETE == operation){
+        if (Operation.DELETE == operation) {
             attachmentFragment.deleteAttachment(item);
-        }else if(Operation.SELECT == operation){
+        } else if (Operation.SELECT == operation) {
             attachmentFragment.shareFile(item);
-        }else if(Operation.PREVIEW == operation){
-            previewFragment.displayPreview(accountRepository.getActiveAccount(),noteUID,item);
+        } else if (Operation.PREVIEW == operation) {
+            previewFragment.displayPreview(accountRepository.getActiveAccount(), noteUID, item);
         }
     }
 }

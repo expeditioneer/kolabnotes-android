@@ -24,9 +24,9 @@ public class KolabNotesContentProvider extends ContentProvider {
     }
 
     /*
-         * query() always returns no results
-         *
-         */
+     * query() always returns no results
+     *
+     */
     @Override
     public Cursor query(
             Uri uri,
@@ -36,6 +36,7 @@ public class KolabNotesContentProvider extends ContentProvider {
             String sortOrder) {
         return null;
     }
+
     /*
      * insert() always returns null (no URI)
      */
@@ -43,6 +44,7 @@ public class KolabNotesContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         return null;
     }
+
     /*
      * delete() always returns "no rows affected" (0)
      */
@@ -50,6 +52,7 @@ public class KolabNotesContentProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
+
     /*
      * update() always returns "no rows affected" (0)
      */

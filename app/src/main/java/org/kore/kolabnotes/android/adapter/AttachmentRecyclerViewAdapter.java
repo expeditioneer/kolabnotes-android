@@ -29,7 +29,7 @@ public class AttachmentRecyclerViewAdapter extends RecyclerView.Adapter<Attachme
     private final AttachmentFragment.OnListFragmentInteractionListener mListener;
     private final Context context;
 
-    public AttachmentRecyclerViewAdapter(List<Attachment> items,Context context, AttachmentFragment.OnListFragmentInteractionListener listener) {
+    public AttachmentRecyclerViewAdapter(List<Attachment> items, Context context, AttachmentFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
         this.context = context;
@@ -66,9 +66,9 @@ public class AttachmentRecyclerViewAdapter extends RecyclerView.Adapter<Attachme
             }
         });
 
-        if(Utils.isTablet(context.getResources())){
+        if (Utils.isTablet(context.getResources())) {
 
-            if(PreviewFragment.previewableMimetype(holder.mItem.getMimeType())){
+            if (PreviewFragment.previewableMimetype(holder.mItem.getMimeType())) {
 
                 holder.mPreviewButton.setVisibility(View.VISIBLE);
 
@@ -99,7 +99,7 @@ public class AttachmentRecyclerViewAdapter extends RecyclerView.Adapter<Attachme
         this.notifyItemInserted(this.mValues.indexOf(attachment));
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return mValues.isEmpty();
     }
 

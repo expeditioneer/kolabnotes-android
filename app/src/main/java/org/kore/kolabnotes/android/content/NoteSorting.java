@@ -6,8 +6,8 @@ import org.kore.kolabnotes.android.Utils;
  * Created by koni on 20.07.15.
  */
 public final class NoteSorting {
-    public enum Direction{
-        ASC,DESC;
+    public enum Direction {
+        ASC, DESC;
     }
 
     private final Direction direction;
@@ -18,8 +18,8 @@ public final class NoteSorting {
         this.columnName = columnName.name();
     }
 
-    public NoteSorting(){
-        this(Utils.SortingColumns.lastModificationDate,Direction.DESC);
+    public NoteSorting() {
+        this(Utils.SortingColumns.lastModificationDate, Direction.DESC);
     }
 
     public Direction getDirection() {

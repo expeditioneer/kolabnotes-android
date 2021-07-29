@@ -83,10 +83,10 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
     }
 
 
-    void setNotePreview(Note note, ViewHolder viewHolder){
+    void setNotePreview(Note note, ViewHolder viewHolder) {
         final String description = note.getDescription();
 
-        if(description == null || description.trim().length() == 0){
+        if (description == null || description.trim().length() == 0) {
             viewHolder.notePreview.setText(context.getResources().getString(R.string.empty_note_description));
             return;
         }
@@ -94,8 +94,8 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         Spanned text = Html.fromHtml(Utils.getHtmlBodyText(description));
 
         CharSequence displayText = text;
-        if(displayText.length() > 200){
-            displayText = displayText.subSequence(0,200) + " ...";
+        if (displayText.length() > 200) {
+            displayText = displayText.subSequence(0, 200) + " ...";
         }
 
         viewHolder.notePreview.setText(displayText, TextView.BufferType.SPANNABLE);
@@ -106,11 +106,11 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         boolean isSelected = SelectableAdapter.getSelectedItems().contains(i) ? true : false;
         final Note note = notes.get(i);
         viewHolder.name.setText(note.getSummary());
-        viewHolder.classification.setText(context.getResources().getString(R.string.classification)+": "+note.getClassification());
-        viewHolder.createdDate.setText(context.getResources().getString(R.string.creationDate)+": "+ dateFormatter.format(note.getAuditInformation().getCreationDate()));
+        viewHolder.classification.setText(context.getResources().getString(R.string.classification) + ": " + note.getClassification());
+        viewHolder.createdDate.setText(context.getResources().getString(R.string.creationDate) + ": " + dateFormatter.format(note.getAuditInformation().getCreationDate()));
         viewHolder.modificationDate.setText(context.getResources().getString(R.string.modificationDate) + ": " + dateFormatter.format(note.getAuditInformation().getLastModificationDate()));
         viewHolder.categories.removeAllViews();
-        setNotePreview(note,viewHolder);
+        setNotePreview(note, viewHolder);
 
         boolean useLightColor = Utils.useLightTextColor(context, note.getColor());
 
@@ -118,8 +118,7 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         params.setMargins(12, 0, 0, 0);
 
 
-
-        if(note.getCategories().isEmpty()){
+        if (note.getCategories().isEmpty()) {
             TextView textView = new TextView(context);
             textView.setText(context.getResources().getString(R.string.notags));
             if (isSelected) {
@@ -128,7 +127,7 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
                 textView.setTextColor(useLightColor ? Color.WHITE : Color.BLACK);
             }
             viewHolder.categories.addView(textView);
-        }else{
+        } else {
             TextView textView = new TextView(context);
             textView.setText(context.getResources().getString(R.string.tags));
             if (isSelected) {
@@ -142,8 +141,8 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
 
             Collections.sort(sorted);
 
-            for(Tag tag : sorted){
-                if(tag.getColor() == null){
+            for (Tag tag : sorted) {
+                if (tag.getColor() == null) {
                     TextView tagTextView = new TextView(context);
                     tagTextView.setText(tag.getName());
                     int backgroundColor;
@@ -160,7 +159,7 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
                     tagTextView.setLayoutParams(params);
 
                     viewHolder.categories.addView(tagTextView);
-                }else{
+                } else {
                     boolean useLight = Utils.useLightTextColor(context, tag.getColor());
 
                     TextView tagTextView = new TextView(context);
@@ -192,7 +191,7 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
             viewHolder.modificationDate.setTextColor(Color.BLACK);
             viewHolder.notePreview.setTextColor(Color.BLACK);
         } else {
-            if(note != null && note.getColor() != null){
+            if (note != null && note.getColor() != null) {
                 viewHolder.cardView.setCardBackgroundColor(Color.parseColor(note.getColor().getHexcode()));
                 viewHolder.name.setBackgroundColor(Color.parseColor(note.getColor().getHexcode()));
                 viewHolder.classification.setBackgroundColor(Color.parseColor(note.getColor().getHexcode()));
@@ -201,11 +200,11 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
                 viewHolder.categories.setBackgroundColor(Color.parseColor(note.getColor().getHexcode()));
                 viewHolder.notePreview.setBackgroundColor(Color.parseColor(note.getColor().getHexcode()));
 
-            /*
-            * Text color depending on background color:
-            * If spectrum from cyan to red and saturation greater than or equal to 0.5 - text is white.
-            * If spectrum is not included in these borders or brightness greater than or equal to 0.8 - text is black.
-            */
+                /*
+                 * Text color depending on background color:
+                 * If spectrum from cyan to red and saturation greater than or equal to 0.5 - text is white.
+                 * If spectrum is not included in these borders or brightness greater than or equal to 0.8 - text is black.
+                 */
                 if (useLightColor) {
                     viewHolder.name.setTextColor(Color.WHITE);
                     viewHolder.classification.setTextColor(Color.WHITE);
@@ -238,43 +237,43 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         }
         Utils.setElevation(viewHolder.cardView, 5);
 
-        if(Utils.getShowMetainformation(context)){
+        if (Utils.getShowMetainformation(context)) {
             viewHolder.showMetainformation();
-        }else{
+        } else {
             viewHolder.hideMetainformation();
         }
 
-        if(Utils.getShowPreview(context)){
+        if (Utils.getShowPreview(context)) {
             viewHolder.showPreview();
-        }else{
+        } else {
             viewHolder.hidePreview();
         }
 
-        if(Utils.getShowCharacteristics(context)){
+        if (Utils.getShowCharacteristics(context)) {
             viewHolder.showCharacteristics();
-        }else{
+        } else {
             viewHolder.hideCharacteristics();
         }
 
-        if(notesWithAttachment.contains(note.getIdentification().getUid())){
+        if (notesWithAttachment.contains(note.getIdentification().getUid())) {
             viewHolder.attachmentImage.setVisibility(View.VISIBLE);
 
-            if(useLightColor){
+            if (useLightColor) {
                 viewHolder.attachmentImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_attach_file_white_24dp));
             }
         }
     }
 
-    public void setNotesWithAttachment(Set<String> ids){
+    public void setNotesWithAttachment(Set<String> ids) {
         this.notesWithAttachment = ids;
     }
 
-    public void restoreElevation(RecyclerView recyclerView){
-        for(int i=0; i < recyclerView.getChildCount(); i++){
+    public void restoreElevation(RecyclerView recyclerView) {
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
             final View childAt = recyclerView.getChildAt(i);
-            Utils.setElevation(childAt,5);
-            if(i == recyclerView.getChildAdapterPosition(childAt)){
-                Utils.setElevation(childAt,30);
+            Utils.setElevation(childAt, 5);
+            if (i == recyclerView.getChildAdapterPosition(childAt)) {
+                Utils.setElevation(childAt, 30);
             }
         }
     }
@@ -288,7 +287,7 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         return notes.isEmpty() ? true : false;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView name;
         TextView classification;
         TextView createdDate;
@@ -314,23 +313,23 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
             createdDate = (TextView) itemView.findViewById(R.id.createdDate);
             modificationDate = (TextView) itemView.findViewById(R.id.modificationDate);
             categories = (LinearLayout) itemView.findViewById(R.id.categories);
-            cardView = (CardView)itemView;
-            attachmentImage = (ImageView)itemView.findViewById(R.id.attachmentHint);
-            notePreview = (TextView)itemView.findViewById(R.id.notePreview);
+            cardView = (CardView) itemView;
+            attachmentImage = (ImageView) itemView.findViewById(R.id.attachmentHint);
+            notePreview = (TextView) itemView.findViewById(R.id.notePreview);
         }
 
         @Override
         public void onClick(View v) {
             if (listener != null && getAdapterPosition() >= 0) {
                 ViewParent parent = v.getParent();
-                if(parent instanceof RecyclerView){
-                    RecyclerView recyclerView = (RecyclerView)parent;
-                    for(int i=0; i < recyclerView.getChildCount(); i++){
+                if (parent instanceof RecyclerView) {
+                    RecyclerView recyclerView = (RecyclerView) parent;
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
                         final View childAt = recyclerView.getChildAt(i);
-                        Utils.setElevation(childAt,5);
+                        Utils.setElevation(childAt, 5);
 
-                        if(recyclerView.getChildAdapterPosition(childAt) == getAdapterPosition()){
-                            Utils.setElevation(childAt,30);
+                        if (recyclerView.getChildAdapterPosition(childAt) == getAdapterPosition()) {
+                            Utils.setElevation(childAt, 30);
                         }
                     }
                 }
@@ -342,10 +341,10 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
         public boolean onLongClick(View v) {
             if (listener != null) {
                 ViewParent parent = v.getParent();
-                if(parent instanceof RecyclerView){
-                    RecyclerView recyclerView = (RecyclerView)parent;
-                    for(int i=0; i < recyclerView.getChildCount(); i++){
-                        Utils.setElevation(recyclerView.getChildAt(i),5);
+                if (parent instanceof RecyclerView) {
+                    RecyclerView recyclerView = (RecyclerView) parent;
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                        Utils.setElevation(recyclerView.getChildAt(i), 5);
                     }
                 }
 
@@ -356,35 +355,36 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
 
         public interface ClickListener {
             void onItemClicked(int position, Note note);
+
             boolean onItemLongClicked(int position, Note note);
         }
 
-        void hideMetainformation(){
+        void hideMetainformation() {
             createdDate.setVisibility(View.GONE);
             modificationDate.setVisibility(View.GONE);
         }
 
-        void showMetainformation(){
+        void showMetainformation() {
             createdDate.setVisibility(View.VISIBLE);
             modificationDate.setVisibility(View.VISIBLE);
         }
 
-        void hideCharacteristics(){
+        void hideCharacteristics() {
             classification.setVisibility(View.GONE);
             categories.setVisibility(View.GONE);
         }
 
-        void showCharacteristics(){
+        void showCharacteristics() {
             //issue #85
             classification.setVisibility(View.GONE);
             categories.setVisibility(View.VISIBLE);
         }
 
-        void hidePreview(){
+        void hidePreview() {
             notePreview.setVisibility(View.GONE);
         }
 
-        void showPreview(){
+        void showPreview() {
             notePreview.setVisibility(View.VISIBLE);
         }
     }

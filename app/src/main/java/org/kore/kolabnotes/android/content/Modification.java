@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  */
 public class Modification {
 
-    public enum Descriminator{
+    public enum Descriminator {
         NOTE, NOTEBOOK, TAG, ATTACHMENT;
     }
 
@@ -19,7 +19,7 @@ public class Modification {
     private String uidNotebook;
     private Descriminator descriminator;
 
-    public Modification(String account, String rootFolder, String uid, ModificationRepository.ModificationType type, Timestamp modificationDate,String uidNotebook, Descriminator desc) {
+    public Modification(String account, String rootFolder, String uid, ModificationRepository.ModificationType type, Timestamp modificationDate, String uidNotebook, Descriminator desc) {
         this.uid = uid;
         this.rootFolder = rootFolder;
         this.account = account;

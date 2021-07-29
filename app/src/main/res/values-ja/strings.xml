@@ -229,14 +229,14 @@
     <string name="attachment_already_exist">指定したファイル名の添付はすでに存在します</string>
     <string name="attachment_send_to">添付を共有...</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_preview">プレビューが選択されていません</string>
     <string name="attachment_not_previewable">添付をプレビューできません</string>
     <string name="attachment_now_playing">再生しています:</string>
     <string name="pref_preview">プレビューノート </string>
     <string name="pref_desc_preview"> メモテキストのいくつかのプレビューテキスト文字を表示する </string>
-    <string name="empty_note_description" >メモテキストなし</string>
+    <string name="empty_note_description">メモテキストなし</string>
     <string name="image_too_big">イメージが大きすぎます（ファイルサイズは900 KB未満である必要があります）</string>
     <string name="changeAccount">アカウントを選択</string>
     <string name="drawer_organise_tags">" タグを整理する"</string>

@@ -28,7 +28,7 @@ public class ListWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // update each of the app widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
-            updateAppWidget(context,appWidgetManager,appWidgetIds[i]);
+            updateAppWidget(context, appWidgetManager, appWidgetIds[i]);
         }
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_notes);
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -73,14 +73,14 @@ public class ListWidget extends AppWidgetProvider {
         // This adapter connects
         // to a RemoteViewsService  through the specified intent.
         // This is how you populate the data.
-        rv.setRemoteAdapter(appWidgetId,R.id.widget_list_notes, intent);
+        rv.setRemoteAdapter(appWidgetId, R.id.widget_list_notes, intent);
 
         // The empty view is displayed when the collection has no items.
         // It should be in the same layout used to instantiate the RemoteViews
         // object above.
         //rv.setEmptyView(R.id.stack_view, R.id.empty_view);
         String correctAccountName = account;
-        if("local".equals(account)){
+        if ("local".equals(account)) {
             correctAccountName = context.getResources().getString(R.string.drawer_account_local);
         }
         rv.setTextViewText(R.id.widget_text, correctAccountName);
@@ -92,7 +92,7 @@ public class ListWidget extends AppWidgetProvider {
 
         StringBuilder sb = new StringBuilder();
 
-        if(!TextUtils.isEmpty(notebook)){
+        if (!TextUtils.isEmpty(notebook)) {
             sb.append(notebook);
 
             Notebook bySummary = new NotebookRepository(context).getBySummary(accId.getAccount(), accId.getRootFolder(), notebook);
@@ -104,10 +104,10 @@ public class ListWidget extends AppWidgetProvider {
 
         intentCreate.putExtra(Utils.INTENT_ACCOUNT_EMAIL, accId.getAccount());
         intentCreate.putExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER, accId.getRootFolder());
-        PendingIntent pendingIntentCreate = PendingIntent.getActivity(context, appWidgetId, intentCreate,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentCreate = PendingIntent.getActivity(context, appWidgetId, intentCreate, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(!TextUtils.isEmpty(tag)){
-            if(sb.length() > 0){
+        if (!TextUtils.isEmpty(tag)) {
+            if (sb.length() > 0) {
                 sb.append(" / ");
             }
             sb.append(tag);
@@ -115,20 +115,20 @@ public class ListWidget extends AppWidgetProvider {
             intentMainActivity.putExtra(Utils.SELECTED_TAG_NAME, tag);
         }
 
-        if(sb.length() > 0){
+        if (sb.length() > 0) {
             rv.setTextViewText(R.id.widget_text_detail, sb.toString());
         }
 
         intentMainActivity.putExtra(Utils.INTENT_ACCOUNT_EMAIL, accId.getAccount());
         intentMainActivity.putExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER, accId.getRootFolder());
-        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(context, appWidgetId, intentMainActivity,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(context, appWidgetId, intentMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        rv.setOnClickPendingIntent(R.id.imageButton_icon,pendingIntentMainActivity);
-        rv.setOnClickPendingIntent(R.id.imageButton_add,pendingIntentCreate);
+        rv.setOnClickPendingIntent(R.id.imageButton_icon, pendingIntentMainActivity);
+        rv.setOnClickPendingIntent(R.id.imageButton_add, pendingIntentCreate);
 
-        Intent clickIntent=new Intent(context, DetailActivity.class);
-        PendingIntent clickPI=PendingIntent.getActivity(context, 0, clickIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent clickIntent = new Intent(context, DetailActivity.class);
+        PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         rv.setPendingIntentTemplate(R.id.widget_list_notes, clickPI);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, rv);

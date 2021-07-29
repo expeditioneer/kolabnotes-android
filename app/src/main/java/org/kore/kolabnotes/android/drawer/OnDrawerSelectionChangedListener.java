@@ -6,7 +6,10 @@ package org.kore.kolabnotes.android.drawer;
 
 public interface OnDrawerSelectionChangedListener {
     void notebookSelected(String notebookName);
+
     void tagSelected(String tagName);
+
     void allNotesSelected();
+
     void allNotesFromAccountSelected();
 }

@@ -85,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
     }
 
 
-    public DrawerLayout getDrawerLayout(){
+    public DrawerLayout getDrawerLayout() {
         return this.mDrawerLayout;
     }
 
-    public NavigationView getNavigationView(){
+    public NavigationView getNavigationView() {
         return this.mNavigationView;
     }
 
@@ -99,15 +99,15 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
 
         initAccountSwitchedListeners();
 
-        if(Utils.getReloadDataAfterDetail(this)){
-            Utils.setReloadDataAfterDetail(this,false);
+        if (Utils.getReloadDataAfterDetail(this)) {
+            Utils.setReloadDataAfterDetail(this, false);
         }
     }
 
     private void initAccountSwitchedListeners() {
-        if(this.accountSwitchedListeners == null){
+        if (this.accountSwitchedListeners == null) {
             this.accountSwitchedListeners = new LinkedList<>();
-            overviewFragment = (OverviewFragment)getFragmentManager().findFragmentById(R.id.overview_fragment);
+            overviewFragment = (OverviewFragment) getFragmentManager().findFragmentById(R.id.overview_fragment);
             this.accountSwitchedListeners.push(overviewFragment);
         }
     }
@@ -119,49 +119,49 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
 
     @Override
     public void fragmentFinished(Intent resultIntent, ResultCode code) {
-        if(ResultCode.DELETED == code){
+        if (ResultCode.DELETED == code) {
             Toast.makeText(this, R.string.note_deleted, Toast.LENGTH_LONG);
             overviewFragment.displayBlankFragment();
             overviewFragment.onResume();
-        }else if(ResultCode.SAVED == code){
+        } else if (ResultCode.SAVED == code) {
             Toast.makeText(this, R.string.note_saved, Toast.LENGTH_LONG);
             overviewFragment.onResume();
-        }else if(ResultCode.BACK == code){
+        } else if (ResultCode.BACK == code) {
             overviewFragment.onResume();
             mDrawerLayout.openDrawer(Gravity.LEFT);
-        }else if(ResultCode.NOT_VISIBLE == code){
+        } else if (ResultCode.NOT_VISIBLE == code) {
             overviewFragment.onResume();
         }
     }
 
-    public void dispatchMenuEvent(MenuItem item){
+    public void dispatchMenuEvent(MenuItem item) {
         Fragment fragment = getFragmentManager().findFragmentById(R.id.details_fragment);
 
-        if(fragment instanceof DetailFragment){
-            DetailFragment detail = (DetailFragment)fragment;
+        if (fragment instanceof DetailFragment) {
+            DetailFragment detail = (DetailFragment) fragment;
 
             detail.onOptionsItemSelected(item);
         }
     }
 
-    public void allNotesSelected(MenuItem item){
+    public void allNotesSelected(MenuItem item) {
         Utils.setSelectedNotebookName(this, null);
         Utils.setSelectedTagName(this, null);
 
         final boolean checked = item.isChecked();
-        if(!checked){
+        if (!checked) {
             item.setChecked(true);
             overviewFragment.allNotesSelected();
         }
         mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
-    public void allNotesFromAccountSelected(MenuItem item){
+    public void allNotesFromAccountSelected(MenuItem item) {
         Utils.setSelectedNotebookName(this, null);
         Utils.setSelectedTagName(this, null);
 
         final boolean checked = item.isChecked();
-        if(!checked){
+        if (!checked) {
             item.setChecked(true);
             overviewFragment.allNotesFromAccountSelected();
         }
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
     }
 
     private void saveDataInSaveableFragments() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             FragmentManager fm = getFragmentManager();
             final List<Fragment> fragments = fm.getFragments();
             for (Fragment fragment : fragments) {
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
         setTitle(name);
         initAccountSwitchedListeners();
         final Iterator<OnAccountSwitchedListener> iterator = this.accountSwitchedListeners.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             iterator.next().onAccountSwitched(name, accountIdentifier);
         }
     }
@@ -244,12 +244,12 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
     public void fragementAttached(Fragment fragment) {
         initAccountSwitchedListeners();
         final OnAccountSwitchedListener peek = this.accountSwitchedListeners.peek();
-        if(peek instanceof  DetailFragment){
+        if (peek instanceof DetailFragment) {
             this.accountSwitchedListeners.poll();
         }
 
-        if(fragment instanceof OnAccountSwitchedListener){
-            this.accountSwitchedListeners.push((OnAccountSwitchedListener)fragment);
+        if (fragment instanceof OnAccountSwitchedListener) {
+            this.accountSwitchedListeners.push((OnAccountSwitchedListener) fragment);
         }
     }
 }

@@ -4,45 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- The main content view -->
-        <FrameLayout
-            android:id="@+id/activity_main_frame"
-            android:layout_height="match_parent"
+    <FrameLayout
+        android:id="@+id/activity_main_frame"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary">
+
+        <RelativeLayout
+            android:gravity="center"
+            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary">
+            android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:gravity="center"
-                android:fitsSystemWindows="true"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:minHeight="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                android:transitionName="actionBar" />
 
-                    android:elevation="4dp"
-                    android:transitionName="actionBar"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/list_background"
+                android:layout_below="@id/toolbar"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/list_background"
-                    android:layout_below="@id/toolbar"
-                    android:orientation="horizontal">
-
-                    <fragment
-                        class="org.kore.kolabnotes.android.fragment.OverviewFragment"
-                        android:id="@+id/overview_fragment"
-                        android:layout_weight="1"
-                        android:layout_width="0px"
-                        android:layout_height="match_parent"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
-        </FrameLayout>
+                <fragment
+                    class="org.kore.kolabnotes.android.fragment.OverviewFragment"
+                    android:id="@+id/overview_fragment"
+                    android:layout_weight="1"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
     <!-- The navigation drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
@@ -53,5 +52,5 @@
         app:itemTextColor="@color/primary_text"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_view"/>
+        app:menu="@menu/drawer_view" />
 </androidx.drawerlayout.widget.DrawerLayout>

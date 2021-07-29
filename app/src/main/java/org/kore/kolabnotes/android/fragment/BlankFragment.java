@@ -13,11 +13,11 @@ import org.kore.kolabnotes.android.R;
  */
 public class BlankFragment extends Fragment {
 
-    public static BlankFragment newInstance(){
+    public static BlankFragment newInstance() {
         BlankFragment f = new BlankFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
-    return f;
+        return f;
     }
 
 

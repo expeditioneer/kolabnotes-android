@@ -229,14 +229,14 @@
     <string name="attachment_already_exist">Załącznik o podanej nazwie już istnieje</string>
     <string name="attachment_send_to">Udostępnij załącznik za pomocą...</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Witaj pusty fragment</string>
     <string name="no_preview">Nie wybrano podglądu</string>
     <string name="attachment_not_previewable">Nie można wyświetlić podglądu załącznika</string>
     <string name="attachment_now_playing">Teraz odtwarzane:</string>
     <string name="pref_preview">Podgląd notatki</string>
     <string name="pref_desc_preview">Pokaż niektóre znaki tekstu podglądu tekstu notatki</string>
-    <string name="empty_note_description" >Brak tekstu notatki</string>
+    <string name="empty_note_description">Brak tekstu notatki</string>
     <string name="image_too_big"> Obraz zbyt duży (rozmiar pliku musi być mniejszy niż 900 kB)</string>
     <string name="changeAccount">Wybierz konto</string>
     <string name="drawer_organise_tags">Porządkuj Tagi</string>

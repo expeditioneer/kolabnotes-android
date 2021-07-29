@@ -42,8 +42,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        mToolbar = (Toolbar)LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        mToolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
         root.addView(mToolbar, 0); /* Insert at top */
 //        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
 //        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -112,7 +112,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
-            }  else {
+            } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);

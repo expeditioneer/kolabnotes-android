@@ -15,7 +15,7 @@ import jp.wasabeef.richeditor.RichEditor;
  *
  * @deprecated delete class and use a fixed version of wasabeef richeditor (if he will be active any day in the future again)
  */
-public class KolabNotesRichEditor extends RichEditor{
+public class KolabNotesRichEditor extends RichEditor {
 
 
     public KolabNotesRichEditor(Context context) {
@@ -35,15 +35,15 @@ public class KolabNotesRichEditor extends RichEditor{
         return new KolabNotesEditorWebViewClient();
     }
 
-   protected class KolabNotesEditorWebViewClient extends RichEditor.EditorWebViewClient{
-       @Override
-       public boolean shouldOverrideUrlLoading(WebView view, String url) {
-           String decode = Uri.decode(url);
+    protected class KolabNotesEditorWebViewClient extends RichEditor.EditorWebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            String decode = Uri.decode(url);
 
-           //really really dirty hack to fix issue 174
-           decode = decode.replaceAll("\\+","&plus;");
+            //really really dirty hack to fix issue 174
+            decode = decode.replaceAll("\\+", "&plus;");
 
-           return super.shouldOverrideUrlLoading(view, decode);
-       }
-   }
+            return super.shouldOverrideUrlLoading(view, decode);
+        }
+    }
 }

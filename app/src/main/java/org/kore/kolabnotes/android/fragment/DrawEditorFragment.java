@@ -82,7 +82,7 @@ public class DrawEditorFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof AppCompatActivity) {
-            this.activity = (AppCompatActivity)context;
+            this.activity = (AppCompatActivity) context;
         }
     }
 
@@ -327,7 +327,7 @@ public class DrawEditorFragment extends Fragment {
             case R.id.ok_menu:
                 Intent i = new Intent();
                 i.putExtra(DrawEditorActivity.TAG_RETURN_BITMAP, saveToBitmap());
-                ((OnFragmentCallback)activity).fragmentFinished(i, OnFragmentCallback.ResultCode.OK);
+                ((OnFragmentCallback) activity).fragmentFinished(i, OnFragmentCallback.ResultCode.OK);
                 break;
             case R.id.undo_menu:
                 mCanvas.undo();
@@ -367,6 +367,6 @@ public class DrawEditorFragment extends Fragment {
     }
 
     public void goBack() {
-        ((OnFragmentCallback)activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
+        ((OnFragmentCallback) activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
     }
 }

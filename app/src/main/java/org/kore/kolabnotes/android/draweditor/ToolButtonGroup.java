@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 /**
- *  This class is a complete copy RadioGroup except adaptation for ToolButton.
+ * This class is a complete copy RadioGroup except adaptation for ToolButton.
  */
 
 public class ToolButtonGroup extends LinearLayout {
@@ -122,7 +122,6 @@ public class ToolButtonGroup extends LinearLayout {
      * such an operation is equivalent to invoking {@link #clearCheck()}.</p>
      *
      * @param id the unique id of the tool button to select in this group
-     *
      * @see #getCheckedToolButtonId()
      * @see #clearCheck()
      */
@@ -162,11 +161,9 @@ public class ToolButtonGroup extends LinearLayout {
      * Upon empty selection, the returned value is -1.</p>
      *
      * @return the unique id of the selected tool button in this group
-     *
+     * @attr ref R.styleable#ToolGroup_checkedButton
      * @see #check(int)
      * @see #clearCheck()
-     *
-     * @attr ref R.styleable#ToolGroup_checkedButton
      */
     @IdRes
     public int getCheckedToolButtonId() {
@@ -223,7 +220,6 @@ public class ToolButtonGroup extends LinearLayout {
      * <p>See
      * {@link com.android.internal.R.styleable#LinearLayout_Layout LinearLayout Attributes}
      * for a list of all child view attributes that this class supports.</p>
-     *
      */
     public static class LayoutParams extends LinearLayout.LayoutParams {
 
@@ -253,8 +249,8 @@ public class ToolButtonGroup extends LinearLayout {
          * height to  {@link android.view.ViewGroup.LayoutParams#WRAP_CONTENT}
          * when not specified in the XML file.</p>
          *
-         * @param a the styled attributes set
-         * @param widthAttr the width attribute to fetch
+         * @param a          the styled attributes set
+         * @param widthAttr  the width attribute to fetch
          * @param heightAttr the height attribute to fetch
          */
         @Override
@@ -284,7 +280,7 @@ public class ToolButtonGroup extends LinearLayout {
          * <p>Called when the checked tool button has changed. When the
          * selection is cleared, checkedId is -1.</p>
          *
-         * @param group the group in which the checked tool button has changed
+         * @param group     the group in which the checked tool button has changed
          * @param checkedId the unique identifier of the newly checked tool button
          */
         public void onCheckedChanged(ToolButtonGroup group, @IdRes int checkedId);
@@ -295,7 +291,7 @@ public class ToolButtonGroup extends LinearLayout {
      */
 
     public static int generateViewId() {
-        for (;;) {
+        for (; ; ) {
             final int result = sNextGeneratedId.get();
             // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
             int newValue = result + 1;

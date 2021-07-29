@@ -22,28 +22,28 @@ public class NoteRepository {
 
     // Database fields
     private Context context;
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER,
             DatabaseHelper.COLUMN_UID,
-            DatabaseHelper.COLUMN_PRODUCTID ,
-            DatabaseHelper.COLUMN_CREATIONDATE ,
-            DatabaseHelper.COLUMN_MODIFICATIONDATE ,
-            DatabaseHelper.COLUMN_SUMMARY ,
-            DatabaseHelper.COLUMN_DESCRIPTION ,
+            DatabaseHelper.COLUMN_PRODUCTID,
+            DatabaseHelper.COLUMN_CREATIONDATE,
+            DatabaseHelper.COLUMN_MODIFICATIONDATE,
+            DatabaseHelper.COLUMN_SUMMARY,
+            DatabaseHelper.COLUMN_DESCRIPTION,
             DatabaseHelper.COLUMN_CLASSIFICATION,
             DatabaseHelper.COLUMN_UID_NOTEBOOK,
             DatabaseHelper.COLUMN_DISCRIMINATOR,
             DatabaseHelper.COLUMN_COLOR};
 
-    private String[] withoutDescriptionColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] withoutDescriptionColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER,
             DatabaseHelper.COLUMN_UID,
-            DatabaseHelper.COLUMN_PRODUCTID ,
-            DatabaseHelper.COLUMN_CREATIONDATE ,
-            DatabaseHelper.COLUMN_MODIFICATIONDATE ,
-            DatabaseHelper.COLUMN_SUMMARY ,
+            DatabaseHelper.COLUMN_PRODUCTID,
+            DatabaseHelper.COLUMN_CREATIONDATE,
+            DatabaseHelper.COLUMN_MODIFICATIONDATE,
+            DatabaseHelper.COLUMN_SUMMARY,
             DatabaseHelper.COLUMN_CLASSIFICATION,
             DatabaseHelper.COLUMN_UID_NOTEBOOK,
             DatabaseHelper.COLUMN_DISCRIMINATOR,
@@ -75,14 +75,14 @@ public class NoteRepository {
 
         ConnectionManager.getDatabase(context).insert(DatabaseHelper.TABLE_NOTES, null, values);
 
-        Modification modification = modificationRepository.getUnique(account,rootFolder,note.getIdentification().getUid());
+        Modification modification = modificationRepository.getUnique(account, rootFolder, note.getIdentification().getUid());
 
-        if(modification == null){
-            modificationRepository.insert(account,rootFolder,note.getIdentification().getUid(), ModificationRepository.ModificationType.INS,uidNotebook, Modification.Descriminator.NOTE);
+        if (modification == null) {
+            modificationRepository.insert(account, rootFolder, note.getIdentification().getUid(), ModificationRepository.ModificationType.INS, uidNotebook, Modification.Descriminator.NOTE);
         }
     }
 
-    public void update(String account, String rootFolder,Note note,String uidNotebook){
+    public void update(String account, String rootFolder, Note note, String uidNotebook) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_UID, note.getIdentification().getUid());
         values.put(DatabaseHelper.COLUMN_ROOT_FOLDER, rootFolder);
@@ -103,14 +103,14 @@ public class NoteRepository {
                         DatabaseHelper.COLUMN_UID + " = '" + note.getIdentification().getUid() + "' ",
                 null);
 
-        Modification modification = modificationRepository.getUnique(account,rootFolder,note.getIdentification().getUid());
+        Modification modification = modificationRepository.getUnique(account, rootFolder, note.getIdentification().getUid());
 
-        if(modification == null){
-            modificationRepository.insert(account,rootFolder,note.getIdentification().getUid(), ModificationRepository.ModificationType.UPD,uidNotebook, Modification.Descriminator.NOTE);
+        if (modification == null) {
+            modificationRepository.insert(account, rootFolder, note.getIdentification().getUid(), ModificationRepository.ModificationType.UPD, uidNotebook, Modification.Descriminator.NOTE);
         }
     }
 
-    void updateAuditInformation(String account, String rootFolder,String noteUID, long newModificationDate){
+    void updateAuditInformation(String account, String rootFolder, String noteUID, long newModificationDate) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_MODIFICATIONDATE, newModificationDate);
 
@@ -122,7 +122,7 @@ public class NoteRepository {
                 null);
     }
 
-    public void delete(String account, String rootFolder,Note note) {
+    public void delete(String account, String rootFolder, Note note) {
         String uidofNotebook = getUIDofNotebook(account, rootFolder, note.getIdentification().getUid());
 
         ConnectionManager.getDatabase(context).delete(DatabaseHelper.TABLE_NOTES,
@@ -131,14 +131,14 @@ public class NoteRepository {
                         DatabaseHelper.COLUMN_UID + " = '" + note.getIdentification().getUid() + "' ",
                 null);
 
-        Modification modification = modificationRepository.getUnique(account,rootFolder,note.getIdentification().getUid());
+        Modification modification = modificationRepository.getUnique(account, rootFolder, note.getIdentification().getUid());
 
-        if(modification == null){
-            modificationRepository.insert(account,rootFolder,note.getIdentification().getUid(), ModificationRepository.ModificationType.DEL,uidofNotebook, Modification.Descriminator.NOTE);
+        if (modification == null) {
+            modificationRepository.insert(account, rootFolder, note.getIdentification().getUid(), ModificationRepository.ModificationType.DEL, uidofNotebook, Modification.Descriminator.NOTE);
         }
     }
 
-    public void cleanAccount(String account, String rootFolder){
+    public void cleanAccount(String account, String rootFolder) {
         ConnectionManager.getDatabase(context).delete(DatabaseHelper.TABLE_NOTES,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
                         DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' ",
@@ -147,15 +147,15 @@ public class NoteRepository {
     }
 
 
-    public List<Note> getFromNotebookWithSummary(String account, String rootFolder,String uidNotebook,String summary,NoteSorting noteSorting) {
+    public List<Note> getFromNotebookWithSummary(String account, String rootFolder, String uidNotebook, String summary, NoteSorting noteSorting) {
         List<Note> notes = new ArrayList<Note>();
 
-        StringBuilder query = new StringBuilder(DatabaseHelper.COLUMN_ACCOUNT + " = '" + account+"' AND ");
-        query.append(DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder+"' AND ");
-        query.append(DatabaseHelper.COLUMN_DISCRIMINATOR+" = '"+DatabaseHelper.DESCRIMINATOR_NOTE+"' AND ");
-        query.append(" "+DatabaseHelper.COLUMN_SUMMARY+" like '%"+summary.trim()+"%' COLLATE NOCASE ");
-        if(uidNotebook != null){
-            query.append(" AND "+DatabaseHelper.COLUMN_UID_NOTEBOOK + " = '" + uidNotebook+"' ");
+        StringBuilder query = new StringBuilder(DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND ");
+        query.append(DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' AND ");
+        query.append(DatabaseHelper.COLUMN_DISCRIMINATOR + " = '" + DatabaseHelper.DESCRIMINATOR_NOTE + "' AND ");
+        query.append(" " + DatabaseHelper.COLUMN_SUMMARY + " like '%" + summary.trim() + "%' COLLATE NOCASE ");
+        if (uidNotebook != null) {
+            query.append(" AND " + DatabaseHelper.COLUMN_UID_NOTEBOOK + " = '" + uidNotebook + "' ");
         }
 
         String[] columns = Utils.getShowPreview(context) ? allColumns : withoutDescriptionColumns;
@@ -169,14 +169,14 @@ public class NoteRepository {
                 noteSorting.getColumnName() + " " + noteSorting.getDirection());
 
         while (cursor.moveToNext()) {
-            Note note = cursorToNoteWithoutDescription(account,rootFolder,cursor);
+            Note note = cursorToNoteWithoutDescription(account, rootFolder, cursor);
             notes.add(note);
         }
         cursor.close();
         return notes;
     }
 
-    public List<Note> getFromNotebookWithDescriptionLoaded(String account, String rootFolder,String uidNotebook, NoteSorting noteSorting) {
+    public List<Note> getFromNotebookWithDescriptionLoaded(String account, String rootFolder, String uidNotebook, NoteSorting noteSorting) {
         List<Note> notes = new ArrayList<Note>();
 
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_NOTES,
@@ -191,14 +191,14 @@ public class NoteRepository {
                 noteSorting.getColumnName() + " " + noteSorting.getDirection());
 
         while (cursor.moveToNext()) {
-            Note note = cursorToNote(account,rootFolder,cursor);
+            Note note = cursorToNote(account, rootFolder, cursor);
             notes.add(note);
         }
         cursor.close();
         return notes;
     }
 
-    public List<Note> getFromNotebook(String account, String rootFolder,String uidNotebook, NoteSorting noteSorting) {
+    public List<Note> getFromNotebook(String account, String rootFolder, String uidNotebook, NoteSorting noteSorting) {
         List<Note> notes = new ArrayList<Note>();
 
         String[] columns = Utils.getShowPreview(context) ? allColumns : withoutDescriptionColumns;
@@ -215,7 +215,7 @@ public class NoteRepository {
                 noteSorting.getColumnName() + " " + noteSorting.getDirection());
 
         while (cursor.moveToNext()) {
-            Note note = cursorToNoteWithoutDescription(account,rootFolder,cursor);
+            Note note = cursorToNoteWithoutDescription(account, rootFolder, cursor);
             notes.add(note);
         }
         cursor.close();
@@ -236,7 +236,7 @@ public class NoteRepository {
                 DatabaseHelper.COLUMN_MODIFICATIONDATE + " DESC");
 
         while (cursor.moveToNext()) {
-            Note note = cursorToNote(account,rootFolder,cursor);
+            Note note = cursorToNote(account, rootFolder, cursor);
             notes.add(note);
         }
         cursor.close();
@@ -287,7 +287,7 @@ public class NoteRepository {
         return notes;
     }
 
-    public Note getByUID(String account, String rootFolder,String uid) {
+    public Note getByUID(String account, String rootFolder, String uid) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_NOTES,
                 allColumns,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -301,13 +301,13 @@ public class NoteRepository {
 
         Note note = null;
         if (cursor.moveToNext()) {
-            note = cursorToNote(account,rootFolder,cursor);
+            note = cursorToNote(account, rootFolder, cursor);
         }
         cursor.close();
         return note;
     }
 
-    public Note getByUIDWithoutDescription(String account, String rootFolder,String uid) {
+    public Note getByUIDWithoutDescription(String account, String rootFolder, String uid) {
         String[] columns = Utils.getShowPreview(context) ? allColumns : withoutDescriptionColumns;
 
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_NOTES,
@@ -323,7 +323,7 @@ public class NoteRepository {
 
         Note note = null;
         if (cursor.moveToNext()) {
-            note = cursorToNoteWithoutDescription(account,rootFolder,cursor);
+            note = cursorToNoteWithoutDescription(account, rootFolder, cursor);
         }
         cursor.close();
         return note;
@@ -341,13 +341,13 @@ public class NoteRepository {
 
         AccountIdentifier ident = null;
         if (cursor.moveToNext()) {
-            ident = new AccountIdentifier(cursor.getString(1),cursor.getString(2));
+            ident = new AccountIdentifier(cursor.getString(1), cursor.getString(2));
         }
         cursor.close();
         return ident;
     }
 
-    public String getUIDofNotebook(String account, String rootFolder,String uid) {
+    public String getUIDofNotebook(String account, String rootFolder, String uid) {
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_NOTES,
                 notebookUIDColumn,
                 DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND " +
@@ -367,7 +367,7 @@ public class NoteRepository {
         return uidNB;
     }
 
-    private Note cursorToNote(String account, String rootFolder,Cursor cursor) {
+    private Note cursorToNote(String account, String rootFolder, Cursor cursor) {
         String uid = cursor.getString(3);
         String productId = cursor.getString(4);
         Long creationDate = cursor.getLong(5);
@@ -377,18 +377,18 @@ public class NoteRepository {
         String classification = cursor.getString(9);
         String color = cursor.getString(12);
 
-        AuditInformation audit = new AuditInformation(new Timestamp(creationDate),new Timestamp(modificationDate));
-        Identification ident = new Identification(uid,productId);
+        AuditInformation audit = new AuditInformation(new Timestamp(creationDate), new Timestamp(modificationDate));
+        Identification ident = new Identification(uid, productId);
 
-        Note note = new Note(ident,audit, Note.Classification.valueOf(classification),summary);
+        Note note = new Note(ident, audit, Note.Classification.valueOf(classification), summary);
         note.setDescription(description);
         note.setColor(Colors.getColor(color));
 
-        if(account != null && rootFolder != null) {
+        if (account != null && rootFolder != null) {
             List<Tag> tags = new NoteTagRepository(context).getTagsFor(account, rootFolder, uid);
 
             if (tags != null && tags.size() > 0) {
-                for(Tag tag : tags){
+                for (Tag tag : tags) {
                     note.addCategories(tag);
                 }
             }
@@ -396,7 +396,7 @@ public class NoteRepository {
         return note;
     }
 
-    private Note cursorToNoteWithoutDescription(String account, String rootFolder,Cursor cursor) {
+    private Note cursorToNoteWithoutDescription(String account, String rootFolder, Cursor cursor) {
         String uid = cursor.getString(3);
         String productId = cursor.getString(4);
         Long creationDate = cursor.getLong(5);
@@ -405,24 +405,24 @@ public class NoteRepository {
         String description = null;
 
         int index = 8;
-        if(Utils.getShowPreview(context)){
+        if (Utils.getShowPreview(context)) {
             description = cursor.getString(index++);
         }
         String classification = cursor.getString(index);
-        String color = cursor.getString(index+3);
+        String color = cursor.getString(index + 3);
 
-        AuditInformation audit = new AuditInformation(new Timestamp(creationDate),new Timestamp(modificationDate));
-        Identification ident = new Identification(uid,productId);
+        AuditInformation audit = new AuditInformation(new Timestamp(creationDate), new Timestamp(modificationDate));
+        Identification ident = new Identification(uid, productId);
 
-        Note note = new Note(ident,audit, Note.Classification.valueOf(classification),summary);
+        Note note = new Note(ident, audit, Note.Classification.valueOf(classification), summary);
         note.setColor(Colors.getColor(color));
         note.setDescription(description);
 
-        if(account != null && rootFolder != null) {
+        if (account != null && rootFolder != null) {
             List<Tag> tags = new NoteTagRepository(context).getTagsFor(account, rootFolder, uid);
 
             if (tags != null && tags.size() > 0) {
-                for(Tag tag : tags){
+                for (Tag tag : tags) {
                     note.addCategories(tag);
                 }
             }
@@ -433,34 +433,34 @@ public class NoteRepository {
     /**
      * Search notes matched the input keyword
      *
-     * @param account       the current active account
-     * @param rootFolder    the root folder
-     * @param keyWord       keyword used to find the notes
-     * @param noteSorting   rule how to sort the results
-     * @return              Return the list of notes matched with the keywords
+     * @param account     the current active account
+     * @param rootFolder  the root folder
+     * @param keyWord     keyword used to find the notes
+     * @param noteSorting rule how to sort the results
+     * @return Return the list of notes matched with the keywords
      */
     public List<Note> searchNotes(String account, String rootFolder, String keyWord,
-        NoteSorting noteSorting) {
+                                  NoteSorting noteSorting) {
         List<Note> notes = new ArrayList<Note>();
 
-        StringBuilder query = new StringBuilder(DatabaseHelper.COLUMN_ACCOUNT + " = '" + account+"' AND ");
-        query.append(DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder+"' AND ");
-        query.append(DatabaseHelper.COLUMN_DISCRIMINATOR+" = '"+DatabaseHelper.DESCRIMINATOR_NOTE+"' AND ");
-        query.append(" ( "+DatabaseHelper.COLUMN_SUMMARY+" like '%"+keyWord.trim()+"%' COLLATE NOCASE OR ");
-        query.append(DatabaseHelper.COLUMN_DESCRIPTION+" like '%"+keyWord.trim()+"%' COLLATE NOCASE )");
+        StringBuilder query = new StringBuilder(DatabaseHelper.COLUMN_ACCOUNT + " = '" + account + "' AND ");
+        query.append(DatabaseHelper.COLUMN_ROOT_FOLDER + " = '" + rootFolder + "' AND ");
+        query.append(DatabaseHelper.COLUMN_DISCRIMINATOR + " = '" + DatabaseHelper.DESCRIMINATOR_NOTE + "' AND ");
+        query.append(" ( " + DatabaseHelper.COLUMN_SUMMARY + " like '%" + keyWord.trim() + "%' COLLATE NOCASE OR ");
+        query.append(DatabaseHelper.COLUMN_DESCRIPTION + " like '%" + keyWord.trim() + "%' COLLATE NOCASE )");
 
         String[] columns = Utils.getShowPreview(context) ? allColumns : withoutDescriptionColumns;
 
         Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_NOTES,
-            columns,
-            query.toString(),
-            null,
-            null,
-            null,
-            noteSorting.getColumnName() + " " + noteSorting.getDirection());
+                columns,
+                query.toString(),
+                null,
+                null,
+                null,
+                noteSorting.getColumnName() + " " + noteSorting.getDirection());
 
         while (cursor.moveToNext()) {
-            Note note = cursorToNoteWithoutDescription(account,rootFolder,cursor);
+            Note note = cursorToNoteWithoutDescription(account, rootFolder, cursor);
             notes.add(note);
         }
         cursor.close();

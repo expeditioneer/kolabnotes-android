@@ -20,7 +20,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:clickable="true"
-            android:background="@drawable/tag_list_default_circle"/>
+            android:background="@drawable/tag_list_default_circle" />
 
         <LinearLayout
             android:orientation="vertical"

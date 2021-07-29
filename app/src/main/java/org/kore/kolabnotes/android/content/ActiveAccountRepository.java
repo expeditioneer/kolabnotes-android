@@ -21,7 +21,7 @@ public class ActiveAccountRepository {
     private static ActiveAccount currentActive;
 
     private Context context;
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
             DatabaseHelper.COLUMN_ROOT_FOLDER};
 
@@ -54,14 +54,14 @@ public class ActiveAccountRepository {
         final SQLiteDatabase db = ConnectionManager.getDatabase(context);
 
         insertAccount(db, "local", "Notes");
-        ret.add(new AccountIdentifier("local","Notes"));
+        ret.add(new AccountIdentifier("local", "Notes"));
 
         final AccountManager accountManager = AccountManager.get(context);
         final Account[] accounts = accountManager.getAccounts();
 
-        for(Account account : accounts){
+        for (Account account : accounts) {
             String email = accountManager.getUserData(account, AuthenticatorActivity.KEY_EMAIL);
-            String rootFolder = accountManager.getUserData(account,AuthenticatorActivity.KEY_ROOT_FOLDER);
+            String rootFolder = accountManager.getUserData(account, AuthenticatorActivity.KEY_ROOT_FOLDER);
 
             insertAccount(db, email, rootFolder);
             ret.add(new AccountIdentifier(email, rootFolder));
@@ -82,8 +82,8 @@ public class ActiveAccountRepository {
         db.insert(DatabaseHelper.TABLE_ACCOUNTS, null, values);
     }
 
-    public void deleteAccount(String account, String rootFolder){
-        if(Utils.isLocalAccount(account,rootFolder)){
+    public void deleteAccount(String account, String rootFolder) {
+        if (Utils.isLocalAccount(account, rootFolder)) {
             return;
         }
 
@@ -93,16 +93,16 @@ public class ActiveAccountRepository {
                 null);
 
         ActiveAccount activeAccount = getActiveAccount();
-        if(activeAccount.getAccount().equals(account) && activeAccount.getRootFolder().equals(rootFolder)){
+        if (activeAccount.getAccount().equals(account) && activeAccount.getRootFolder().equals(rootFolder)) {
             switchAccount("local", "Notes");
         }
     }
 
-    public synchronized ActiveAccount switchAccount(String account, String rootFolder){
+    public synchronized ActiveAccount switchAccount(String account, String rootFolder) {
         final ActiveAccount toCheck = getActiveAccount();
-        ActiveAccount newActive = new ActiveAccount(account,rootFolder);
+        ActiveAccount newActive = new ActiveAccount(account, rootFolder);
 
-        if(newActive.equals(toCheck)){
+        if (newActive.equals(toCheck)) {
             currentActive = newActive;
             return currentActive;
         }
@@ -121,7 +121,7 @@ public class ActiveAccountRepository {
     }
 
     public synchronized ActiveAccount getActiveAccount() {
-        if(currentActive == null) {
+        if (currentActive == null) {
             Cursor cursor = ConnectionManager.getDatabase(context).query(DatabaseHelper.TABLE_ACTIVEACCOUNT,
                     allColumns,
                     null,
