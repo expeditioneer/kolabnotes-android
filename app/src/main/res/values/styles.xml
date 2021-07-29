@@ -12,7 +12,7 @@
         <item name="color">@android:color/white</item>
     </style>
 
-    <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SettingsTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:fitsSystemWindows">true</item>
         <item name="colorAccent">@color/theme_accent</item>
         <item name="colorPrimary">@color/theme_default_primary</item>
