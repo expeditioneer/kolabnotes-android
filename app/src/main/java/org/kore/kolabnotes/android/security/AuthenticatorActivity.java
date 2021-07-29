@@ -16,8 +16,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.kore.kolab.notes.AccountInformation;
 import org.kore.kolabnotes.android.MainActivity;
@@ -62,13 +63,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private AccountManager mAccountManager;
 
-    private Switch mExtendedOptions;
+    private SwitchMaterial mExtendedOptions;
     private EditText mRootFolderView;
     private EditText mPortView;
     private CheckBox mEnableSSLView;
     private EditText mSyncView;
-    private Switch mKolabView;
-    private Switch mSharedFoldersView;
+    private SwitchMaterial mKolabView;
+    private SwitchMaterial mSharedFoldersView;
     private EditText mIMAPServerView;
     private Spinner mAccountType;
     private Spinner mIntervallType;
@@ -100,8 +101,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mPortView = (EditText) findViewById(R.id.port_number);
         mEnableSSLView = (CheckBox) findViewById(R.id.enable_ssl);
         mSyncView = (EditText) findViewById(R.id.sync_intervall);
-        mKolabView = (Switch) findViewById(R.id.enable_kolab);
-        mSharedFoldersView = (Switch) findViewById(R.id.enable_shared_folders);
+        mKolabView = (SwitchMaterial) findViewById(R.id.enable_kolab);
+        mSharedFoldersView = (SwitchMaterial) findViewById(R.id.enable_shared_folders);
         mRootFolderView = (EditText) findViewById(R.id.imap_root_folder);
         mIMAPServerView = (EditText) findViewById(R.id.imap_server_url);
         mAccountType = (Spinner) findViewById(R.id.spinner_accountType);
@@ -111,7 +112,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.accountPassword);
 
-        mExtendedOptions = (Switch) findViewById(R.id.enable_more_config);
+        mExtendedOptions = (SwitchMaterial) findViewById(R.id.enable_more_config);
         mExtendedOptions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
