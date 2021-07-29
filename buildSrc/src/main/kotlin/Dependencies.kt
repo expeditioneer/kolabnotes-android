@@ -32,16 +32,12 @@ object Libraries {
 }
 
 object TestLibraries {
-    private object Versions {
-        const val test = "1.1.1"
-    }
-
     object AndroidXTest {
-        const val espresso = "androidx.test.espresso:espresso-core:3.1.0"
-        const val junit = "androidx.test.ext:junit:${Versions.test}"
-        const val runner = "androidx.test:runner:${Versions.test}"
-        const val rules = "androidx.test:rules:${Versions.test}"
+        const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
+        const val junit = "androidx.test.ext:junit:1.1.2"
+        const val runner = "androidx.test:runner:1.4.0"
+        const val rules = "androidx.test:rules:1.4.0"
     }
 
-    const val annotation = "androidx.annotation:annotation:1.0.0"
+    const val annotation = "androidx.annotation:annotation:1.2.0"
 }

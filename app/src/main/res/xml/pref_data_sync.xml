@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:key="sync_conflict"
@@ -25,4 +25,4 @@
         <intent android:action="android.settings.SYNC_SETTINGS" />
     </Preference>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -17,7 +17,6 @@ import androidx.test.espresso.action.Tap;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -42,7 +41,7 @@ import static org.kore.kolabnotes.android.IsEqualTrimmingAndIgnoringCase.equalTo
 import static org.kore.kolabnotes.android.VisibleViewMatcher.isVisible;
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
+@RunWith(androidx.test.ext.junit.runners.AndroidJUnit4.class)
 public class MainActivityTest {
 
     @Rule

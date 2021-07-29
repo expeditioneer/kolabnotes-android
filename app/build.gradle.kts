@@ -27,6 +27,13 @@ android {
     lintOptions {
         isAbortOnError = false
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
 }
 
 dependencies {
