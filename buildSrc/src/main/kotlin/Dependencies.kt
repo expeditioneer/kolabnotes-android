@@ -24,7 +24,7 @@ object Libraries {
 
     const val colorpicker = "com.github.dhaval2404:colorpicker:2.0"
     const val kolabnotesJava = "com.github.konradrenner:kolabnotes-java:3.4.1"
-    const val richtexteditorAndroid = "jp.wasabeef:richeditor-android:1.2.2"
+    const val richtexteditorAndroid = "jp.wasabeef:richeditor-android:2.0.0"
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
