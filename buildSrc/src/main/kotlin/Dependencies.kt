@@ -19,7 +19,7 @@ object Libraries {
         const val cardview = "androidx.cardview:cardview:${Versions.jetpack}"
         const val recycleview = "androidx.recyclerview:recyclerview:${Versions.jetpack}"
         const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-        const val material = "com.google.android.material:material:${Versions.jetpack}"
+        const val material = "com.google.android.material:material:1.4.0"
     }
 
     const val colorpicker = "com.github.dhaval2404:colorpicker:2.0"
