@@ -1,12 +1,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/item_round"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/item_round"
     android:hapticFeedbackEnabled="true"
+    android:orientation="horizontal"
     card_view:cardElevation="0dp">
 
     <RelativeLayout
@@ -19,46 +19,46 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:clickable="true"
-            android:background="@drawable/tag_list_default_circle" />
+            android:background="@drawable/tag_list_default_circle"
+            android:clickable="true" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="45dp">
+            android:layout_marginLeft="45dp"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/tagName"
-                android:textColor="@color/md_black_1000"
                 style="@style/NoteOverviewSummary"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:clickable="false" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="false"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/md_black_1000" />
+
+            <TextView
                 android:id="@+id/tagCreatedDate"
-                android:textColor="@color/md_black_1000"
                 style="@style/NoteOverviewInfoText"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:paddingTop="4dp"
-                android:clickable="false" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tagModificationDate"
-                android:textColor="@color/md_black_1000"
-                style="@style/NoteOverviewInfoText"
+                android:clickable="false"
                 android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:paddingTop="4dp"
-                android:clickable="false" />
+                android:paddingRight="4dp"
+                android:textColor="@color/md_black_1000" />
+
+            <TextView
+                android:id="@+id/tagModificationDate"
+                style="@style/NoteOverviewInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:paddingLeft="4dp"
+                android:paddingTop="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/md_black_1000" />
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

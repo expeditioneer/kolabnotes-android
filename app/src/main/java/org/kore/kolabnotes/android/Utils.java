@@ -54,141 +54,6 @@ import java.util.ArrayList;
 public class Utils {
 
     public static final String DETAIL_FRAGMENT_TAG = "detail_fragment";
-
-    private static final int CYAN = 210;
-    private static final int RED = 0;
-    private static final int RED_ORANGE = 20;
-    private static final int HUE = 0;
-    private static final int SATURATION = 1;
-    private static final int BRIGHTNESS = 2;
-
-    public enum SortingColumns {
-        summary {
-            @Override
-            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
-                int sorting = 0;
-                if (direction == NoteSorting.Direction.ASC) {
-                    sorting = note1.getSummary().toLowerCase().compareTo(note2.getSummary().toLowerCase());
-
-                    if (sorting == 0) {
-                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
-                    }
-                } else {
-                    sorting = note2.getSummary().toLowerCase().compareTo(note1.getSummary().toLowerCase());
-
-                    if (sorting == 0) {
-                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
-                    }
-                }
-                return sorting;
-            }
-        }, lastModificationDate {
-            @Override
-            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
-                int sorting = 0;
-                if (direction == NoteSorting.Direction.ASC) {
-                    sorting = note1.getAuditInformation().getLastModificationDate().compareTo(note2.getAuditInformation().getLastModificationDate());
-
-                    if (sorting == 0) {
-                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
-                    }
-                } else {
-                    sorting = note2.getAuditInformation().getLastModificationDate().compareTo(note1.getAuditInformation().getLastModificationDate());
-
-                    if (sorting == 0) {
-                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
-                    }
-                }
-                return sorting;
-            }
-        }, creationDate {
-            @Override
-            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
-                int sorting = 0;
-                if (direction == NoteSorting.Direction.ASC) {
-                    sorting = note1.getAuditInformation().getCreationDate().compareTo(note2.getAuditInformation().getCreationDate());
-
-                    if (sorting == 0) {
-                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
-                    }
-                } else {
-                    sorting = note2.getAuditInformation().getCreationDate().compareTo(note1.getAuditInformation().getCreationDate());
-
-                    if (sorting == 0) {
-                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
-                    }
-                }
-                return sorting;
-            }
-        }, classification {
-            @Override
-            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
-                int sorting = 0;
-                if (direction == NoteSorting.Direction.ASC) {
-                    sorting = note1.getClassification().compareTo(note2.getClassification());
-
-                    if (sorting == 0) {
-                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
-                    }
-                } else {
-                    sorting = note2.getClassification().compareTo(note1.getClassification());
-
-                    if (sorting == 0) {
-                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
-                    }
-                }
-                return sorting;
-            }
-        }, color {
-            @Override
-            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
-                int sorting = 0;
-                String note1Color = note1.getColor() == null ? "" : note1.getColor().getHexcode();
-                String note2Color = note2.getColor() == null ? "" : note2.getColor().getHexcode();
-                if (direction == NoteSorting.Direction.ASC) {
-                    sorting = note1Color.compareTo(note2Color);
-
-                    if (sorting == 0) {
-                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
-                    }
-                } else {
-                    sorting = note2Color.compareTo(note1Color);
-
-                    if (sorting == 0) {
-                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
-                    }
-                }
-                return sorting;
-            }
-        };
-
-        public abstract int compare(Note note1, Note note2, NoteSorting.Direction direction);
-
-        public static String[] valuesToStringArray() {
-            final SortingColumns[] values = values();
-            String[] arr = new String[values.length];
-
-            for (int i = 0; i < values.length; i++) {
-
-                if ("classification".equalsIgnoreCase(values[i].toString())) {
-                    continue;
-                }
-
-                arr[i] = values[i].toString();
-            }
-            return arr;
-        }
-
-        public static SortingColumns findValue(String value) {
-            for (SortingColumns column : SortingColumns.values()) {
-                if (column.toString().equalsIgnoreCase(value)) {
-                    return column;
-                }
-            }
-            return SortingColumns.summary;
-        }
-    }
-
     public static final String INTENT_ACCOUNT_EMAIL = "intent_account_email";
     public static final String INTENT_ACCOUNT_ROOT_FOLDER = "intent_account_rootfolder";
     public static final String NOTE_UID = "note_uid";
@@ -198,14 +63,12 @@ public class Utils {
     public static final String RELOAD_DATA_AFTER_DETAIL = "reloadDataAfterDetail";
     public static final int READ_REQUEST_CODE = 42;
     public static final int WRITE_REQUEST_CODE = 43;
-    /*
-    public static void configureWindowEnterExitTransition(Window w) {
-        Explode ex = new Explode();
-        ex.setInterpolator(new PathInterpolator(0.4f, 0, 1, 1));
-        w.setExitTransition(ex);
-        w.setEnterTransition(ex);
-    }
-    */
+    private static final int CYAN = 210;
+    private static final int RED = 0;
+    private static final int RED_ORANGE = 20;
+    private static final int HUE = 0;
+    private static final int SATURATION = 1;
+    private static final int BRIGHTNESS = 2;
 
     public static File getAttachmentDirForAccount(Context context, String account, String rootFolder) {
         File filesDir = context.getFilesDir();
@@ -223,6 +86,14 @@ public class Utils {
         }
         return rootFolderPart;
     }
+    /*
+    public static void configureWindowEnterExitTransition(Window w) {
+        Explode ex = new Explode();
+        ex.setInterpolator(new PathInterpolator(0.4f, 0, 1, 1));
+        w.setExitTransition(ex);
+        w.setEnterTransition(ex);
+    }
+    */
 
     public static File getAttachmentDirForNote(Context context, String account, String rootFolder, String noteUID) {
         File accountDir = getAttachmentDirForAccount(context, account, rootFolder);
@@ -380,7 +251,6 @@ public class Utils {
             sharedPref.edit().remove(Utils.RELOAD_DATA_AFTER_DETAIL).commit();
         }
     }
-
 
     public static String getSelectedTagName(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("org.kore.kolabnotes.android.pref", Context.MODE_PRIVATE);
@@ -658,7 +528,6 @@ public class Utils {
         initColumnSpinner(context, spinner, spinnerLayout, listener, null);
     }
 
-
     public static void initColumnSpinner(Context context, Spinner spinner, int spinnerLayout, AdapterView.OnItemSelectedListener listener, String selection) {
         int select = 1;
         if (selection != null) {
@@ -696,5 +565,132 @@ public class Utils {
         return (res.getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public enum SortingColumns {
+        summary {
+            @Override
+            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
+                int sorting = 0;
+                if (direction == NoteSorting.Direction.ASC) {
+                    sorting = note1.getSummary().toLowerCase().compareTo(note2.getSummary().toLowerCase());
+
+                    if (sorting == 0) {
+                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
+                    }
+                } else {
+                    sorting = note2.getSummary().toLowerCase().compareTo(note1.getSummary().toLowerCase());
+
+                    if (sorting == 0) {
+                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
+                    }
+                }
+                return sorting;
+            }
+        }, lastModificationDate {
+            @Override
+            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
+                int sorting = 0;
+                if (direction == NoteSorting.Direction.ASC) {
+                    sorting = note1.getAuditInformation().getLastModificationDate().compareTo(note2.getAuditInformation().getLastModificationDate());
+
+                    if (sorting == 0) {
+                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
+                    }
+                } else {
+                    sorting = note2.getAuditInformation().getLastModificationDate().compareTo(note1.getAuditInformation().getLastModificationDate());
+
+                    if (sorting == 0) {
+                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
+                    }
+                }
+                return sorting;
+            }
+        }, creationDate {
+            @Override
+            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
+                int sorting = 0;
+                if (direction == NoteSorting.Direction.ASC) {
+                    sorting = note1.getAuditInformation().getCreationDate().compareTo(note2.getAuditInformation().getCreationDate());
+
+                    if (sorting == 0) {
+                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
+                    }
+                } else {
+                    sorting = note2.getAuditInformation().getCreationDate().compareTo(note1.getAuditInformation().getCreationDate());
+
+                    if (sorting == 0) {
+                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
+                    }
+                }
+                return sorting;
+            }
+        }, classification {
+            @Override
+            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
+                int sorting = 0;
+                if (direction == NoteSorting.Direction.ASC) {
+                    sorting = note1.getClassification().compareTo(note2.getClassification());
+
+                    if (sorting == 0) {
+                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
+                    }
+                } else {
+                    sorting = note2.getClassification().compareTo(note1.getClassification());
+
+                    if (sorting == 0) {
+                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
+                    }
+                }
+                return sorting;
+            }
+        }, color {
+            @Override
+            public int compare(Note note1, Note note2, NoteSorting.Direction direction) {
+                int sorting = 0;
+                String note1Color = note1.getColor() == null ? "" : note1.getColor().getHexcode();
+                String note2Color = note2.getColor() == null ? "" : note2.getColor().getHexcode();
+                if (direction == NoteSorting.Direction.ASC) {
+                    sorting = note1Color.compareTo(note2Color);
+
+                    if (sorting == 0) {
+                        sorting = note1.getAuditInformation().compareTo(note2.getAuditInformation());
+                    }
+                } else {
+                    sorting = note2Color.compareTo(note1Color);
+
+                    if (sorting == 0) {
+                        sorting = note2.getAuditInformation().compareTo(note1.getAuditInformation());
+                    }
+                }
+                return sorting;
+            }
+        };
+
+        public static String[] valuesToStringArray() {
+            final SortingColumns[] values = values();
+            String[] arr = new String[values.length];
+
+            for (int i = 0; i < values.length; i++) {
+
+                if ("classification".equalsIgnoreCase(values[i].toString())) {
+                    continue;
+                }
+
+                arr[i] = values[i].toString();
+            }
+            return arr;
+        }
+
+        public static SortingColumns findValue(String value) {
+            for (SortingColumns column : SortingColumns.values()) {
+                if (column.toString().equalsIgnoreCase(value)) {
+                    return column;
+                }
+            }
+            return SortingColumns.summary;
+        }
+
+        public abstract int compare(Note note1, Note note2, NoteSorting.Direction direction);
     }
 }

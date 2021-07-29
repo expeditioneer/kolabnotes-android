@@ -61,6 +61,10 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
 
     private Handler handler = new Handler();
 
+    public PreviewFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -78,8 +82,21 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         return fragment;
     }
 
-    public PreviewFragment() {
-        // Required empty public constructor
+    public static boolean previewableMimetype(String mimeType) {
+        if (mimeType.startsWith("text/")) {
+            return true;
+        }
+        if (mimeType.startsWith("audio/")) {
+            return true;
+        }
+        if (mimeType.startsWith("video/")) {
+            return true;
+        }
+        if (mimeType.startsWith("image/")) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -228,24 +245,6 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
 
         mediaController.show(0);
     }
-
-    public static boolean previewableMimetype(String mimeType) {
-        if (mimeType.startsWith("text/")) {
-            return true;
-        }
-        if (mimeType.startsWith("audio/")) {
-            return true;
-        }
-        if (mimeType.startsWith("video/")) {
-            return true;
-        }
-        if (mimeType.startsWith("image/")) {
-            return true;
-        }
-
-        return false;
-    }
-
 
     @Override
     public void onDetach() {

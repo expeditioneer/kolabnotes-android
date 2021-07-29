@@ -9,54 +9,54 @@
         android:id="@+id/empty_view_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_preview"
         android:textColor="@android:color/darker_gray"
         android:textSize="30sp"
-        android:gravity="center"
-        android:visibility="visible"
-        android:text="@string/no_preview" />
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/preview_text"
-        android:visibility="invisible"
-        android:gravity="top|left"
-        android:editable="false"
-        android:textColor="@color/primary_text_default_material_light"
-        android:inputType="textMultiLine"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:editable="false"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:textColor="@color/primary_text_default_material_light"
+        android:visibility="invisible" />
 
     <WebView
         android:id="@+id/preview_html"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/preview_picture"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
     <VideoView
         android:id="@+id/preview_video"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:id="@+id/main_audio_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/primary_text"
             android:text="@string/attachment_now_playing"
+            android:textColor="@color/primary_text"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -64,12 +64,12 @@
             android:id="@+id/now_playing_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:layout_marginTop="20dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="20dip"
+            android:layout_marginRight="10dip"
             android:text="Now playing.."
+            android:textColor="@color/primary_text"
             android:textSize="16sp"
             android:textStyle="italic" />
     </LinearLayout>

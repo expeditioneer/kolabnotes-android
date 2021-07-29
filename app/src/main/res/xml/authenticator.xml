@@ -2,5 +2,5 @@
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountType="kore.kolabnotes"
     android:icon="@mipmap/ic_kolabnotes_breeze"
-    android:smallIcon="@mipmap/ic_kolabnotes_breeze"
-    android:label="@string/label" />
+    android:label="@string/label"
+    android:smallIcon="@mipmap/ic_kolabnotes_breeze" />

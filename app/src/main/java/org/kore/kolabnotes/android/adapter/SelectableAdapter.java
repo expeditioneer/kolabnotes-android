@@ -20,6 +20,20 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder> exte
         selectedItems = new SparseBooleanArray();
     }
 
+    public static ArrayList<Integer> getSelectedItems() {
+        ArrayList<Integer> items = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); ++i) {
+            items.add(selectedItems.keyAt(i));
+        }
+        return items;
+    }
+
+    public void setSelectedItems(ArrayList<Integer> items) {
+        for (int i : items) {
+            selectedItems.put(i, true);
+        }
+    }
+
     public boolean isSelected(int position) {
         return SelectableAdapter.getSelectedItems().contains(position);
     }
@@ -44,19 +58,5 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder> exte
 
     public int getSelectedItemCount() {
         return selectedItems.size();
-    }
-
-    public static ArrayList<Integer> getSelectedItems() {
-        ArrayList<Integer> items = new ArrayList<>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); ++i) {
-            items.add(selectedItems.keyAt(i));
-        }
-        return items;
-    }
-
-    public void setSelectedItems(ArrayList<Integer> items) {
-        for (int i : items) {
-            selectedItems.put(i, true);
-        }
     }
 }

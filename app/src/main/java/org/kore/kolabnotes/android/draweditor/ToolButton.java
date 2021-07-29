@@ -36,17 +36,11 @@ import android.widget.ImageButton;
  */
 
 public class ToolButton extends ImageButton implements Checkable {
+    private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
     private boolean mChecked;
     private boolean mBroadcasting;
     private ToolButtonMode mMode;
-
     private OnCheckedChangeListener onCheckedChangeListener;
-
-    public enum ToolButtonMode {
-        MODE_RADIO_BUTTON, MODE_CHECK_BOX
-    }
-
-    private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
 
     public ToolButton(Context context) {
         this(context, null);
@@ -69,12 +63,12 @@ public class ToolButton extends ImageButton implements Checkable {
         attr.recycle();
     }
 
-    public void setMode(ToolButtonMode mode) {
-        mMode = mode;
-    }
-
     public ToolButtonMode getMode() {
         return mMode;
+    }
+
+    public void setMode(ToolButtonMode mode) {
+        mMode = mode;
     }
 
     public void toggle() {
@@ -125,13 +119,6 @@ public class ToolButton extends ImageButton implements Checkable {
         onCheckedChangeListener = listener;
     }
 
-    /**
-     * Interface definition for a callback.
-     */
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(ToolButton button, boolean isChecked);
-    }
-
     @Override
     public int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
@@ -146,35 +133,6 @@ public class ToolButton extends ImageButton implements Checkable {
     protected void drawableStateChanged() {
         super.drawableStateChanged();
         invalidate();
-    }
-
-    static class SavedState extends BaseSavedState {
-        boolean checked;
-
-        SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-            checked = (Boolean) in.readValue(null);
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeValue(checked);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 
     @Override
@@ -193,5 +151,44 @@ public class ToolButton extends ImageButton implements Checkable {
         super.onRestoreInstanceState(savedState.getSuperState());
         setChecked(savedState.checked);
         requestLayout();
+    }
+
+    public enum ToolButtonMode {
+        MODE_RADIO_BUTTON, MODE_CHECK_BOX
+    }
+
+    /**
+     * Interface definition for a callback.
+     */
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(ToolButton button, boolean isChecked);
+    }
+
+    static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+        boolean checked;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            checked = (Boolean) in.readValue(null);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeValue(checked);
+        }
     }
 }

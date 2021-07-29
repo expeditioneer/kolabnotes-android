@@ -305,32 +305,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         reloadData();
     }
 
-    final class AccountsCleaner implements Runnable {
-
-        private final Set<AccountIdentifier> accountsForDeletion;
-
-        public AccountsCleaner(Set<AccountIdentifier> accountsForDeletion) {
-            this.accountsForDeletion = accountsForDeletion;
-        }
-
-        @Override
-        public void run() {
-            for (AccountIdentifier identifier : accountsForDeletion) {
-                String email = identifier.getAccount();
-                String rootFolder = identifier.getRootFolder();
-                activeAccountRepository.deleteAccount(identifier.getAccount(), identifier.getRootFolder());
-
-                notesRepository.cleanAccount(email, rootFolder);
-                notetagRepository.cleanAccount(email, rootFolder);
-                tagRepository.cleanAccount(email, rootFolder);
-                attachmentRepository.cleanAccount(email, rootFolder);
-                modificationRepository.cleanAccount(email, rootFolder);
-
-                Log.d("AccountsCleaner", "Cleaned account:" + identifier);
-            }
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -440,61 +414,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             return super.getContext();
         }
         return activity;
-    }
-
-    private class ActionModeCallback implements ActionMode.Callback {
-        @SuppressWarnings("unused")
-        private final String TAG = ActionModeCallback.class.getSimpleName();
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.row_note_context, menu);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode_dark));
-                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode));
-            }
-            isInActionMode = true;
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<Integer> items = mAdapter.getSelectedItems();
-            switch (item.getItemId()) {
-                case R.id.delete_menu_context:
-                    deleteNotes(items);
-                    mode.finish();
-                    break;
-                case R.id.edit_tag_menu_context:
-                    editTags(items);
-                    mode.finish();
-                    break;
-                case R.id.colorpicker_context:
-                    chooseColor(items);
-                    mode.finish();
-                    break;
-                case R.id.move_context:
-                    moveNotes(items);
-                    mode.finish();
-            }
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mAdapter.clearSelection();
-            mActionMode = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_default_primary_dark));
-                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
-            }
-            isInActionMode = false;
-        }
     }
 
     void deleteNotes(final List<Integer> items) {
@@ -891,105 +810,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         new AccountChangeThread(activeAccount, notebookName).run();
     }
 
-
-    class AccountChangeThread extends Thread {
-
-        private final String account;
-        private final String rootFolder;
-        private ActiveAccount activeAccount;
-        private String notebookUID;
-        private boolean changeDrawerAccount;
-        private boolean resetDrawerSelection;
-
-        AccountChangeThread(String account, String rootFolder) {
-            this.account = account;
-            this.rootFolder = rootFolder;
-            notebookUID = null;
-            changeDrawerAccount = true;
-            resetDrawerSelection = false;
-        }
-
-        AccountChangeThread(ActiveAccount activeAccount) {
-            this(activeAccount.getAccount(), activeAccount.getRootFolder());
-            this.activeAccount = activeAccount;
-        }
-
-        AccountChangeThread(ActiveAccount activeAccount, String notebookUID) {
-            this(activeAccount);
-            this.notebookUID = notebookUID;
-        }
-
-        public void disableProfileChangeing() {
-            changeDrawerAccount = false;
-        }
-
-        public void resetDrawerSelection() {
-            this.resetDrawerSelection = true;
-        }
-
-
-        @Override
-        public void run() {
-            if (activeAccount == null) {
-                activeAccount = activeAccountRepository.switchAccount(account, rootFolder);
-            }
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String name = Utils.getNameOfActiveAccount(activity, activeAccount.getAccount(), activeAccount.getRootFolder());
-                    if (changeDrawerAccount) {
-                        mDrawerAccountsService.changeSelectedAccount(activity, name, activeAccount.getAccount(), Utils.getAccountType(activity, activeAccount));
-                    }
-                    toolbar.setTitle(name);
-                }
-            });
-
-            List<Note> notes;
-            String selectedTagName = Utils.getSelectedTagName(activity);
-            if (resetDrawerSelection || (notebookUID == null && selectedTagName == null)) {
-                if (resetDrawerSelection) {
-                    Utils.setSelectedNotebookName(activity, null);
-                    Utils.setSelectedTagName(activity, null);
-                }
-                notes = notesRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder(), Utils.getNoteSorting(getActivity()));
-            } else if (selectedTagName != null) {
-                notes = notetagRepository.getNotesWith(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedTagName, Utils.getNoteSorting(activity));
-            } else {
-                notes = notesRepository.getFromNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookUID, Utils.getNoteSorting(getActivity()));
-            }
-
-            Map<String, Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
-            List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
-
-            if (preventBlankDisplaying) {
-                preventBlankDisplaying = false;
-            } else if (getFragmentManager().findFragmentById(R.id.details_fragment) == null) {
-                displayBlankFragment();
-            }
-
-            getActivity().runOnUiThread(new ReloadDataThread(notebooks, notes, tags));
-        }
-    }
-
-
-    public class ReloadDataThread extends Thread {
-        private final List<Notebook> notebooks;
-        private final List<Note> notes;
-        private final Map<String, Tag> tags;
-
-        ReloadDataThread(List<Notebook> notebooks, List<Note> notes, Map<String, Tag> tags) {
-            this.notebooks = notebooks;
-            this.notes = notes;
-            this.tags = tags;
-        }
-
-        @Override
-        public void run() {
-            reloadData(notebooks, notes, tags);
-        }
-    }
-
     public void refreshFinished(Account selectedAccount) {
         if (selectedAccount == null || !ContentResolver.isSyncActive(selectedAccount, MainActivity.AUTHORITY)) {
             getActivity().runOnUiThread(new Runnable() {
@@ -1219,80 +1039,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         return notebookName;
     }
 
-    class ImportNotebook extends AsyncTask<String, Void, String> {
-
-        private final Context context;
-        private final InputStream pathToZip;
-
-        ImportNotebook(Context context, InputStream zip) {
-            this.context = context;
-            this.pathToZip = zip;
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Log.d("import", Arrays.toString(params));
-                LocalNotesRepository repo = new LocalNotesRepository(new KolabNotesParserV3(), "tmp");
-
-
-                Notebook notebook = repo.importNotebook(params[2], new KolabNotesParserV3(), pathToZip);
-
-                Notebook bySummary = notebookRepository.getBySummary(params[0], params[1], notebook.getSummary());
-                if (bySummary == null) {
-                    notebookRepository.insert(params[0], params[1], notebook);
-                    bySummary = notebook;
-                }
-
-                for (Note note : notebook.getNotes()) {
-                    Note byUID = notesRepository.getByUID(params[0], params[1], note.getIdentification().getUid());
-
-                    if (byUID == null) {
-                        notesRepository.insert(params[0], params[1], note, bySummary.getIdentification().getUid());
-                    }
-                }
-
-                return notebook.getSummary();
-            } catch (Exception e) {
-                Log.e("import", e.getMessage(), e);
-                cancel(false);
-                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onCancelled(String s) {
-            super.onCancelled(s);
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            final Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
-                    .setContentTitle(context.getResources().getString(R.string.import_canceled))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
-                    .setAutoCancel(true).build();
-
-            notificationManager.notify(0, notification);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            final Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
-                    .setContentTitle(context.getResources().getString(R.string.imported))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
-                    .setAutoCancel(true).build();
-
-            notificationManager.notify(0, notification);
-
-            reloadData();
-        }
-    }
-
     private void exportNotebooks() {
 
         Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.exporting), Toast.LENGTH_SHORT).show();
@@ -1319,82 +1065,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
             String notebookName = Utils.getSelectedNotebookName(activity);
             intent.putExtra(Intent.EXTRA_TITLE, notebookName + ".zip");
             startActivityForResult(intent, Utils.WRITE_REQUEST_CODE);
-        }
-    }
-
-    class ExportNotebook extends AsyncTask<String, Void, String> {
-
-        private final Context context;
-        private final ParcelFileDescriptor pfd;
-        private final Uri fileUri;
-        private final Random random;
-
-        ExportNotebook(Context context, Uri fileUri, ParcelFileDescriptor pfd) {
-            this.context = context;
-            this.pfd = pfd;
-            random = new Random();
-            this.fileUri = fileUri;
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Log.d("export", Arrays.toString(params));
-                FileOutputStream pathToZIP = new FileOutputStream(pfd.getFileDescriptor());
-                Notebook notebook = notebookRepository.getBySummary(params[0], params[1], params[2]);
-                List<Note> fromNotebook = notesRepository.getFromNotebookWithDescriptionLoaded(params[0], params[1], notebook.getIdentification().getUid(), new NoteSorting());
-
-                for (Note note : fromNotebook) {
-                    notebook.addNote(note);
-                }
-
-                LocalNotesRepository repository = new LocalNotesRepository(new KolabNotesParserV3(), "tmp");
-
-
-                repository.exportNotebook(notebook, new KolabNotesParserV3(), pathToZIP);
-                pathToZIP.close();
-
-                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                intent.setData(fileUri);
-                context.sendBroadcast(intent);
-
-                return fileUri.toString();
-            } catch (Exception e) {
-                Log.e("export", e.getMessage(), e);
-                cancel(false);
-                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onCancelled(String s) {
-            super.onCancelled(s);
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            final Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
-                    .setContentTitle(context.getResources().getString(R.string.export_canceled))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
-                    .setAutoCancel(true).build();
-
-            notificationManager.notify(random.nextInt(), notification);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            final Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
-                    .setContentTitle(context.getResources().getString(R.string.exported))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
-                    .setAutoCancel(true).build();
-
-            notificationManager.notify(random.nextInt(), notification);
-            reloadData();
         }
     }
 
@@ -1452,63 +1122,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
     private AlertDialog createNotebookDialog() {
         return createNotebookDialog(null);
-    }
-
-
-    private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> implements Runnable {
-
-        @Override
-        protected void onPreExecute() {
-            mAdapter.clearNotes();
-            super.onPreExecute();
-        }
-
-        @Override
-        public void run() {
-            //Query the notes
-            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-            Intent startIntent = getActivity().getIntent();
-            String email = startIntent.getStringExtra(Utils.INTENT_ACCOUNT_EMAIL);
-            String rootFolder = startIntent.getStringExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER);
-
-            ActiveAccount activeAccount;
-            if (email != null && rootFolder != null) {
-                activeAccount = activeAccountRepository.switchAccount(email, rootFolder);
-            } else {
-                activeAccount = activeAccountRepository.getActiveAccount();
-            }
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mDrawerAccountsService.overrideAccounts(activity, mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE), mAccountManager, activity.getDrawerLayout());
-                    mDrawerAccountsService.displayNavigation();
-                }
-            });
-
-            new DrawerService(activity.getNavigationView(), activity.getDrawerLayout()).setNotesFromAccountClickListener(OverviewFragment.this);
-
-            new AccountChangeThread(activeAccount).run();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            run();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //handle visibility
-            mRecyclerView.setVisibility(View.VISIBLE);
-
-            mSwipeRefreshLayout.setRefreshing(false);
-
-            super.onPostExecute(result);
-        }
-
     }
 
     final synchronized void reloadData(List<Notebook> notebooks, List<Note> notes, Map<String, Tag> tags) {
@@ -1592,6 +1205,390 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         final List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
         final Map<String, Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
         reloadData(notebooks, notes, tags);
+    }
+
+    final class AccountsCleaner implements Runnable {
+
+        private final Set<AccountIdentifier> accountsForDeletion;
+
+        public AccountsCleaner(Set<AccountIdentifier> accountsForDeletion) {
+            this.accountsForDeletion = accountsForDeletion;
+        }
+
+        @Override
+        public void run() {
+            for (AccountIdentifier identifier : accountsForDeletion) {
+                String email = identifier.getAccount();
+                String rootFolder = identifier.getRootFolder();
+                activeAccountRepository.deleteAccount(identifier.getAccount(), identifier.getRootFolder());
+
+                notesRepository.cleanAccount(email, rootFolder);
+                notetagRepository.cleanAccount(email, rootFolder);
+                tagRepository.cleanAccount(email, rootFolder);
+                attachmentRepository.cleanAccount(email, rootFolder);
+                modificationRepository.cleanAccount(email, rootFolder);
+
+                Log.d("AccountsCleaner", "Cleaned account:" + identifier);
+            }
+        }
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.row_note_context, menu);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode_dark));
+                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode));
+            }
+            isInActionMode = true;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            List<Integer> items = mAdapter.getSelectedItems();
+            switch (item.getItemId()) {
+                case R.id.delete_menu_context:
+                    deleteNotes(items);
+                    mode.finish();
+                    break;
+                case R.id.edit_tag_menu_context:
+                    editTags(items);
+                    mode.finish();
+                    break;
+                case R.id.colorpicker_context:
+                    chooseColor(items);
+                    mode.finish();
+                    break;
+                case R.id.move_context:
+                    moveNotes(items);
+                    mode.finish();
+            }
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.clearSelection();
+            mActionMode = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_default_primary_dark));
+                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
+            }
+            isInActionMode = false;
+        }
+    }
+
+    class AccountChangeThread extends Thread {
+
+        private final String account;
+        private final String rootFolder;
+        private ActiveAccount activeAccount;
+        private String notebookUID;
+        private boolean changeDrawerAccount;
+        private boolean resetDrawerSelection;
+
+        AccountChangeThread(String account, String rootFolder) {
+            this.account = account;
+            this.rootFolder = rootFolder;
+            notebookUID = null;
+            changeDrawerAccount = true;
+            resetDrawerSelection = false;
+        }
+
+        AccountChangeThread(ActiveAccount activeAccount) {
+            this(activeAccount.getAccount(), activeAccount.getRootFolder());
+            this.activeAccount = activeAccount;
+        }
+
+        AccountChangeThread(ActiveAccount activeAccount, String notebookUID) {
+            this(activeAccount);
+            this.notebookUID = notebookUID;
+        }
+
+        public void disableProfileChangeing() {
+            changeDrawerAccount = false;
+        }
+
+        public void resetDrawerSelection() {
+            this.resetDrawerSelection = true;
+        }
+
+
+        @Override
+        public void run() {
+            if (activeAccount == null) {
+                activeAccount = activeAccountRepository.switchAccount(account, rootFolder);
+            }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String name = Utils.getNameOfActiveAccount(activity, activeAccount.getAccount(), activeAccount.getRootFolder());
+                    if (changeDrawerAccount) {
+                        mDrawerAccountsService.changeSelectedAccount(activity, name, activeAccount.getAccount(), Utils.getAccountType(activity, activeAccount));
+                    }
+                    toolbar.setTitle(name);
+                }
+            });
+
+            List<Note> notes;
+            String selectedTagName = Utils.getSelectedTagName(activity);
+            if (resetDrawerSelection || (notebookUID == null && selectedTagName == null)) {
+                if (resetDrawerSelection) {
+                    Utils.setSelectedNotebookName(activity, null);
+                    Utils.setSelectedTagName(activity, null);
+                }
+                notes = notesRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder(), Utils.getNoteSorting(getActivity()));
+            } else if (selectedTagName != null) {
+                notes = notetagRepository.getNotesWith(activeAccount.getAccount(), activeAccount.getRootFolder(), selectedTagName, Utils.getNoteSorting(activity));
+            } else {
+                notes = notesRepository.getFromNotebook(activeAccount.getAccount(), activeAccount.getRootFolder(), notebookUID, Utils.getNoteSorting(getActivity()));
+            }
+
+            Map<String, Tag> tags = tagRepository.getAllAsMap(activeAccount.getAccount(), activeAccount.getRootFolder());
+            List<Notebook> notebooks = notebookRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
+
+            if (preventBlankDisplaying) {
+                preventBlankDisplaying = false;
+            } else if (getFragmentManager().findFragmentById(R.id.details_fragment) == null) {
+                displayBlankFragment();
+            }
+
+            getActivity().runOnUiThread(new ReloadDataThread(notebooks, notes, tags));
+        }
+    }
+
+    public class ReloadDataThread extends Thread {
+        private final List<Notebook> notebooks;
+        private final List<Note> notes;
+        private final Map<String, Tag> tags;
+
+        ReloadDataThread(List<Notebook> notebooks, List<Note> notes, Map<String, Tag> tags) {
+            this.notebooks = notebooks;
+            this.notes = notes;
+            this.tags = tags;
+        }
+
+        @Override
+        public void run() {
+            reloadData(notebooks, notes, tags);
+        }
+    }
+
+    class ImportNotebook extends AsyncTask<String, Void, String> {
+
+        private final Context context;
+        private final InputStream pathToZip;
+
+        ImportNotebook(Context context, InputStream zip) {
+            this.context = context;
+            this.pathToZip = zip;
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Log.d("import", Arrays.toString(params));
+                LocalNotesRepository repo = new LocalNotesRepository(new KolabNotesParserV3(), "tmp");
+
+
+                Notebook notebook = repo.importNotebook(params[2], new KolabNotesParserV3(), pathToZip);
+
+                Notebook bySummary = notebookRepository.getBySummary(params[0], params[1], notebook.getSummary());
+                if (bySummary == null) {
+                    notebookRepository.insert(params[0], params[1], notebook);
+                    bySummary = notebook;
+                }
+
+                for (Note note : notebook.getNotes()) {
+                    Note byUID = notesRepository.getByUID(params[0], params[1], note.getIdentification().getUid());
+
+                    if (byUID == null) {
+                        notesRepository.insert(params[0], params[1], note, bySummary.getIdentification().getUid());
+                    }
+                }
+
+                return notebook.getSummary();
+            } catch (Exception e) {
+                Log.e("import", e.getMessage(), e);
+                cancel(false);
+                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            final Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
+                    .setContentTitle(context.getResources().getString(R.string.import_canceled))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
+                    .setAutoCancel(true).build();
+
+            notificationManager.notify(0, notification);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            final Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
+                    .setContentTitle(context.getResources().getString(R.string.imported))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
+                    .setAutoCancel(true).build();
+
+            notificationManager.notify(0, notification);
+
+            reloadData();
+        }
+    }
+
+    class ExportNotebook extends AsyncTask<String, Void, String> {
+
+        private final Context context;
+        private final ParcelFileDescriptor pfd;
+        private final Uri fileUri;
+        private final Random random;
+
+        ExportNotebook(Context context, Uri fileUri, ParcelFileDescriptor pfd) {
+            this.context = context;
+            this.pfd = pfd;
+            random = new Random();
+            this.fileUri = fileUri;
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Log.d("export", Arrays.toString(params));
+                FileOutputStream pathToZIP = new FileOutputStream(pfd.getFileDescriptor());
+                Notebook notebook = notebookRepository.getBySummary(params[0], params[1], params[2]);
+                List<Note> fromNotebook = notesRepository.getFromNotebookWithDescriptionLoaded(params[0], params[1], notebook.getIdentification().getUid(), new NoteSorting());
+
+                for (Note note : fromNotebook) {
+                    notebook.addNote(note);
+                }
+
+                LocalNotesRepository repository = new LocalNotesRepository(new KolabNotesParserV3(), "tmp");
+
+
+                repository.exportNotebook(notebook, new KolabNotesParserV3(), pathToZIP);
+                pathToZIP.close();
+
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(fileUri);
+                context.sendBroadcast(intent);
+
+                return fileUri.toString();
+            } catch (Exception e) {
+                Log.e("export", e.getMessage(), e);
+                cancel(false);
+                return params[0] + "/" + params[1] + "/" + params[2] + "/" + e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            final Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
+                    .setContentTitle(context.getResources().getString(R.string.export_canceled))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
+                    .setAutoCancel(true).build();
+
+            notificationManager.notify(random.nextInt(), notification);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            final Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_kolabnotes_breeze)
+                    .setContentTitle(context.getResources().getString(R.string.exported))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(s))
+                    .setAutoCancel(true).build();
+
+            notificationManager.notify(random.nextInt(), notification);
+            reloadData();
+        }
+    }
+
+    private class InitializeApplicationsTask extends AsyncTask<Void, Void, Void> implements Runnable {
+
+        @Override
+        protected void onPreExecute() {
+            mAdapter.clearNotes();
+            super.onPreExecute();
+        }
+
+        @Override
+        public void run() {
+            //Query the notes
+            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+            Intent startIntent = getActivity().getIntent();
+            String email = startIntent.getStringExtra(Utils.INTENT_ACCOUNT_EMAIL);
+            String rootFolder = startIntent.getStringExtra(Utils.INTENT_ACCOUNT_ROOT_FOLDER);
+
+            ActiveAccount activeAccount;
+            if (email != null && rootFolder != null) {
+                activeAccount = activeAccountRepository.switchAccount(email, rootFolder);
+            } else {
+                activeAccount = activeAccountRepository.getActiveAccount();
+            }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerAccountsService.overrideAccounts(activity, mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE), mAccountManager, activity.getDrawerLayout());
+                    mDrawerAccountsService.displayNavigation();
+                }
+            });
+
+            new DrawerService(activity.getNavigationView(), activity.getDrawerLayout()).setNotesFromAccountClickListener(OverviewFragment.this);
+
+            new AccountChangeThread(activeAccount).run();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            run();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //handle visibility
+            mRecyclerView.setVisibility(View.VISIBLE);
+
+            mSwipeRefreshLayout.setRefreshing(false);
+
+            super.onPostExecute(result);
+        }
+
     }
 
     class CreateButtonListener implements View.OnClickListener {

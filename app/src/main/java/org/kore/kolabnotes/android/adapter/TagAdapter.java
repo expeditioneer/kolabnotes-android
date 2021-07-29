@@ -30,9 +30,9 @@ public class TagAdapter extends SelectableAdapter<TagAdapter.ViewHolder> {
 
     DateFormat dateFormatter;
     Context context;
+    List<Tag> tags;
     private ViewHolder.ClickListener clickListener;
     private int rowLayout;
-    List<Tag> tags;
     private int COLOR_SELECTED_NOTE;
 
     public TagAdapter(List<Tag> tags, Context context, int rowLayout, ViewHolder.ClickListener clickListener) {

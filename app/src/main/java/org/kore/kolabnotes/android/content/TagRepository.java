@@ -21,6 +21,7 @@ import java.util.UUID;
  * Created by koni on 12.03.15.
  */
 public class TagRepository {
+    private final Context context;
     // Database fields
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
@@ -33,7 +34,6 @@ public class TagRepository {
             DatabaseHelper.COLUMN_PRIORITY,
             DatabaseHelper.COLUMN_TAGNAME,
             DatabaseHelper.COLUMN_UID};
-    private final Context context;
 
     public TagRepository(Context context) {
         this.context = context;

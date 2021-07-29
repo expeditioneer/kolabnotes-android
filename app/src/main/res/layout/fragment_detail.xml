@@ -4,18 +4,18 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_material_light"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <HorizontalScrollView
             android:id="@+id/editor_bar"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/theme_default_primary">
+            android:background="@color/theme_default_primary"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -250,14 +250,14 @@
         </HorizontalScrollView>
 
         <Spinner
+            android:id="@+id/spinner_notebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_notebook"
-            android:spinnerMode="dialog"
             android:background="@color/theme_default_primary_dark"
-            android:dropDownSelector="@android:color/white"
             android:clickable="true"
-            android:minHeight="@dimen/abc_text_size_headline_material" />
+            android:dropDownSelector="@android:color/white"
+            android:minHeight="@dimen/abc_text_size_headline_material"
+            android:spinnerMode="dialog" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -265,49 +265,49 @@
             android:background="@color/background_material_light">
 
             <EditText
+                android:id="@id/detail_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@id/detail_summary"
                 android:layout_gravity="center_horizontal"
-                android:inputType="text"
-                android:enabled="true"
                 android:editable="true"
-                android:textColor="@color/primary_text_default_material_light"
+                android:enabled="true"
                 android:hint="@string/text_summary"
+                android:inputType="text"
+                android:textColor="@color/primary_text_default_material_light"
                 android:textColorHint="@color/secondary_text_default_material_light" />
         </FrameLayout>
 
         <org.kore.kolabnotes.android.fragment.KolabNotesRichEditor
-            android:visibility="gone"
+            android:id="@id/detail_description"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginBottom="4dp"
-            android:id="@id/detail_description"
+            android:editable="true"
             android:gravity="top"
+            android:hint="@string/description_hint"
             android:isScrollContainer="true"
             android:textColor="@color/primary_text_default_material_light"
             android:textColorHint="@color/secondary_text_default_material_light"
-            android:hint="@string/description_hint"
-            android:editable="true" />
+            android:visibility="gone" />
 
         <EditText
+            android:id="@+id/detail_description_plain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/detail_description_plain"
-            android:visibility="gone"
-            android:gravity="top"
-            android:inputType="textMultiLine|textWebEditText"
+            android:autoLink="all"
             android:autoText="false"
+            android:bufferType="spannable"
+            android:editable="true"
+            android:enabled="true"
+            android:gravity="top"
+            android:hint="@string/description_hint"
+            android:inputType="textMultiLine|textWebEditText"
+            android:linksClickable="true"
             android:textColor="@color/primary_text_default_material_light"
             android:textColorHint="@color/secondary_text_default_material_light"
-            android:hint="@string/description_hint"
-            android:editable="true"
-            android:autoLink="all"
-            android:linksClickable="true"
-            android:bufferType="spannable"
-            android:enabled="true" />
+            android:visibility="gone" />
 
     </LinearLayout>
 </FrameLayout>

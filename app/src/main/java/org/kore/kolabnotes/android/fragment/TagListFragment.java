@@ -207,54 +207,6 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         return activity;
     }
 
-    private class ActionModeCallback implements ActionMode.Callback {
-        @SuppressWarnings("unused")
-        private final String TAG = ActionModeCallback.class.getSimpleName();
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.list_item_tag_context, menu);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode_dark));
-                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode));
-            }
-            isInActionMode = true;
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<Integer> items = mAdapter.getSelectedItems();
-            switch (item.getItemId()) {
-                case R.id.delete_menu_context:
-                    deleteTags(items);
-                    mode.finish();
-                    break;
-                case R.id.choose_tag_color_menu_context:
-                    chooseColor(items);
-                    mode.finish();
-            }
-
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mAdapter.clearSelection();
-            mActionMode = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_default_primary_dark));
-                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
-            }
-            isInActionMode = false;
-        }
-    }
-
     void chooseColor(final List<Integer> items) {
         if (items != null) {
             new ColorPickerDialog
@@ -340,16 +292,6 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         }
     }
 
-    class CreateButtonListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            LayoutInflater inflater = activity.getLayoutInflater();
-            View view = inflater.inflate(R.layout.dialog_text_input, null);
-            AlertDialog newTagDialog = createTagDialog(view, new CreateTagButtonListener((EditText) view.findViewById(R.id.dialog_text_input_field)));
-            newTagDialog.show();
-        }
-    }
-
     private AlertDialog createTagDialog(View view, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
@@ -383,6 +325,108 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
             }
         });
         return builder.create();
+    }
+
+    final synchronized void reloadData() {
+        ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
+        List<Tag> tags = tagRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
+
+        mAdapter.clearTags();
+        if (tags.size() == 0) {
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mAdapter.addTags(tags);
+        }
+        setListState();
+    }
+
+    private void setListState() {
+        if (mAdapter != null) {
+            if (mAdapter.isEmpty()) {
+                mRecyclerView.setVisibility(View.GONE);
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mEmptyView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onBackPressed() {
+        ((OnFragmentCallback) activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.list_item_tag_context, menu);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode_dark));
+                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.theme_actionmode));
+            }
+            isInActionMode = true;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            List<Integer> items = mAdapter.getSelectedItems();
+            switch (item.getItemId()) {
+                case R.id.delete_menu_context:
+                    deleteTags(items);
+                    mode.finish();
+                    break;
+                case R.id.choose_tag_color_menu_context:
+                    chooseColor(items);
+                    mode.finish();
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.clearSelection();
+            mActionMode = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                activity.getWindow().setStatusBarColor(ContextCompat.getColor(getContext(), R.color.theme_default_primary_dark));
+                activity.getWindow().setNavigationBarColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
+            }
+            isInActionMode = false;
+        }
+    }
+
+    class CreateButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            LayoutInflater inflater = activity.getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_text_input, null);
+            AlertDialog newTagDialog = createTagDialog(view, new CreateTagButtonListener((EditText) view.findViewById(R.id.dialog_text_input_field)));
+            newTagDialog.show();
+        }
     }
 
     public class CreateTagButtonListener implements DialogInterface.OnClickListener {
@@ -439,49 +483,5 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
             tagRepository.update(account, rootFolder, tag);
             reloadData();
         }
-    }
-
-    final synchronized void reloadData() {
-        ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-        List<Tag> tags = tagRepository.getAll(activeAccount.getAccount(), activeAccount.getRootFolder());
-
-        mAdapter.clearTags();
-        if (tags.size() == 0) {
-            mAdapter.notifyDataSetChanged();
-        } else {
-            mAdapter.addTags(tags);
-        }
-        setListState();
-    }
-
-    private void setListState() {
-        if (mAdapter != null) {
-            if (mAdapter.isEmpty()) {
-                mRecyclerView.setVisibility(View.GONE);
-                mEmptyView.setVisibility(View.VISIBLE);
-            } else {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mEmptyView.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void onBackPressed() {
-        ((OnFragmentCallback) activity).fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
     }
 }

@@ -48,6 +48,45 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> mActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    private static Matcher<View> classOrSuperClassesName(final Matcher<String> classNameMatcher) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Class name or any super class name ");
+                classNameMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                Class<?> clazz = view.getClass();
+                String canonicalName;
+
+                do {
+                    canonicalName = clazz.getCanonicalName();
+                    if (canonicalName == null) {
+                        return false;
+                    }
+
+                    if (classNameMatcher.matches(canonicalName)) {
+                        return true;
+                    }
+
+                    clazz = clazz.getSuperclass();
+                    if (clazz == null) {
+                        return false;
+                    }
+                } while (!"java.lang.Object".equals(canonicalName));
+
+                return false;
+            }
+        };
+    }
+
+    private static Matcher<View> withTextOrHint(final Matcher<String> stringMatcher) {
+        return anyOf(withText(stringMatcher), withHint(stringMatcher));
+    }
+
     @Test
     public void mainActivityTest() {
         ViewInteraction root = onView(isRoot());
@@ -406,45 +445,6 @@ public class MainActivityTest {
                                                                 withTextOrHint(
                                                                         equalToTrimmingAndIgnoringCase("Import notebook"))))))));
         android_widget_LinearLayout4.perform(getClickAction());
-    }
-
-    private static Matcher<View> classOrSuperClassesName(final Matcher<String> classNameMatcher) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Class name or any super class name ");
-                classNameMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                Class<?> clazz = view.getClass();
-                String canonicalName;
-
-                do {
-                    canonicalName = clazz.getCanonicalName();
-                    if (canonicalName == null) {
-                        return false;
-                    }
-
-                    if (classNameMatcher.matches(canonicalName)) {
-                        return true;
-                    }
-
-                    clazz = clazz.getSuperclass();
-                    if (clazz == null) {
-                        return false;
-                    }
-                } while (!"java.lang.Object".equals(canonicalName));
-
-                return false;
-            }
-        };
-    }
-
-    private static Matcher<View> withTextOrHint(final Matcher<String> stringMatcher) {
-        return anyOf(withText(stringMatcher), withHint(stringMatcher));
     }
 
     private ViewAction getSwipeAction(

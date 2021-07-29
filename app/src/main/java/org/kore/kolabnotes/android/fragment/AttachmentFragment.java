@@ -174,19 +174,6 @@ public class AttachmentFragment extends Fragment {
         mListener.fragmentFinished(new Intent(), OnFragmentCallback.ResultCode.BACK);
     }
 
-    class NewAttachmentListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-            intent.setType("*/*");
-
-            startActivityForResult(intent, Utils.READ_REQUEST_CODE);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
@@ -269,10 +256,23 @@ public class AttachmentFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        enum Operation {NEW, DELETE, PREVIEW, SELECT}
-
         void onListFragmentInteraction(Operation op, Attachment item);
 
         void fragmentFinished(Intent resultIntent, OnFragmentCallback.ResultCode code);
+
+        enum Operation {NEW, DELETE, PREVIEW, SELECT}
+    }
+
+    class NewAttachmentListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+            intent.setType("*/*");
+
+            startActivityForResult(intent, Utils.READ_REQUEST_CODE);
+        }
     }
 }

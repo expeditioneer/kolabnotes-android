@@ -13,8 +13,8 @@
             android:title="@string/drawer_item_allnotes" />
         <item
             android:id="@+id/navigation_tags"
-            android:icon="@drawable/ic_action_labels"
             android:enabled="false"
+            android:icon="@drawable/ic_action_labels"
             android:title="@string/drawer_item_tags">
             <menu>
                 <!-- will be filled at runtime -->
@@ -23,8 +23,8 @@
 
         <item
             android:id="@+id/navigation_notebooks"
-            android:icon="@drawable/ic_action_collection"
             android:enabled="false"
+            android:icon="@drawable/ic_action_collection"
             android:title="@string/drawer_item_notebooks">
             <menu>
                 <!-- will be filled at runtime -->
@@ -33,8 +33,8 @@
     </group>
     <group
         android:id="@+id/drawer_accounts"
-        android:visible="false"
-        android:checkableBehavior="none">
+        android:checkableBehavior="none"
+        android:visible="false">
         <!-- will be filled at runtime -->
     </group>
 </menu>

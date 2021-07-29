@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingTop="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/filename"
-        android:textSize="16dip"
-        android:textColor="@color/primary_text"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_gravity="left" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textColor="@color/primary_text"
+        android:textSize="16dip" />
 
     <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_below="@+id/filename"
         android:id="@+id/metainformation_attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filename"
         android:layout_gravity="left"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/attachment_mimetype"
-            android:textSize="12dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:text="MIME-Type: "
             android:textColor="@color/primary_text"
-            android:layout_gravity="left"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:textSize="12dip" />
 
         <TextView
             android:id="@+id/mimetype"
-            android:textSize="12dip"
-            android:textColor="@color/primary_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:paddingRight="8dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:textColor="@color/primary_text"
+            android:textSize="12dip" />
 
         <TextView
             android:id="@+id/attachment_size"
-            android:textSize="12dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:text="Bytes: "
             android:textColor="@color/primary_text"
-            android:layout_gravity="left"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:textSize="12dip" />
 
         <TextView
             android:id="@+id/filesize"
-            android:textSize="12dip"
-            android:textColor="@color/primary_text"
-            android:layout_gravity="left"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:layout_gravity="left"
+            android:textColor="@color/primary_text"
+            android:textSize="12dip" />
 
     </LinearLayout>
 
     <ImageButton
-        android:layout_width="wrap_content"
         android:id="@+id/previewButton"
-        android:src="@drawable/ic_visibility_black_36dp"
-        android:background="@android:color/transparent"
-        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/deleteButton"
-        android:layout_height="wrap_content" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_visibility_black_36dp"
+        android:visibility="invisible" />
 
     <ImageButton
-        android:layout_width="wrap_content"
         android:id="@+id/deleteButton"
-        android:src="@drawable/ic_delete_black_36dp"
-        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_height="wrap_content" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_delete_black_36dp" />
 </RelativeLayout>

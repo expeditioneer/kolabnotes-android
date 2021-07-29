@@ -353,12 +353,6 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
             return false;
         }
 
-        public interface ClickListener {
-            void onItemClicked(int position, Note note);
-
-            boolean onItemLongClicked(int position, Note note);
-        }
-
         void hideMetainformation() {
             createdDate.setVisibility(View.GONE);
             modificationDate.setVisibility(View.GONE);
@@ -386,6 +380,12 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
 
         void showPreview() {
             notePreview.setVisibility(View.VISIBLE);
+        }
+
+        public interface ClickListener {
+            void onItemClicked(int position, Note note);
+
+            boolean onItemLongClicked(int position, Note note);
         }
     }
 }

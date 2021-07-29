@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="kore.kolabnotes"
     android:accountType="kore.kolabnotes"
-    android:userVisible="true"
-    android:supportsUploading="true"
     android:allowParallelSyncs="true"
-    android:isAlwaysSyncable="true" />
+    android:contentAuthority="kore.kolabnotes"
+    android:isAlwaysSyncable="true"
+    android:supportsUploading="true"
+    android:userVisible="true" />

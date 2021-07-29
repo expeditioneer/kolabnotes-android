@@ -6,16 +6,16 @@
     android:layout_height="match_parent">
 
     <org.kore.kolabnotes.android.draweditor.DrawingView
+        android:id="@+id/draweditor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/draweditor"
         android:background="@color/theme_actionmode" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_default_primary"
         android:layout_alignParentBottom="true"
+        android:background="@color/theme_default_primary"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -81,9 +81,9 @@
                         android:id="@+id/draweditor_color"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:padding="12dp"
                         android:background="@drawable/tool_selector"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:padding="12dp" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

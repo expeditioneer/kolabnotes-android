@@ -6,13 +6,13 @@
         android:width="0.5dp"
         android:color="@android:color/darker_gray" />
     <corners
-        android:topLeftRadius="3dp"
-        android:topRightRadius="3dp"
         android:bottomLeftRadius="3dp"
-        android:bottomRightRadius="3dp" />
+        android:bottomRightRadius="3dp"
+        android:topLeftRadius="3dp"
+        android:topRightRadius="3dp" />
     <padding
+        android:bottom="1dip"
         android:left="3dip"
-        android:top="1dip"
         android:right="3dip"
-        android:bottom="1dip" />
+        android:top="1dip" />
 </shape>

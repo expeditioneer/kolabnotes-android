@@ -6,10 +6,6 @@ import org.kore.kolabnotes.android.Utils;
  * Created by koni on 20.07.15.
  */
 public final class NoteSorting {
-    public enum Direction {
-        ASC, DESC;
-    }
-
     private final Direction direction;
     private final String columnName;
 
@@ -36,5 +32,9 @@ public final class NoteSorting {
                 "direction=" + direction +
                 ", columnName='" + columnName + '\'' +
                 '}';
+    }
+
+    public enum Direction {
+        ASC, DESC;
     }
 }

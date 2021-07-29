@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="@dimen/widget_margin"
-    tools:showIn="@layout/list_widget_info"
-    android:orientation="vertical">
+    tools:showIn="@layout/list_widget_info">
 
     <include
         android:id="@+id/widget_list_header"
         layout="@layout/list_widget_header" />
 
     <ListView
+        android:id="@+id/widget_list_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_list_notes"
-        android:background="@color/background_material_dark"
-        android:alpha="0.8" />
+        android:alpha="0.8"
+        android:background="@color/background_material_dark" />
 </LinearLayout>

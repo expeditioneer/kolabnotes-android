@@ -15,10 +15,6 @@ import java.util.List;
  */
 public class ModificationRepository {
 
-    public enum ModificationType {
-        UPD, DEL, INS;
-    }
-
     private Context context;
     // Database fields
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
@@ -33,7 +29,6 @@ public class ModificationRepository {
     public ModificationRepository(Context context) {
         this.context = context;
     }
-
 
     public void insert(String account, String rootFolder, String uid, ModificationType type, String uidNotebook, Modification.Descriminator desc) {
         if (Utils.isLocalAccount(account, rootFolder)) {
@@ -154,5 +149,9 @@ public class ModificationRepository {
 
         Modification modification = new Modification(account, rootFolder, uid, type, new Timestamp(modDate), uidNotebook, desc);
         return modification;
+    }
+
+    public enum ModificationType {
+        UPD, DEL, INS;
     }
 }

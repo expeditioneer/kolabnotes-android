@@ -1035,31 +1035,6 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         this.isNewNote = true;
     }
 
-    class OnClassificationChange implements DialogInterface.OnClickListener {
-
-        private final View view;
-
-        public OnClassificationChange(View view) {
-            this.view = view;
-        }
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            RadioGroup group = (RadioGroup) view.findViewById(R.id.dialog_classification);
-            switch (group.getCheckedRadioButtonId()) {
-                case R.id.radio_public:
-                    DetailFragment.this.selectedClassification = Note.Classification.PUBLIC;
-                    break;
-                case R.id.radio_confidential:
-                    DetailFragment.this.selectedClassification = Note.Classification.CONFIDENTIAL;
-                    break;
-                case R.id.radio_private:
-                    DetailFragment.this.selectedClassification = Note.Classification.PRIVATE;
-                    break;
-            }
-        }
-    }
-
     void editTags() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.dialog_change_tags);
@@ -1151,39 +1126,6 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
             }
         });
         return builder.create();
-    }
-
-    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener {
-
-        private final EditText textField;
-
-        public CreateNotebookButtonListener(EditText textField) {
-            this.textField = textField;
-        }
-
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
-                return;
-            }
-
-            ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
-
-            Identification ident = new Identification(UUID.randomUUID().toString(), "kolabnotes-android");
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            AuditInformation audit = new AuditInformation(now, now);
-
-            String value = textField.getText().toString();
-
-            Notebook nb = new Notebook(ident, audit, Note.Classification.PUBLIC, value);
-            nb.setDescription(value);
-            notebookRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), nb);
-
-            initSpinner();
-
-            setSpinnerSelection(value);
-        }
     }
 
     @Override
@@ -1628,5 +1570,63 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         saveNotRequiredAnymore = true;
 
         ((OnFragmentCallback) activity).fragmentFinished(returnIntent, OnFragmentCallback.ResultCode.BACK);
+    }
+
+    class OnClassificationChange implements DialogInterface.OnClickListener {
+
+        private final View view;
+
+        public OnClassificationChange(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            RadioGroup group = (RadioGroup) view.findViewById(R.id.dialog_classification);
+            switch (group.getCheckedRadioButtonId()) {
+                case R.id.radio_public:
+                    DetailFragment.this.selectedClassification = Note.Classification.PUBLIC;
+                    break;
+                case R.id.radio_confidential:
+                    DetailFragment.this.selectedClassification = Note.Classification.CONFIDENTIAL;
+                    break;
+                case R.id.radio_private:
+                    DetailFragment.this.selectedClassification = Note.Classification.PRIVATE;
+                    break;
+            }
+        }
+    }
+
+    public class CreateNotebookButtonListener implements DialogInterface.OnClickListener {
+
+        private final EditText textField;
+
+        public CreateNotebookButtonListener(EditText textField) {
+            this.textField = textField;
+        }
+
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (textField == null || textField.getText() == null || textField.getText().toString().trim().length() == 0) {
+                return;
+            }
+
+            ActiveAccount activeAccount = activeAccountRepository.getActiveAccount();
+
+            Identification ident = new Identification(UUID.randomUUID().toString(), "kolabnotes-android");
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            AuditInformation audit = new AuditInformation(now, now);
+
+            String value = textField.getText().toString();
+
+            Notebook nb = new Notebook(ident, audit, Note.Classification.PUBLIC, value);
+            nb.setDescription(value);
+            notebookRepository.insert(activeAccount.getAccount(), activeAccount.getRootFolder(), nb);
+
+            initSpinner();
+
+            setSpinnerSelection(value);
+        }
     }
 }

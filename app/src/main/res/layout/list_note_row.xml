@@ -3,7 +3,7 @@
     android:id="@id/list_note_row_summary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="20sp"
     android:gravity="left"
+    android:padding="5dip"
     android:textColor="@color/primary_text_default_material_dark"
-    android:padding="5dip" />
+    android:textSize="20sp" />

@@ -7,10 +7,6 @@ import java.sql.Timestamp;
  */
 public class Modification {
 
-    public enum Descriminator {
-        NOTE, NOTEBOOK, TAG, ATTACHMENT;
-    }
-
     private String uid;
     private String rootFolder;
     private String account;
@@ -85,5 +81,9 @@ public class Modification {
                 ", uidNotebook='" + uidNotebook + '\'' +
                 ", descriminator=" + descriminator +
                 '}';
+    }
+
+    public enum Descriminator {
+        NOTE, NOTEBOOK, TAG, ATTACHMENT;
     }
 }

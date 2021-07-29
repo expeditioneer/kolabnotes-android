@@ -36,6 +36,8 @@ import java.util.Set;
  * Created by koni on 12.03.15.
  */
 public class AttachmentRepository {
+    private final Context context;
+    private final NoteRepository noteRepository;
     // Database fields
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ACCOUNT,
@@ -46,9 +48,6 @@ public class AttachmentRepository {
             DatabaseHelper.COLUMN_FILESIZE,
             DatabaseHelper.COLUMN_FILENAME,
             DatabaseHelper.COLUMN_MIMETYPE};
-    private final Context context;
-
-    private final NoteRepository noteRepository;
 
     public AttachmentRepository(Context context) {
         this.context = context;

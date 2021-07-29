@@ -3,6 +3,6 @@
     android:shape="oval">
     <solid android:color="@android:color/white" />
     <stroke
-        android:color="@color/theme_selected_notes"
-        android:width="0.5dp" />
+        android:width="0.5dp"
+        android:color="@color/theme_selected_notes" />
 </shape>

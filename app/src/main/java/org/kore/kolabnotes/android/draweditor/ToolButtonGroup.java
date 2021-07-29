@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class ToolButtonGroup extends LinearLayout {
+    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
     // holds the checked id; the selection is empty by default
     private int mCheckedId = -1;
     // tracks children tool buttons checked state
@@ -47,7 +48,6 @@ public class ToolButtonGroup extends LinearLayout {
     private boolean mProtectFromCheckedChange = false;
     private OnCheckedChangeListener mOnCheckedChangeListener;
     private PassThroughHierarchyChangeListener mPassThroughListener;
-    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     public ToolButtonGroup(Context context) {
         super(context);
@@ -72,6 +72,22 @@ public class ToolButtonGroup extends LinearLayout {
 
         attributes.recycle();
         init();
+    }
+
+    /**
+     * Portable version View.generateViewId() (for API 16)
+     */
+
+    public static int generateViewId() {
+        for (; ; ) {
+            final int result = sNextGeneratedId.get();
+            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
+            int newValue = result + 1;
+            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
+            if (sNextGeneratedId.compareAndSet(result, newValue)) {
+                return result;
+            }
+        }
     }
 
     private void init() {
@@ -213,6 +229,21 @@ public class ToolButtonGroup extends LinearLayout {
     }
 
     /**
+     * <p>Interface definition for a callback to be invoked when the checked
+     * tool button changed in this group.</p>
+     */
+    public interface OnCheckedChangeListener {
+        /**
+         * <p>Called when the checked tool button has changed. When the
+         * selection is cleared, checkedId is -1.</p>
+         *
+         * @param group     the group in which the checked tool button has changed
+         * @param checkedId the unique identifier of the newly checked tool button
+         */
+        public void onCheckedChanged(ToolButtonGroup group, @IdRes int checkedId);
+    }
+
+    /**
      * <p>This set of layout parameters defaults the width and the height of
      * the children to {@link #WRAP_CONTENT} when they are not specified in the
      * XML file. Otherwise, this class ussed the value read from the XML file.</p>
@@ -267,37 +298,6 @@ public class ToolButtonGroup extends LinearLayout {
                 height = a.getLayoutDimension(heightAttr, "layout_height");
             } else {
                 height = WRAP_CONTENT;
-            }
-        }
-    }
-
-    /**
-     * <p>Interface definition for a callback to be invoked when the checked
-     * tool button changed in this group.</p>
-     */
-    public interface OnCheckedChangeListener {
-        /**
-         * <p>Called when the checked tool button has changed. When the
-         * selection is cleared, checkedId is -1.</p>
-         *
-         * @param group     the group in which the checked tool button has changed
-         * @param checkedId the unique identifier of the newly checked tool button
-         */
-        public void onCheckedChanged(ToolButtonGroup group, @IdRes int checkedId);
-    }
-
-    /**
-     * Portable version View.generateViewId() (for API 16)
-     */
-
-    public static int generateViewId() {
-        for (; ; ) {
-            final int result = sNextGeneratedId.get();
-            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
-            int newValue = result + 1;
-            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
-            if (sNextGeneratedId.compareAndSet(result, newValue)) {
-                return result;
             }
         }
     }

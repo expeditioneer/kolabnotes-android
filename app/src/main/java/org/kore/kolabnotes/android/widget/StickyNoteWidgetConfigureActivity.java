@@ -32,11 +32,10 @@ import java.util.List;
  */
 public class StickyNoteWidgetConfigureActivity extends Activity {
 
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     public static final String PREFS_NAME = "org.kore.kolabnotes.android.widget.StickyNoteWidget";
     public static final String PREF_PREFIX_KEY_NOTE = "appwidget_note_sticky_";
     public static final String PREF_PREFIX_KEY_ACCOUNT = "appwidget_account_sticky_";
-
+    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private NoteRepository noteRepository;
     private AccountManager mAccountManager;
     private Spinner accountSpinner;
@@ -44,11 +43,62 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
 
     private Account selectedAccount;
     private String selectedNote;
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
 
+            if (selectedNote == null) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_selection), Toast.LENGTH_SHORT);
+            } else {
+
+                final Context context = StickyNoteWidgetConfigureActivity.this;
+
+                // When the button is clicked, store the string locally
+                if (selectedAccount == null) {
+                    saveStickyNoteWidgetPref(context, mAppWidgetId, "local", selectedNote);
+                } else {
+                    saveStickyNoteWidgetPref(context, mAppWidgetId, mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ACCOUNT_NAME), selectedNote);
+                }
+
+                // It is the responsibility of the configuration activity to update the app widget
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                StickyNoteWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, noteRepository);
+
+                // Make sure we pass back the original appWidgetId
+                Intent resultValue = new Intent();
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                setResult(RESULT_OK, resultValue);
+                finish();
+            }
+        }
+    };
     private String localAccountName;
 
     public StickyNoteWidgetConfigureActivity() {
         super();
+    }
+
+    static void saveStickyNoteWidgetPref(Context context, int appWidgetId, String accountName, String note) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, accountName);
+        prefs.putString(PREF_PREFIX_KEY_NOTE + appWidgetId, note);
+        prefs.commit();
+    }
+
+    static String loadStickyNoteWidgetAccountPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, null);
+    }
+
+    static String loadStickyNoteWidgetNoteUIDPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getString(PREF_PREFIX_KEY_NOTE + appWidgetId, null);
+    }
+
+    static void deleteStickyNoteWidgetPref(Context context, int appWidgetId) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.remove(PREF_PREFIX_KEY_ACCOUNT + appWidgetId);
+        prefs.remove(PREF_PREFIX_KEY_NOTE + appWidgetId);
+        prefs.commit();
     }
 
     @Override
@@ -87,59 +137,6 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
         initSpinners();
     }
 
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-
-            if (selectedNote == null) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_selection), Toast.LENGTH_SHORT);
-            } else {
-
-                final Context context = StickyNoteWidgetConfigureActivity.this;
-
-                // When the button is clicked, store the string locally
-                if (selectedAccount == null) {
-                    saveStickyNoteWidgetPref(context, mAppWidgetId, "local", selectedNote);
-                } else {
-                    saveStickyNoteWidgetPref(context, mAppWidgetId, mAccountManager.getUserData(selectedAccount, AuthenticatorActivity.KEY_ACCOUNT_NAME), selectedNote);
-                }
-
-                // It is the responsibility of the configuration activity to update the app widget
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                StickyNoteWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId, noteRepository);
-
-                // Make sure we pass back the original appWidgetId
-                Intent resultValue = new Intent();
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                setResult(RESULT_OK, resultValue);
-                finish();
-            }
-        }
-    };
-
-    static void saveStickyNoteWidgetPref(Context context, int appWidgetId, String accountName, String note) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, accountName);
-        prefs.putString(PREF_PREFIX_KEY_NOTE + appWidgetId, note);
-        prefs.commit();
-    }
-
-    static String loadStickyNoteWidgetAccountPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, null);
-    }
-
-    static String loadStickyNoteWidgetNoteUIDPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getString(PREF_PREFIX_KEY_NOTE + appWidgetId, null);
-    }
-
-    static void deleteStickyNoteWidgetPref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY_ACCOUNT + appWidgetId);
-        prefs.remove(PREF_PREFIX_KEY_NOTE + appWidgetId);
-        prefs.commit();
-    }
-
     void initSpinners() {
         initAccountSpinner();
         updateNoteSpinner();
@@ -162,34 +159,6 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
         accountSpinner.setAdapter(adapter);
         accountSpinner.setOnItemSelectedListener(new OnAccountItemClicked());
         accountSpinner.setSelection(0);
-    }
-
-    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String name = parent.getSelectedItem().toString();
-
-            if (localAccountName.equalsIgnoreCase(name)) {
-                selectedAccount = null;
-            } else {
-                Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
-
-                for (Account account : accounts) {
-                    if (name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
-                        selectedAccount = account;
-                        break;
-                    }
-                }
-            }
-
-            updateNoteSpinner();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-            //nothing
-        }
     }
 
     void updateNoteSpinner() {
@@ -228,6 +197,34 @@ public class StickyNoteWidgetConfigureActivity extends Activity {
                 //nothing
             }
         });
+    }
+
+    class OnAccountItemClicked implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String name = parent.getSelectedItem().toString();
+
+            if (localAccountName.equalsIgnoreCase(name)) {
+                selectedAccount = null;
+            } else {
+                Account[] accounts = mAccountManager.getAccountsByType(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
+
+                for (Account account : accounts) {
+                    if (name.equals(mAccountManager.getUserData(account, AuthenticatorActivity.KEY_ACCOUNT_NAME))) {
+                        selectedAccount = account;
+                        break;
+                    }
+                }
+            }
+
+            updateNoteSpinner();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            //nothing
+        }
     }
 
 }

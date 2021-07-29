@@ -87,28 +87,28 @@ public class Line extends Path implements Serializable {
         mIsDot = isDot;
     }
 
-    public void setBrushSize(int size) {
-        mSize = size;
-    }
-
     public int getBrushSize() {
         return mSize;
     }
 
-    public void setBrushAlpha(int alpha) {
-        mAlpha = alpha;
+    public void setBrushSize(int size) {
+        mSize = size;
     }
 
     public int getBrushAlpha() {
         return mAlpha;
     }
 
-    public void setBrushColor(int color) {
-        mColor = color;
+    public void setBrushAlpha(int alpha) {
+        mAlpha = alpha;
     }
 
     public int getBrushColor() {
         return mColor;
+    }
+
+    public void setBrushColor(int color) {
+        mColor = color;
     }
 
     @Override

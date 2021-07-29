@@ -17,6 +17,10 @@ public class IsEqualTrimmingAndIgnoringCase extends BaseMatcher<String> {
         this.string = string;
     }
 
+    public static IsEqualTrimmingAndIgnoringCase equalToTrimmingAndIgnoringCase(String string) {
+        return new IsEqualTrimmingAndIgnoringCase(string);
+    }
+
     public boolean matchesSafely(String item) {
         return string.trim().equalsIgnoreCase(item.trim());
     }
@@ -30,10 +34,6 @@ public class IsEqualTrimmingAndIgnoringCase extends BaseMatcher<String> {
         description.appendText("equalToTrimmingAndIgnoringCase(")
                 .appendValue(string)
                 .appendText(")");
-    }
-
-    public static IsEqualTrimmingAndIgnoringCase equalToTrimmingAndIgnoringCase(String string) {
-        return new IsEqualTrimmingAndIgnoringCase(string);
     }
 
     @Override

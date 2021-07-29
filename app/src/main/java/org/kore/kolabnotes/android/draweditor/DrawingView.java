@@ -39,6 +39,10 @@ import java.util.Stack;
  */
 
 public class DrawingView extends View {
+    public static final int DEFAULT_BRUSH_SIZE = 10;
+    public static final int DEFAULT_BRUSH_ALPHA = 255;
+    public static final int DEFAULT_BRUSH_COLOR = Color.BLACK;
+    public static final int DEFAULT_CANVAS_COLOR = Color.WHITE;
     private static final String TAG_INSTANCE_STATE = "instanceState";
     private static final String TAG_LINES = "Lines";
     private static final String TAG_UNDONE_LINES = "UndoneLines";
@@ -48,14 +52,7 @@ public class DrawingView extends View {
     private static final String TAG_BRUSH_SIZE = "BrushSize";
     private static final String TAG_SCALE_MODE = "ScaleMode";
     private static final String TAG_CANVAS_COLOR = "BackgroundColor";
-
     private static final int MAX_POINTERS = 10;
-
-    public static final int DEFAULT_BRUSH_SIZE = 10;
-    public static final int DEFAULT_BRUSH_ALPHA = 255;
-    public static final int DEFAULT_BRUSH_COLOR = Color.BLACK;
-    public static final int DEFAULT_CANVAS_COLOR = Color.WHITE;
-
     private DrawingListener mListener;
 
     private MultiPointersManager mMultiPointersManager;
@@ -71,10 +68,6 @@ public class DrawingView extends View {
     private int mCanvasColor;
     private float mScalePointX, mScalePointY;
     private boolean mScaleMode;
-
-    public interface DrawingListener {
-        void onDrawEvent();
-    }
 
     public DrawingView(Context context) {
         this(context, null);
@@ -92,6 +85,20 @@ public class DrawingView extends View {
         mMultiPointersManager = new MultiPointersManager(MAX_POINTERS);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         mScaleMode = false;
+    }
+
+    private static Paint createPaint(int color, int size, int alpha) {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setAlpha(alpha);
+        paint.setStrokeWidth(size);
+
+        return paint;
     }
 
     @Override
@@ -182,22 +189,6 @@ public class DrawingView extends View {
         canvas.restore();
     }
 
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-            mScalePointX = detector.getFocusX();
-            mScalePointY = detector.getFocusY();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
-
-            invalidate();
-            return true;
-        }
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Line line;
@@ -270,26 +261,12 @@ public class DrawingView extends View {
         mListener = listener;
     }
 
-    private static Paint createPaint(int color, int size, int alpha) {
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setAlpha(alpha);
-        paint.setStrokeWidth(size);
-
-        return paint;
+    public boolean getScaleMode() {
+        return mScaleMode;
     }
 
     public void setScaleMode(boolean mode) {
         mScaleMode = mode;
-    }
-
-    public boolean getScaleMode() {
-        return mScaleMode;
     }
 
     public Bitmap getBitmap() {
@@ -343,20 +320,20 @@ public class DrawingView extends View {
         mCanvasColor = color;
     }
 
-    public void setBrushColor(int color) {
-        mBrushColor = color;
-    }
-
     public int getBrushColor() {
         return mBrushColor;
     }
 
-    public void setBrushSize(int size) {
-        mBrushSize = size;
+    public void setBrushColor(int color) {
+        mBrushColor = color;
     }
 
     public int getBrushSize() {
         return mBrushSize;
+    }
+
+    public void setBrushSize(int size) {
+        mBrushSize = size;
     }
 
     public int setBrushAlpha() {
@@ -380,5 +357,25 @@ public class DrawingView extends View {
 
     public int getUndoneLinesCount() {
         return mUndoneLines.size();
+    }
+
+    public interface DrawingListener {
+        void onDrawEvent();
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+            mScalePointX = detector.getFocusX();
+            mScalePointY = detector.getFocusY();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            invalidate();
+            return true;
+        }
     }
 }
