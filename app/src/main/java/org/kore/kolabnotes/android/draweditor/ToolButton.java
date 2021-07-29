@@ -35,7 +35,7 @@ import android.widget.ImageButton;
  * Custom tool button for drawing editor. Based on the behavior of the RadioButton.
  */
 
-public class ToolButton extends ImageButton implements Checkable {
+public class ToolButton extends androidx.appcompat.widget.AppCompatImageButton implements Checkable {
     private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
     private boolean mChecked;
     private boolean mBroadcasting;

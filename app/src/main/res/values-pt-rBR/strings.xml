@@ -69,7 +69,6 @@
     <string name="dialog_change_tags">Editar Tags</string>
     <string name="no_nb_selected">Nenhum bloco de notas selecionado</string>
     <string name="local_account_change">A conta local não pode ser alterada</string>
-    <string name="adicionar">adicionar</string>
     <string name="title_edit_tag">Editar Tags</string>
     <string name="dialog_question_delete">Tem certeza de que deseja excluir esta nota?</string>
     <string name="dialog_question_delete_notes">Tem certeza de que deseja excluir as notas selecionadas?</string>
@@ -114,7 +113,7 @@
     <string name="note_saved">Nota salva</string>
     <string name="sync_failed">Falha na sincronização</string>
     <string name="title_delete_notebook">Excluir bloco de notas</string>
-    <string name="send_to">Compartilhar nota com...</string>
+    <string name="send_to">Compartilhar nota com…</string>
     <string name="empty_note">Nota vazia</string>
     <string name="sort_with_heading">Ordenar por:</string>
     <string name="radio_desc">Decrescente</string>
@@ -227,7 +226,7 @@
     <string name="attachments">Anexos</string>
     <string name="attachment_creation_failed">Falha ao criar anexo</string>
     <string name="attachment_already_exist">Um anexo com esse nome já existe</string>
-    <string name="attachment_send_to">Compartilhar anexo com...</string>
+    <string name="attachment_send_to">Compartilhar anexo com…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Olá fragmento em branco</string>

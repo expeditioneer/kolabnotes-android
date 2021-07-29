@@ -53,6 +53,7 @@
     <string name="description_text">Chữ Vừa</string>
     <string name="description_hint">Mô tả</string>
     <string name="text_description">Chữ Vừa</string>
+    <string name="error_connection">Đã xảy ra lỗi khi cố gắng kết nối với máy chủ</string>
 
     <string name="dialog_input_text_hint">Tổng kết</string>
     <string name="dialog_input_text_search_hint">Kiếm Ghi Chú</string>
@@ -88,6 +89,20 @@
     <string name="add_widget">Thêm widget</string>
     <string name="title_colorpicker">Chọn màu</string>
     <string name="button_add">button_add</string>
+    <string name="error_field_required">Required entry missing</string>
+    <string name="error_field_to_low">This value must be between 1 and 90</string>
+    <string name="error_incorrect_password">Password is incorrect</string>
+    <string name="error_invalid_email">Email is invalid</string>
+    <string name="error_invalid_password">Password is invalid</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="title_change_classification">Edit Classification</string>
+    <string name="title_create_notebook">New Notebook</string>
+    <string name="title_create_tag">New Tag</string>
+    <string name="title_delete">Delete</string>
+    <string name="title_dialog_search">Search</string>
+    <string name="title_ok">OK</string>
+    <string name="title_share">Share</string>
     <string name="kolab_enabled">Kolab extensions</string>
     <string name="sync_intervall">Sync intervall (default 24)</string>
     <string name="note_not_found">Không kiếm thấy ghi chú!</string>
@@ -97,7 +112,7 @@
     <string name="note_saved">Đã lưu ghi chú</string>
     <string name="sync_failed">Synchronisation failed</string>
     <string name="title_delete_notebook">Xoá quyển sổ ghi chú</string>
-    <string name="send_to">Chia sẻ ghi chú với ...</string>
+    <string name="send_to">Chia sẻ ghi chú với …</string>
     <string name="empty_note">Ghi chú không có nội dung</string>
     <string name="sort_with_heading">Sắp xếp theo:</string>
     <string name="radio_desc">Giảm dần</string>
@@ -208,7 +223,7 @@
     <string name="attachments"> File đính kèm</string>
     <string name="attachment_creation_failed">tạo tập tin đính kèm không</string>
     <string name="attachment_already_exist">File đính kèm với tên tập tin được đặt đã tồn tại</string>
-    <string name="attachment_send_to"> Chia sẻ với attachement ...</string>
+    <string name="attachment_send_to"> Chia sẻ với attachement …</string>
     <string name="no_preview">Không có lựa chọn xem trước</string>
     <string name="attachment_not_previewable"> Không thể xem trước tập tin đính kèm</string>
     <string name="attachment_now_playing"> Đang chơi:</string>
@@ -218,4 +233,5 @@
     <string name="image_too_big">Hình ảnh quá lớn (kích thước tệp phải nhỏ hơn 900 kB)</string>
     <string name="changeAccount">Chọn Tài khoản</string>
     <string name="drawer_organise_tags">Tổ chức thẻ</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

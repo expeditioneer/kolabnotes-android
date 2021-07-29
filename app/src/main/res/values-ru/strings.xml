@@ -204,5 +204,5 @@
     <string name="image_too_big">Слишком большое изображение (размер файла не должен превышать 900 КБ)</string>
     <string name="changeAccount">Выберите учетную запись</string>
     <string name="drawer_organise_tags">" Упорядочить теги"</string>
-
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

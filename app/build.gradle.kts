@@ -24,10 +24,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
-        isAbortOnError = false
-    }
-
     testOptions {
         unitTests {
             isReturnDefaultValues = true

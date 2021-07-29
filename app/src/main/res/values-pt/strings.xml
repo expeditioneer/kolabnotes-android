@@ -69,7 +69,7 @@
     <string name="dialog_change_tags">Editar Tags</string>
     <string name="no_nb_selected">Nenhum bloco de notas selecionado</string>
     <string name="local_account_change">A conta local não pode ser alterada</string>
-    <string name="adicionar">adicionar</string>
+    <string name="add">adicionar</string>
     <string name="title_edit_tag">Editar Tags</string>
     <string name="dialog_question_delete">Tem certeza de que deseja excluir esta nota?</string>
     <string name="dialog_question_delete_notes">Tem certeza de que deseja excluir as notas selecionadas?</string>
