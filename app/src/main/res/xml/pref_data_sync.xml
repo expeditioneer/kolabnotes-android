@@ -1,4 +1,4 @@
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="LATEST"
@@ -29,4 +29,4 @@
         <intent android:action="android.settings.SYNC_SETTINGS" />
     </Preference>
 
-</androidx.preference.PreferenceScreen>
+</PreferenceScreen>
