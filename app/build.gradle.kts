@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -51,5 +52,28 @@ dependencies {
     testImplementation(TestLibraries.AndroidXTest.runner)
     testImplementation(TestLibraries.AndroidXTest.rules)
     testImplementation(TestLibraries.annotation)
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
+
+    // (Optional) If you also have JUnit 4-based tests
+    testImplementation("junit:junit:4.13")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.1")
+
+
+    androidTestImplementation(TestLibraries.AndroidXTest.espresso)
+    androidTestImplementation(TestLibraries.AndroidXTest.junit)
+    androidTestImplementation(TestLibraries.AndroidXTest.runner)
+    androidTestImplementation(TestLibraries.AndroidXTest.rules)
+    androidTestImplementation(TestLibraries.annotation)
+
+    androidTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
+
+    // (Optional) If you also have JUnit 4-based tests
+    androidTestImplementation("junit:junit:4.13")
+    androidTestRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.1")
 }
 
