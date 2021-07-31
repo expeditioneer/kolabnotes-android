@@ -83,6 +83,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import jp.wasabeef.richeditor.RichEditor;
+
 /**
  * Fragment for displaying and editing the details of a note
  */
@@ -125,7 +127,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     private String startUid;
     private String startNotebook;
 
-    private KolabNotesRichEditor editor;
+    private RichEditor editor;
 
     private EditText editText;
 
@@ -273,7 +275,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         boolean useRicheditor = Utils.getUseRicheditor(activity);
 
         if (useRicheditor) {
-            editor = (KolabNotesRichEditor) activity.findViewById(R.id.detail_description);
+            editor = (RichEditor) activity.findViewById(R.id.detail_description);
             editor.setVisibility(View.VISIBLE);
             editor.setBackgroundColor(Color.TRANSPARENT);
             editor.setEditorHeight(300);
@@ -457,7 +459,7 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
     }
 
     void initEditor() {
-        editor.setOnTextChangeListener(new KolabNotesRichEditor.OnTextChangeListener() {
+        editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String s) {
                 DetailFragment.this.isDescriptionDirty = true;
