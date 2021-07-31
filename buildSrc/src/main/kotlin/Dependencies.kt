@@ -1,4 +1,7 @@
+const val junit5Version = "5.7.1"
 const val kotlinVersion = "1.5.21"
+const val roomVersion = "2.3.0"
+
 
 object BuildPlugins {
     object Versions {
@@ -6,7 +9,9 @@ object BuildPlugins {
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
+    const val kotlinAndroid = "kotlin-android"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    const val kotlinxSerialization = "org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}"
 }
 
 object Libraries {
@@ -20,6 +25,11 @@ object Libraries {
         const val recycleview = "androidx.recyclerview:recyclerview:${Versions.jetpack}"
         const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
         const val material = "com.google.android.material:material:1.4.0"
+    }
+
+    object Room {
+        const val compiler = "androidx.room:room-compiler:${roomVersion}"
+        const val runtime = "androidx.room:room-runtime:${roomVersion}"
     }
 
     const val colorpicker = "com.github.dhaval2404:colorpicker:2.0"
@@ -40,4 +50,14 @@ object TestLibraries {
     }
 
     const val annotation = "androidx.annotation:annotation:1.2.0"
+
+    object Junit5 {
+        const val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
+        const val jupiterApi = "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
+        const val jupiterParams = "org.junit.jupiter:junit-jupiter-params:${junit5Version}"
+    }
+
+    object Room {
+        const val testing = "androidx.room:room-testing:${roomVersion}"
+    }
 }
