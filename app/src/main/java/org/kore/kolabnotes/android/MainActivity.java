@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -24,8 +23,6 @@ import org.kore.kolabnotes.android.content.AccountIdentifier;
 import org.kore.kolabnotes.android.content.ActiveAccount;
 import org.kore.kolabnotes.android.content.ActiveAccountRepository;
 import org.kore.kolabnotes.android.database.AppDatabase;
-import org.kore.kolabnotes.android.database.entity.Attachment;
-import org.kore.kolabnotes.android.database.entity.Note;
 import org.kore.kolabnotes.android.drawer.OnHeaderClicked;
 import org.kore.kolabnotes.android.fragment.ChooseAccountDialogFragment;
 import org.kore.kolabnotes.android.fragment.DetailFragment;
@@ -151,30 +148,6 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
 
             detail.onOptionsItemSelected(item);
         }
-    }
-
-    public void allNotesSelected(MenuItem item) {
-        Utils.setSelectedNotebookName(this, null);
-        Utils.setSelectedTagName(this, null);
-
-        final boolean checked = item.isChecked();
-        if (!checked) {
-            item.setChecked(true);
-            overviewFragment.allNotesSelected();
-        }
-        mDrawerLayout.closeDrawer(Gravity.LEFT);
-    }
-
-    public void allNotesFromAccountSelected(MenuItem item) {
-        Utils.setSelectedNotebookName(this, null);
-        Utils.setSelectedTagName(this, null);
-
-        final boolean checked = item.isChecked();
-        if (!checked) {
-            item.setChecked(true);
-            overviewFragment.allNotesFromAccountSelected();
-        }
-        mDrawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     @Override
