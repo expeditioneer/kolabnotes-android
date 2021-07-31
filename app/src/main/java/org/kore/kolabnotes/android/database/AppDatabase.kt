@@ -8,11 +8,12 @@ import org.kore.kolabnotes.android.database.dao.AttachmentDao
 import org.kore.kolabnotes.android.database.dao.ModificationDao
 import org.kore.kolabnotes.android.database.dao.NoteDao
 import org.kore.kolabnotes.android.database.dao.TagDao
+import org.kore.kolabnotes.android.database.entity.Attachment
 import org.kore.kolabnotes.android.database.entity.Modification
 import org.kore.kolabnotes.android.database.entity.Note
 import org.kore.kolabnotes.android.database.entity.Tag
 
-@Database(entities = [Modification::class, Note::class, Tag::class], version = 1)
+@Database(entities = [Attachment::class, Modification::class, Note::class, Tag::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attachmentDao(): AttachmentDao
     abstract fun modificationDao(): ModificationDao

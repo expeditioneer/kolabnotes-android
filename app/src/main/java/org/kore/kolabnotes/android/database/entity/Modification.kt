@@ -1,8 +1,10 @@
 package org.kore.kolabnotes.android.database.entity
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Entity
 data class Modification(
     @PrimaryKey @ColumnInfo(name = "column_id") val columnId: Int,
     val account: String,
