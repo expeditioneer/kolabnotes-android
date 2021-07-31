@@ -28,10 +28,6 @@ import android.widget.Checkable;
 import android.widget.ImageButton;
 
 /**
- * Created by yaroslav on 25.03.16.
- */
-
-/**
  * Custom tool button for drawing editor. Based on the behavior of the RadioButton.
  */
 

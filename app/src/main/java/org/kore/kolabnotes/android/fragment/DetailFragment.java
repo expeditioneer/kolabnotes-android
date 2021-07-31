@@ -1248,11 +1248,6 @@ public class DetailFragment extends Fragment implements OnAccountSwitchedListene
         return Utils.checkNotebookPermissions(activity, activeAccountRepository.getActiveAccount(), note, book);
     }
 
-    /**
-     * Android WebView adds line terminators to inline images, these must be deleted
-     *
-     * @param html
-     */
     String repairImages(String html) {
         //issue 127
         if (!Utils.getUseRicheditor(activity)) {

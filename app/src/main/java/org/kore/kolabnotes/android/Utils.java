@@ -465,12 +465,6 @@ public class Utils {
         return false;
     }
 
-    /**
-     * Creates a exact copy of an note
-     *
-     * @param source
-     * @return Note
-     */
     public static final Note copy(Note source) {
         Note note = new Note(source.getIdentification(), source.getAuditInformation(), source.getClassification(), source.getSummary());
         note.setDescription(source.getDescription());

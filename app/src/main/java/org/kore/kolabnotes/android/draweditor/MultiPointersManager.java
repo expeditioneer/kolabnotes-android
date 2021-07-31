@@ -23,10 +23,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Created by yaroslav on 24.03.16.
- */
-
-/**
  * Management drawing multiple fingers, binding of drawing lines with a certain finger.
  */
 

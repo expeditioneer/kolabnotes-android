@@ -44,10 +44,6 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by yaroslav on 09.01.16.
- */
-
-/**
  * Fragment which displays, edits and deletes tags
  */
 

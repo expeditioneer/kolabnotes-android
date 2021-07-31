@@ -24,10 +24,6 @@ import android.graphics.Path;
 import java.io.Serializable;
 
 /**
- * Created by yaroslav on 24.03.16.
- */
-
-/**
  * The basic model of the drawn line.
  */
 

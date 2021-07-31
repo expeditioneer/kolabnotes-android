@@ -31,10 +31,6 @@ import org.kore.kolabnotes.android.R;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by yaroslav on 25.03.16.
- */
-
-/**
  * This class is a complete copy RadioGroup except adaptation for ToolButton.
  */
 
@@ -172,15 +168,6 @@ public class ToolButtonGroup extends LinearLayout {
         }
     }
 
-    /**
-     * <p>Returns the identifier of the selected tool button in this group.
-     * Upon empty selection, the returned value is -1.</p>
-     *
-     * @return the unique id of the selected tool button in this group
-     * @attr ref R.styleable#ToolGroup_checkedButton
-     * @see #check(int)
-     * @see #clearCheck()
-     */
     @IdRes
     public int getCheckedToolButtonId() {
         return mCheckedId;
@@ -243,15 +230,6 @@ public class ToolButtonGroup extends LinearLayout {
         public void onCheckedChanged(ToolButtonGroup group, @IdRes int checkedId);
     }
 
-    /**
-     * <p>This set of layout parameters defaults the width and the height of
-     * the children to {@link #WRAP_CONTENT} when they are not specified in the
-     * XML file. Otherwise, this class ussed the value read from the XML file.</p>
-     *
-     * <p>See
-     * {@link com.android.internal.R.styleable#LinearLayout_Layout LinearLayout Attributes}
-     * for a list of all child view attributes that this class supports.</p>
-     */
     public static class LayoutParams extends LinearLayout.LayoutParams {
 
         public LayoutParams(Context c, AttributeSet attrs) {
