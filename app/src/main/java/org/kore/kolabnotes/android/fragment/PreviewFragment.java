@@ -45,7 +45,6 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
 
     // TODO: Rename and change types of parameters
     private String noteUID;
-    private String attachmentID;
     private AttachmentRepository attachmentRepository;
     private ActiveAccountRepository accountRepository;
     private WebView webView;
@@ -104,7 +103,7 @@ public class PreviewFragment extends Fragment implements MediaPlayer.OnPreparedL
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             noteUID = getArguments().getString(ARG_NOTEUID);
-            attachmentID = getArguments().getString(ARG_ATTACHMENTID);
+            String attachmentID = getArguments().getString(ARG_ATTACHMENTID);
         }
     }
 

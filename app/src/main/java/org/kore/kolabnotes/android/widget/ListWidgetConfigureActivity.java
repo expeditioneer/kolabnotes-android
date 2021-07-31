@@ -51,8 +51,6 @@ public class ListWidgetConfigureActivity extends Activity {
     private Spinner notebookSpinner;
     private Spinner tagSpinner;
     private Spinner columnSpinner;
-    private RadioButton ascButton;
-    private RadioButton descButton;
 
     private Account selectedAccount;
     private String selectedNotebook;
@@ -148,8 +146,8 @@ public class ListWidgetConfigureActivity extends Activity {
         notebookSpinner = (Spinner) findViewById(R.id.spinner_notebook);
         tagSpinner = (Spinner) findViewById(R.id.spinner_tag);
         columnSpinner = (Spinner) findViewById(R.id.spinner_sort_column);
-        ascButton = (RadioButton) findViewById(R.id.radio_asc);
-        descButton = (RadioButton) findViewById(R.id.radio_desc);
+        RadioButton ascButton = (RadioButton) findViewById(R.id.radio_asc);
+        RadioButton descButton = (RadioButton) findViewById(R.id.radio_desc);
 
         localAccountName = getResources().getString(R.string.drawer_account_local);
 

@@ -60,7 +60,6 @@ public class DrawingView extends View {
     private float mScaleFactor = 1.f;
     private Bitmap mCanvasBitmap;
     private Canvas mCanvas;
-    private int mWidth, mHeight;
     private Paint mBitmapPaint;
     private Stack<Line> mLines = new Stack<Line>();
     private Stack<Line> mUndoneLines = new Stack<Line>();
@@ -143,8 +142,8 @@ public class DrawingView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mWidth = View.MeasureSpec.getSize(widthMeasureSpec);
-        mHeight = View.MeasureSpec.getSize(heightMeasureSpec);
+        int mWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int mHeight = MeasureSpec.getSize(heightMeasureSpec);
 
         setMeasuredDimension(mWidth, mHeight);
     }

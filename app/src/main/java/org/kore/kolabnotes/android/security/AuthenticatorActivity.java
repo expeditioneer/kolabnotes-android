@@ -63,7 +63,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private AccountManager mAccountManager;
 
-    private SwitchMaterial mExtendedOptions;
     private EditText mRootFolderView;
     private EditText mPortView;
     private CheckBox mEnableSSLView;
@@ -77,8 +76,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     private EditText mAccountNameView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-
-    private Intent startIntent;
 
     private Account accountToChange;
 
@@ -112,7 +109,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.accountPassword);
 
-        mExtendedOptions = (SwitchMaterial) findViewById(R.id.enable_more_config);
+        SwitchMaterial mExtendedOptions = (SwitchMaterial) findViewById(R.id.enable_more_config);
         mExtendedOptions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -130,7 +127,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         hideExtendedOptions();
 
-        startIntent = getIntent();
+        Intent startIntent = getIntent();
         if (startIntent != null && startIntent.getBooleanExtra("changeAccount", false)) {
             ActiveAccountRepository accountRepo = new ActiveAccountRepository(this);
             ActiveAccount activeAccount = accountRepo.getActiveAccount();

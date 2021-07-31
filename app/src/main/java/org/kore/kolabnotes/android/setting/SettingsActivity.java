@@ -60,7 +60,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return true;
         }
     };
-    private Toolbar mToolbar;
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -113,7 +112,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onPostCreate(savedInstanceState);
 
         LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
-        mToolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
+        Toolbar mToolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
         root.addView(mToolbar, 0); /* Insert at top */
 //        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
 //        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -15,14 +15,13 @@ import org.kore.kolabnotes.android.fragment.TagListFragment;
  */
 public class TagListActivity extends AppCompatActivity implements OnFragmentCallback {
     private TagListFragment tagListFragment;
-    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_list);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar_tag_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_tag_list);
         if (toolbar != null) {
             toolbar.setTitle(R.string.title_activity_tag_list);
         }

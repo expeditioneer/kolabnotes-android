@@ -54,10 +54,8 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
     private static final String TAG_SELECTABLE_ADAPTER = "SelectableAdapter";
 
     private AppCompatActivity activity;
-    private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private TextView mEmptyView;
-    private FloatingActionButton mAddTagButton;
     private Snackbar mSnackbarDelete;
 
     private TagRepository tagRepository;
@@ -88,7 +86,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_tag_list);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_tag_list);
 
         if (activity == null) {
             activity = (AppCompatActivity) getActivity();
@@ -107,7 +105,7 @@ public class TagListFragment extends Fragment implements TagAdapter.ViewHolder.C
         }
         setHasOptionsMenu(true);
 
-        mAddTagButton = (FloatingActionButton) getActivity().findViewById(R.id.addTagButton);
+        FloatingActionButton mAddTagButton = (FloatingActionButton) getActivity().findViewById(R.id.addTagButton);
         mAddTagButton.setOnClickListener(new CreateButtonListener());
 
         mRecyclerView = (RecyclerView) activity.findViewById(R.id.listTag);

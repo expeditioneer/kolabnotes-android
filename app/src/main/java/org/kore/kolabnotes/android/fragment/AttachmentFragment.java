@@ -46,9 +46,7 @@ public class AttachmentFragment extends Fragment {
     private AttachmentRepository attachmentRepository;
     private String noteUID;
     private View topView;
-    private Toolbar toolbar;
     private AppCompatActivity activity;
-    private FloatingActionButton fab;
 
     private RecyclerView recyclerView;
     private TextView noAttachmentView;
@@ -87,7 +85,7 @@ public class AttachmentFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_attachments);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_attachments);
 
         if (activity == null) {
             activity = (AppCompatActivity) getActivity();
@@ -105,7 +103,7 @@ public class AttachmentFragment extends Fragment {
             }
         });
 
-        fab = (FloatingActionButton) topView.findViewById(R.id.fab_button);
+        FloatingActionButton fab = (FloatingActionButton) topView.findViewById(R.id.fab_button);
         fab.setOnClickListener(new NewAttachmentListener());
 
         View recycler = topView.findViewById(R.id.attachment_list);

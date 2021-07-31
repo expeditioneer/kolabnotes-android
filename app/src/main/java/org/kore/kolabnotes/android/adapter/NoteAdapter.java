@@ -40,15 +40,13 @@ public class NoteAdapter extends SelectableAdapter<NoteAdapter.ViewHolder> {
     private int COLOR_SELECTED_NOTE;
     private Set<String> notesWithAttachment;
 
-    private List<ViewHolder> views;
-
     public NoteAdapter(List<Note> notes, int rowLayout, Context context, ViewHolder.ClickListener clickListener, Set<String> notesWithAttachment) {
         this.notes = notes;
         this.rowLayout = rowLayout;
         this.context = context;
         this.clickListener = clickListener;
         this.dateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        views = new ArrayList<>(notes.size());
+        List<ViewHolder> views = new ArrayList<>(notes.size());
         COLOR_SELECTED_NOTE = ContextCompat.getColor(context, R.color.theme_selected_notes);
         this.notesWithAttachment = notesWithAttachment;
     }

@@ -56,7 +56,6 @@ public class DrawEditorFragment extends Fragment {
     private static final int MAX_BRUSH_SIZE = 100;
 
     private AppCompatActivity activity;
-    private Toolbar toolbar;
     private DrawingView mCanvas;
     private LinearLayout mToolsOptions;
     private ToolButtonGroup mTools;
@@ -90,7 +89,7 @@ public class DrawEditorFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_draweditor);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_draweditor);
 
         if (activity == null) {
             activity = (AppCompatActivity) getActivity();

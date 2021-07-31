@@ -14,14 +14,12 @@ import org.kore.kolabnotes.android.R;
 
 public class OnHeaderClicked implements View.OnClickListener {
 
-    private final NavigationView navigationView;
     private final DrawerAccountsService drawerAccountsService;
 
     private boolean arrowDown;
 
     public OnHeaderClicked(NavigationView navigationView) {
-        this.navigationView = navigationView;
-        this.drawerAccountsService = new DrawerAccountsService(this.navigationView);
+        this.drawerAccountsService = new DrawerAccountsService(navigationView);
         this.arrowDown = true;
     }
 

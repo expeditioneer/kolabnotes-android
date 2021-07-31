@@ -110,7 +110,6 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
 
 
     private NoteAdapter mAdapter;
-    private FloatingActionButton mFabButton;
     private RecyclerView mRecyclerView;
     private TextView mEmptyView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -214,7 +213,7 @@ public class OverviewFragment extends Fragment implements NoteAdapter.ViewHolder
         mAccountManager = AccountManager.get(activity);
 
         // Fab Button
-        mFabButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_button);
+        FloatingActionButton mFabButton = (FloatingActionButton) getActivity().findViewById(R.id.fab_button);
         //mFabButton.setImageDrawable(new IconicsDrawable(this, FontAwesome.Icon.faw_upload).color(Color.WHITE).actionBarSize());
         Utils.configureFab(mFabButton);
         mFabButton.setOnClickListener(new CreateButtonListener());

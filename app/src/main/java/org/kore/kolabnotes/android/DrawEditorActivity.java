@@ -18,14 +18,13 @@ public class DrawEditorActivity extends AppCompatActivity implements OnFragmentC
     public static final String TAG_RETURN_BITMAP = "ReturnBitmap";
 
     private DrawEditorFragment drawEditorFragment;
-    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draweditor);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar_draweditor);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_draweditor);
         if (toolbar != null) {
             toolbar.setTitle(R.string.draweditor_title);
         }

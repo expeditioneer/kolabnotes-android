@@ -35,8 +35,6 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
     private List<Note> notes;
     private String rootFolder;
     private String accountEmail;
-    private NoteRepository notesRepository;
-    private TagRepository tagRepository;
 
     public ListWidgetRemoteViewsFactory(Application app, Intent intent) {
         this.app = app;
@@ -57,8 +55,8 @@ public class ListWidgetRemoteViewsFactory implements RemoteViewsService.RemoteVi
     void refreshData() {
         notes.clear();
         Context context = app.getApplicationContext();
-        notesRepository = new NoteRepository(context);
-        tagRepository = new TagRepository(context);
+        NoteRepository notesRepository = new NoteRepository(context);
+        TagRepository tagRepository = new TagRepository(context);
         NotebookRepository notebookRepository = new NotebookRepository(context);
 
         String account = ListWidgetConfigureActivity.loadListWidgetAccountPref(context, appWidgetId);

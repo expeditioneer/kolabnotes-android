@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
     public static final String AUTHORITY = "kore.kolabnotes";
 
     private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigationView;
     private AccountManager mAccountManager;
     private ActiveAccountRepository activeAccountRepository = new ActiveAccountRepository(this);
@@ -51,13 +50,11 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
 
     private Deque<OnAccountSwitchedListener> accountSwitchedListeners;
 
-    private AppDatabase db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = AppDatabase.getAppDataBase(this);
+        AppDatabase db = AppDatabase.getAppDataBase(this);
 
         setContentView(R.layout.activity_main);
 
@@ -68,7 +65,9 @@ public class MainActivity extends AppCompatActivity implements SyncStatusObserve
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+        /** Called when a drawer has settled in a completely closed state. */
+        /** Called when a drawer has settled in a completely open state. */
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
 
             /** Called when a drawer has settled in a completely closed state. */

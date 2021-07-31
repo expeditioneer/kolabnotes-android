@@ -28,8 +28,6 @@ public class ChooseAccountDialogFragment extends DialogFragment implements View.
     private ActiveAccountRepository activeAccountRepository;
 
     private Spinner accountSpinner;
-    private Button selectButton;
-    private Button cancelButton;
     private AccountManager mAccountManager;
     private String localAccountName;
 
@@ -45,8 +43,8 @@ public class ChooseAccountDialogFragment extends DialogFragment implements View.
         activeAccountRepository = new ActiveAccountRepository(getActivity());
 
         accountSpinner = (Spinner) view.findViewById(R.id.spinner_account);
-        selectButton = (Button) view.findViewById(R.id.select_button);
-        cancelButton = (Button) view.findViewById(R.id.cancel_button);
+        Button selectButton = (Button) view.findViewById(R.id.select_button);
+        Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
         selectButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         localAccountName = getResources().getString(R.string.drawer_account_local);

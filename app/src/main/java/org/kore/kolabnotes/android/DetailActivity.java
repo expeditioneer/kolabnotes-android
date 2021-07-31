@@ -21,7 +21,6 @@ import org.kore.kolabnotes.android.security.AuthenticatorActivity;
 public class DetailActivity extends AppCompatActivity implements OnFragmentCallback, OnAccountSwitchedListener, AccountChooserActivity {
 
     private DetailFragment detailFragment;
-    private Toolbar toolbar;
 
     private ActiveAccountRepository activeAccountRepository = new ActiveAccountRepository(this);
 
@@ -30,7 +29,7 @@ public class DetailActivity extends AppCompatActivity implements OnFragmentCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle("");
         }

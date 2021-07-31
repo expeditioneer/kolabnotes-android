@@ -19,7 +19,6 @@ import org.kore.kolabnotes.android.fragment.PreviewFragment;
 public class AttachmentActivity extends AppCompatActivity implements AttachmentFragment.OnListFragmentInteractionListener {
 
     private AttachmentFragment attachmentFragment;
-    private Toolbar toolbar;
     private PreviewFragment previewFragment;
     private ActiveAccountRepository accountRepository;
 
@@ -33,7 +32,7 @@ public class AttachmentActivity extends AppCompatActivity implements AttachmentF
         Intent startIntent = getIntent();
         noteUID = startIntent.getStringExtra(Utils.NOTE_UID);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar_attachments);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_attachments);
         if (toolbar != null) {
             toolbar.setTitle(R.string.attachment_title);
         }
